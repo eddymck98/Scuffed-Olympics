@@ -1,1 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scuffed Olympics</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-full flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950">
 
+    <!-- Top Navigation Bar -->
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3">
+                    <img src="/static/images/logo.png" alt="Logo" class="h-10 w-10 object-contain">
+                    <span class="font-extrabold text-xl tracking-wider text-amber-400">SCUFFED OLYMPICS</span>
+                </div>
+
+                <!-- Nav Links (Desktop) -->
+                <nav class="hidden md:flex space-x-6 text-sm font-medium">
+                    <a href="/" class="hover:text-amber-400 transition">Dashboard</a>
+                    <a href="/events" class="hover:text-amber-400 transition">Events & Rules</a>
+                    <a href="/treasure-hunt" class="hover:text-amber-400 transition">Treasure Hunt</a>
+                    <a href="/puzzle" class="hover:text-amber-400 transition">Escape Room</a>
+                    <a href="/nations" class="hover:text-amber-400 transition">Nations</a>
+                </nav>
+
+                <!-- Logged In User & Logout -->
+                <div class="flex items-center space-x-4">
+                    {% if request.cookies.get("nation_name") %}
+                        <span class="hidden sm:inline-block text-xs bg-slate-800 text-amber-300 border border-amber-500/30 px-3 py-1 rounded-full font-semibold">
+                            Rep: {{ request.cookies.get("nation_name") }}
+                        </span>
+                        <a href="/logout" class="text-xs text-slate-400 hover:text-rose-400 transition font-medium">Logout</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Bar (Bottom or secondary row) -->
+        <div class="md:hidden flex justify-around bg-slate-900/90 border-t border-slate-800/80 py-2 text-xs">
+            <a href="/" class="hover:text-amber-400">Dashboard</a>
+            <a href="/events" class="hover:text-amber-400">Events</a>
+            <a href="/treasure-hunt" class="hover:text-amber-400">Treasure Hunt</a>
+            <a href="/puzzle" class="hover:text-amber-400">Puzzle</a>
+            <a href="/nations" class="hover:text-amber-400">Nations</a>
+        </div>
+    </header>
+
+    <!-- Main Content Injection Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+        Scuffed Olympics &copy; 2026 &bull; Authorized Personnel & Competitors Only
+    </footer>
+
+</body>
+</html>
