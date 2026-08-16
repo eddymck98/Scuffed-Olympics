@@ -1,1 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commissioner Login - Scuffed Olympics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-full flex items-center justify-center px-4">
 
+    <div class="max-w-md w-full bg-slate-900 border border-rose-900/50 rounded-2xl p-8 shadow-2xl">
+        <div class="text-center mb-8">
+            <div class="text-3xl mb-2">⚖️</div>
+            <h1 class="text-2xl font-black text-rose-500 tracking-wide">COMMISSIONER GATEWAY</h1>
+            <p class="text-xs text-slate-400 mt-1">Restricted access for the ultimate decision-maker only.</p>
+        </div>
+
+        <form action="/admin/login" method="POST" class="space-y-6">
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Master Password</label>
+                <input type="password" name="admin_password" placeholder="Enter admin password" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-rose-500 transition text-center tracking-widest">
+            </div>
+
+            <button type="submit" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-extrabold py-3 rounded-xl transition shadow-lg shadow-rose-600/20">
+                UNLOCK GOD MODE
+            </button>
+        </form>
+    </div>
+
+</body>
+</html>
