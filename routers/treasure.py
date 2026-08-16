@@ -1,13 +1,13 @@
-
-from fastapi import APIRouter, Depends, Form, Request, HTTPException, status, UploadFile, File
+from fastapi import APIRouter, Depends, Form, Request, UploadFile, File, status
 from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 from database import supabase
-from routers.auth import require_team, templates  # Import shared dependencies
+from routers.auth import require_team
 
 router = APIRouter(prefix="/treasure-hunt", tags=["Treasure Hunt"])
+templates = Jinja2Templates(directory="templates")
 
-@app.get("", response_class=HTMLResponse) # Note: prefix handles the path
+@router.get("", response_class=HTMLResponse)
 async def treasure_hunt_page(request: Request, team: dict = Depends(require_team)):
     toggle_res = supabase.table("app_settings").select("is_active").eq("key", "treasure_hunt_active").execute()
     is_active = toggle_res.data[0]["is_active"] if toggle_res.data else False
