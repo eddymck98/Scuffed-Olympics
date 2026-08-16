@@ -1,1 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="space-y-8">
+    
+    <!-- Admin Header -->
+    <div class="bg-slate-900 border border-rose-900/40 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-black text-rose-500">COMMISSIONER COMMAND CENTER</h1>
+            <p class="text-xs text-slate-400 mt-1">Control global event unlocks, manage game states, and review submissions.</p>
+        </div>
+        <div class="flex items-center space-x-3">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                ADMIN ACTIVE
+            </span>
+        </div>
+    </div>
 
+    <!-- Grid Section: Global Toggles & Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Game Toggles Box -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+            <h2 class="text-lg font-bold text-amber-400 mb-4 flex items-center gap-2">
+                <span>⚡</span> Global Event Toggles
+            </h2>
+            <p class="text-xs text-slate-400 mb-6">Flip switches to instantly unlock features on all participant devices.</p>
+            
+            <div class="space-y-4">
+                <!-- Treasure Hunt Toggle Form -->
+                <form action="/admin/toggle" method="POST" class="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <div>
+                        <span class="font-bold text-sm block text-slate-200">City Treasure Hunt</span>
+                        <span class="text-xs text-slate-400">Allows teams to view items and submit photos</span>
+                    </div>
+                    <input type="hidden" name="key" value="treasure_hunt_active">
+                    <button type="submit" class="px-4 py-2 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 hover:bg-amber-400 transition">
+                        Toggle State
+                    </button>
+                </form>
+
+                <!-- Puzzle Room Toggle Form -->
+                <form action="/admin/toggle" method="POST" class="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <div>
+                        <span class="font-bold text-sm block text-slate-200">Escape Room / Puzzle Round</span>
+                        <span class="text-xs text-slate-400">Unlocks the multi-stage code breaking round</span>
+                    </div>
+                    <input type="hidden" name="key" value="puzzle_room_active">
+                    <button type="submit" class="px-4 py-2 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 hover:bg-amber-400 transition">
+                        Toggle State
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Pending Verifications Summary -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+            <h2 class="text-lg font-bold text-amber-400 mb-4 flex items-center gap-2">
+                <span>📸</span> Treasure Hunt Verification Queue
+            </h2>
+            <p class="text-xs text-slate-400 mb-6">Review incoming team photo proofs and award points instantly.</p>
+            
+            <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 text-center text-xs text-slate-400">
+                Queue endpoint ready. We will wire up the verification cards next!
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
