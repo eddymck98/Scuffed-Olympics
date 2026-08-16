@@ -82,7 +82,6 @@ async def admin_login_page(request: Request):
 
 @app.post("/admin/login")
 async def admin_login_action(admin_password: str = Form(...)):
-    # Simple hardcoded admin password check (or store it securely in your .env)
     master_pass = os.getenv("ADMIN_PASSWORD", "scuffedadmin123")
     if admin_password != master_pass:
         return RedirectResponse(url="/admin/login?error=Wrong+Password", status_code=status.HTTP_303_SEE_OTHER)
@@ -96,8 +95,56 @@ async def admin_login_action(admin_password: str = Form(...)):
 
 @app.get("/", response_class=HTMLResponse)
 async def home_dashboard(request: Request, team: dict = Depends(require_team)):
-    # Fetch global app settings (toggles) and recent activity here later
-    return templates.TemplateResponse("index.html", {"request": request, "team": team})
+    # 1. Fetch all teams and calculate their total medals/points (Gold = 3pts, Silver = 2pts, Bronze = 1pt)
+    teams_res = supabase.table("teams").select("id, nation_name, flag_emoji").execute()
+    teams = teams_res.data if teams_res.data else []
+    
+    results_res = supabase.table("event_results").select("team_id, medal_type, points").execute()
+    results = results_res.data if results_res.data else []
+    
+    standings = {}
+    for t in teams:
+        standings[t["id"]] = {
+            "nation_name": t["nation_name"],
+            "flag_emoji": t["flag_emoji"],
+            "gold": 0,
+            "silver": 0,
+            "bronze": 0,
+            "total_points": 0
+        }
+        
+    for r in results:
+        tid = r["team_id"]
+        if tid in standings:
+            medal = r["medal_type"]
+            if medal == "gold":
+                standings[tid]["gold"] += 1
+                standings[tid]["total_points"] += 3
+            elif medal == "silver":
+                standings[tid]["silver"] += 1
+                standings[tid]["total_points"] += 2
+            elif medal == "bronze":
+                standings[tid]["bronze"] += 1
+                standings[tid]["total_points"] += 1
+            if r["points"]:
+                standings[tid]["total_points"] += r["points"]
+
+    sorted_standings = sorted(
+        standings.values(), 
+        key=lambda x: (x["total_points"], x["gold"], x["silver"], x["bronze"]), 
+        reverse=True
+    )
+
+    # 2. Fetch recent activity ticker
+    activity_res = supabase.table("event_results").select("event_name, medal_type, recorded_at, teams(nation_name, flag_emoji)").order("recorded_at", desc=True).limit(5).execute()
+    activities = activity_res.data if activity_res.data else []
+
+    return templates.TemplateResponse("index.html", {
+        "request": request, 
+        "team": team, 
+        "standings": sorted_standings,
+        "activities": activities
+    })
 
 @app.get("/events", response_class=HTMLResponse)
 async def events_page(request: Request, team: dict = Depends(require_team)):
@@ -105,7 +152,6 @@ async def events_page(request: Request, team: dict = Depends(require_team)):
 
 @app.get("/treasure-hunt", response_class=HTMLResponse)
 async def treasure_hunt_page(request: Request, team: dict = Depends(require_team)):
-    # Check if treasure hunt is active in app_settings table
     toggle_res = supabase.table("app_settings").select("is_active").eq("key", "treasure_hunt_active").execute()
     is_active = toggle_res.data[0]["is_active"] if toggle_res.data else False
     
@@ -128,3 +174,15 @@ async def puzzle_page(request: Request, team: dict = Depends(require_team)):
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_dashboard(request: Request, admin: bool = Depends(require_admin)):
     return templates.TemplateResponse("admin.html", {"request": request})
+
+@app.post("/admin/toggle")
+async def admin_toggle(key: str = Form(...), admin: bool = Depends(require_admin)):
+    # Fetch current state
+    res = supabase.table("app_settings").select("is_active").eq("key", key).execute()
+    if res.data:
+        current_state = res.data[0]["is_active"]
+        new_state = not current_state
+        # Update state in database
+        supabase.table("app_settings").update({"is_active": new_state}).eq("key", key).execute()
+    
+    return RedirectResponse(url="/admin", status_code=status.HTTP_303_SEE_OTHER)
