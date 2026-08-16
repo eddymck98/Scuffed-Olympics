@@ -1,1 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="space-y-8 max-w-4xl mx-auto">
+    
+    <!-- Header -->
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center shadow-xl">
+        <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+            City Mission
+        </span>
+        <h1 class="text-3xl font-black text-slate-100 mt-3 tracking-tight">CITY TREASURE HUNT</h1>
+        <p class="text-slate-400 text-sm mt-1 max-w-lg mx-auto">
+            Roam the city, find the objects or complete the photo challenges, and snap proof straight from your phone camera.
+        </p>
+    </div>
 
+    {% if not is_active %}
+        <!-- Locked State -->
+        <div class="bg-slate-900/50 border border-slate-800/80 rounded-3xl p-12 text-center">
+            <div class="text-4xl mb-3">🔒</div>
+            <h2 class="text-xl font-bold text-slate-300">Treasure Hunt is Locked</h2>
+            <p class="text-xs text-slate-500 mt-1">The Commissioner has not unleashed the hunt yet. Stand by for instructions.</p>
+        </div>
+    {% else %}
+        <!-- Active State: Checklist of Items -->
+        <div class="grid grid-cols-1 gap-6">
+            {% for item in items %}
+                {% set prog = progress_map.get(item.id) %}
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-lg">
+                    
+                    <!-- Item Info -->
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-3">
+                            <h3 class="font-bold text-lg text-slate-100">{{ item.title }}</h3>
+                            <span class="text-xs font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
+                                +{{ item.points }} pts
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">{{ item.description }}</p>
+                    </div>
+
+                    <!-- Status / Submission Action -->
+                    <div class="w-full md:w-auto flex flex-col items-end gap-2">
+                        {% if prog %}
+                            {% if prog.status == 'approved' %}
+                                <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-xl text-emerald-400 text-xs font-bold">
+                                    <span>✅ Approved & Credited</span>
+                                </div>
+                            {% elif prog.status == 'pending' %}
+                                <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded-xl text-amber-400 text-xs font-bold">
+                                    <span>⏳ Pending Commissioner Review</span>
+                                </div>
+                            {% elif prog.status == 'rejected' %}
+                                <div class="flex items-center gap-2 bg-rose-500/10 border border-rose-500/20 px-4 py-2 rounded-xl text-rose-400 text-xs font-bold">
+                                    <span>❌ Rejected - Try Again</span>
+                                </div>
+                                <!-- Resubmit form if rejected -->
+                                <form action="/treasure-hunt/submit" method="POST" enctype="multipart/form-data" class="flex items-center gap-2 mt-2">
+                                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                                    <input type="file" name="photo" accept="image/*" required class="text-xs text-slate-400 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700">
+                                    <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs transition">
+                                        Re-submit
+                                    </button>
+                                </form>
+                            {% endif %}
+                        {% else %}
+                            <!-- Fresh Submission Form -->
+                            <form action="/treasure-hunt/submit" method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row items-end sm:items-center gap-3 w-full md:w-auto">
+                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                                <input type="file" name="photo" accept="image/*" required class="text-xs text-slate-400 file:mr-2 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 w-full sm:w-auto">
+                                <button type="submit" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-4 py-2 rounded-xl text-xs transition shadow-md">
+                                    Upload Proof
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}
