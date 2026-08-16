@@ -1,1 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Login - Scuffed Olympics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-full flex items-center justify-center px-4">
 
+    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+        <div class="text-center mb-8">
+            <img src="/static/images/logo.png" alt="Logo" class="h-16 w-16 mx-auto mb-3 object-contain">
+            <h1 class="text-2xl font-black text-amber-400 tracking-wide">ATHLETE LOGIN</h1>
+            <p class="text-xs text-slate-400 mt-1">Select your nation and enter your team PIN</p>
+        </div>
+
+        <form action="/login" method="POST" class="space-y-6">
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Representing Nation</label>
+                <select name="team_id" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-amber-400 transition">
+                    <option value="" disabled selected>Choose your nation...</option>
+                    {% for team in teams %}
+                        <option value="{{ team.id }}">{{ team.flag_emoji }} {{ team.nation_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Team PIN Code</label>
+                <input type="password" name="pin_code" placeholder="Enter 4-digit PIN" required maxlength="6" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-amber-400 transition tracking-widest text-center">
+            </div>
+
+            <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-3 rounded-xl transition shadow-lg shadow-amber-500/10">
+                ENTER THE GAMES
+            </button>
+        </form>
+    </div>
+
+</body>
+</html>
