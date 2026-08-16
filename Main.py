@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, Form, Request, HTTPException, status
+from fastapi import FastAPI, Depends, Form, Request, HTTPException, status, UploadFile, File
 from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -46,14 +46,12 @@ def require_admin(request: Request):
 
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
-    # Fetch all teams from Supabase to populate the nation dropdown
     response = supabase.table("teams").select("id, nation_name, flag_emoji").execute()
     teams = response.data if response.data else []
     return templates.TemplateResponse("login.html", {"request": request, "teams": teams})
 
 @app.post("/login")
 async def login_action(team_id: str = Form(...), pin_code: str = Form(...)):
-    # Verify PIN against Supabase database
     response = supabase.table("teams").select("*").eq("id", team_id).eq("pin_code", pin_code).execute()
     teams = response.data
     
@@ -95,7 +93,6 @@ async def admin_login_action(admin_password: str = Form(...)):
 
 @app.get("/", response_class=HTMLResponse)
 async def home_dashboard(request: Request, team: dict = Depends(require_team)):
-    # 1. Fetch all teams and calculate their total medals/points (Gold = 3pts, Silver = 2pts, Bronze = 1pt)
     teams_res = supabase.table("teams").select("id, nation_name, flag_emoji").execute()
     teams = teams_res.data if teams_res.data else []
     
@@ -135,7 +132,6 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
         reverse=True
     )
 
-    # 2. Fetch recent activity ticker
     activity_res = supabase.table("event_results").select("event_name, medal_type, recorded_at, teams(nation_name, flag_emoji)").order("recorded_at", desc=True).limit(5).execute()
     activities = activity_res.data if activity_res.data else []
 
@@ -152,10 +148,51 @@ async def events_page(request: Request, team: dict = Depends(require_team)):
 
 @app.get("/treasure-hunt", response_class=HTMLResponse)
 async def treasure_hunt_page(request: Request, team: dict = Depends(require_team)):
+    # 1. Check if hunt is active
     toggle_res = supabase.table("app_settings").select("is_active").eq("key", "treasure_hunt_active").execute()
     is_active = toggle_res.data[0]["is_active"] if toggle_res.data else False
     
-    return templates.TemplateResponse("treasure_hunt.html", {"request": request, "team": team, "is_active": is_active})
+    # 2. Fetch all hunt items and team's progress
+    items_res = supabase.table("treasure_hunt_items").select("*").execute()
+    items = items_res.data if items_res.data else []
+
+    progress_res = supabase.table("team_treasure_progress").select("*").eq("team_id", team["id"]).execute()
+    # Map progress by item_id for easy lookup in Jinja template
+    progress_map = {p["item_id"]: p for p in progress_res.data} if progress_res.data else {}
+
+    return templates.TemplateResponse("treasure_hunt.html", {
+        "request": request, 
+        "team": team, 
+        "is_active": is_active,
+        "items": items,
+        "progress_map": progress_map
+    })
+
+@app.post("/treasure-hunt/submit")
+async def submit_treasure_item(request: Request, item_id: str = Form(...), photo: UploadFile = File(...), team: dict = Depends(require_team)):
+    # 1. Upload photo to Supabase storage bucket named 'treasure-hunt-uploads'
+    file_bytes = await photo.read()
+    file_path = f"{team['id']}/{item_id}_{photo.filename}"
+    
+    storage_res = supabase.storage.from_("treasure-hunt-uploads").upload(
+        path=file_path,
+        file=file_bytes,
+        file_options={"content-type": photo.content_type}
+    )
+    
+    # Get public URL for the uploaded image
+    public_url_res = supabase.storage.from_("treasure-hunt-uploads").get_public_url(file_path)
+    image_url = public_url_res if isinstance(public_url_res, str) else public_url_res.get("publicURL", "")
+
+    # 2. Upsert submission record into database as 'pending'
+    supabase.table("team_treasure_progress").upsert({
+        "team_id": team["id"],
+        "item_id": item_id,
+        "image_url": image_url,
+        "status": "pending"
+    }, on_conflict="team_id,item_id").execute()
+
+    return RedirectResponse(url="/treasure-hunt", status_code=status.HTTP_303_SEE_OTHER)
 
 @app.get("/nations", response_class=HTMLResponse)
 async def nations_page(request: Request, team: dict = Depends(require_team)):
@@ -173,16 +210,46 @@ async def puzzle_page(request: Request, team: dict = Depends(require_team)):
 
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_dashboard(request: Request, admin: bool = Depends(require_admin)):
-    return templates.TemplateResponse("admin.html", {"request": request})
+    # Fetch pending treasure hunt submissions for verification queue
+    pending_res = supabase.table("team_treasure_progress").select("id, image_url, submitted_at, status, teams(nation_name, flag_emoji), treasure_hunt_items(title, points)").eq("status", "pending").execute()
+    pending_submissions = pending_res.data if pending_res.data else []
+
+    return templates.TemplateResponse("admin.html", {
+        "request": request,
+        "pending_submissions": pending_submissions
+    })
 
 @app.post("/admin/toggle")
 async def admin_toggle(key: str = Form(...), admin: bool = Depends(require_admin)):
-    # Fetch current state
     res = supabase.table("app_settings").select("is_active").eq("key", key).execute()
     if res.data:
         current_state = res.data[0]["is_active"]
         new_state = not current_state
-        # Update state in database
         supabase.table("app_settings").update({"is_active": new_state}).eq("key", key).execute()
     
+    return RedirectResponse(url="/admin", status_code=status.HTTP_303_SEE_OTHER)
+
+@app.post("/admin/treasure/verify")
+async def verify_treasure_submission(submission_id: str = Form(...), action: str = Form(...), admin: bool = Depends(require_admin)):
+    # action can be 'approve' or 'reject'
+    new_status = "approved" if action == "approve" else "rejected"
+    
+    # Update submission status
+    supabase.table("team_treasure_progress").update({"status": new_status}).eq("id", submission_id).execute()
+    
+    # If approved, award points as a bonus event result or handle points logic here
+    if new_status == "approved":
+        sub_info = supabase.table("team_treasure_progress").select("team_id, treasure_hunt_items(points)").eq("id", submission_id).execute()
+        if sub_info.data:
+            data = sub_info.data[0]
+            tid = data["team_id"]
+            pts = data["treasure_hunt_items"]["points"] if data["treasure_hunt_items"] else 10
+            # Record points in event_results
+            supabase.table("event_results").insert({
+                "event_name": "City Treasure Hunt Task",
+                "team_id": tid,
+                "medal_type": "none",
+                "points": pts
+            }).execute()
+
     return RedirectResponse(url="/admin", status_code=status.HTTP_303_SEE_OTHER)
