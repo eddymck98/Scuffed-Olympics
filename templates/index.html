@@ -1,1 +1,137 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="space-y-8">
+    
+    <!-- Hero Section -->
+    <div class="relative bg-gradient-to-r from-slate-900 via-slate-900 to-amber-950/40 border border-slate-800 rounded-3xl p-8 overflow-hidden shadow-2xl">
+        <div class="relative z-10 max-w-2xl">
+            <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                Official Home Games 2026
+            </span>
+            <h1 class="text-4xl sm:text-5xl font-black text-slate-100 mt-4 tracking-tight">
+                THE SCUFFED OLYMPICS
+            </h1>
+            <p class="text-slate-400 text-sm mt-2 leading-relaxed">
+                Glory, low-stakes competition, and absolute chaos. Represent your nation, conquer the house games, and survive the city treasure hunt.
+            </p>
+            
+            <!-- Live Countdown Timer -->
+            <div class="mt-6 flex items-center space-x-4 bg-slate-950/60 border border-slate-800/80 px-5 py-3 rounded-2xl w-fit backdrop-blur-sm">
+                <span class="text-xs uppercase font-bold text-amber-400 tracking-wider">Opening Ceremony In:</span>
+                <div id="countdown" class="text-sm font-mono font-bold text-slate-100">Loading...</div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Main Grid: Leaderboard & Activity Feed -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Live Medal Table (Takes 2 columns on large screens) -->
+        <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-black text-slate-100 flex items-center gap-2">
+                    <span>🏆</span> Live Medal Standings
+                </h2>
+                <span class="text-xs text-slate-400 font-medium">Weighted Points System</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                            <th class="py-3 px-4">Rank</th>
+                            <th class="py-3 px-4">Nation</th>
+                            <th class="py-3 px-4 text-center">🥇 Gold</th>
+                            <th class="py-3 px-4 text-center">🥈 Silver</th>
+                            <th class="py-3 px-4 text-center">🥉 Bronze</th>
+                            <th class="py-3 px-4 text-right">Points</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60 text-sm">
+                        {% for row in standings %}
+                            <tr class="hover:bg-slate-800/40 transition">
+                                <td class="py-4 px-4 font-mono font-bold text-slate-400">#{{ loop.index }}</td>
+                                <td class="py-4 px-4 font-bold text-slate-100 flex items-center gap-3">
+                                    <span class="text-xl">{{ row.flag_emoji }}</span>
+                                    {{ row.nation_name }}
+                                </td>
+                                <td class="py-4 px-4 text-center font-mono font-semibold text-amber-400">{{ row.gold }}</td>
+                                <td class="py-4 px-4 text-center font-mono font-semibold text-slate-300">{{ row.silver }}</td>
+                                <td class="py-4 px-4 text-center font-mono font-semibold text-amber-700">{{ row.bronze }}</td>
+                                <td class="py-4 px-4 text-right font-mono font-black text-amber-400 text-base">{{ row.total_points }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Activity Ticker (Takes 1 column) -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+            <div>
+                <h2 class="text-xl font-black text-slate-100 flex items-center gap-2 mb-6">
+                    <span>⚡</span> Recent Activity
+                </h2>
+                
+                <div class="space-y-4">
+                    {% if activities %}
+                        {% for act in activities %}
+                            <div class="bg-slate-950 border border-slate-800/80 p-4 rounded-2xl flex items-start space-x-3">
+                                <span class="text-lg">🏅</span>
+                                <div class="text-xs">
+                                    <p class="font-bold text-slate-200">
+                                        {{ act.teams.flag_emoji }} {{ act.teams.nation_name }}
+                                    </p>
+                                    <p class="text-slate-400 mt-0.5">
+                                        Secured <span class="text-amber-400 font-bold uppercase">{{ act.medal_type }}</span> in <span class="text-slate-300 font-semibold">{{ act.event_name }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="bg-slate-950 border border-slate-800/80 p-6 rounded-2xl text-center text-xs text-slate-500">
+                            No event results recorded yet. Let the games begin!
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Action Notice -->
+            <div class="mt-6 bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-center">
+                <p class="text-xs font-bold text-amber-400">Ready to hunt?</p>
+                <a href="/treasure-hunt" class="inline-block mt-2 text-xs font-extrabold bg-amber-500 text-slate-950 px-4 py-2 rounded-xl hover:bg-amber-400 transition">
+                    Open Treasure Hunt Hub &rarr;
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Countdown Timer Script -->
+<script>
+    // Set target date for the Olympics (Adjust to your event date)
+    const targetDate = new Date("November 20, 2026 12:00:00").getTime();
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance < 0) {
+            document.getElementById("countdown").innerText = "GAMES ARE LIVE!";
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60 * 1000)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown").innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+</script>
+{% endblock %}
