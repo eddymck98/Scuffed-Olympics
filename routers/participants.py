@@ -7,9 +7,16 @@ router = APIRouter(tags=["Participants"])
 
 @router.get("/", response_class=HTMLResponse)
 async def home_dashboard(request: Request, team: dict = Depends(require_team)):
-    teams_res = supabase.table("teams").select("id, nation_name, participant_name, flag_emoji").order("nation_name").execute()
+    teams_res = supabase.table("teams").select("id, nation_name, participant_name, flag_emoji, shots_owed").order("nation_name").execute()
     teams = teams_res.data if teams_res.data else []
     
+    # Fetch feature toggles from your app_settings table using your exact schema (key, is_active)
+    settings_res = supabase.table("app_settings").select("key, is_active").execute()
+    settings = {s["key"]: s["is_active"] for s in settings_res.data} if settings_res.data else {}
+    
+    treasure_visible = settings.get("treasure_hunt_active", False)
+    escape_visible = settings.get("puzzle_room_active", False)
+
     results_res = supabase.table("event_results").select("team_id, medal_type, points").execute()
     results = results_res.data if results_res.data else []
     
@@ -64,7 +71,9 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
         "teams": teams,
         "standings": sorted_standings,
         "activities": activities,
-        "shots_history": shots_history
+        "shots_history": shots_history,
+        "treasure_visible": treasure_visible,
+        "escape_visible": escape_visible
     })
     return HTMLResponse(content=html_content)
 
