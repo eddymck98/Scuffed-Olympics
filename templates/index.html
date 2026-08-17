@@ -18,8 +18,7 @@
                 <span class="absolute -right-12 text-4xl opacity-60 select-none animate-pulse">🌿</span>
             </div>
 
-            <!-- Personalized Welcome -->
-            <h1 class="text-2xl font-black text-amber-400 uppercase tracking-widest">{{ team.greeting }}, {{ team.participant_name }}!</h1>
+            <h1 class="text-xl sm:text-2xl font-black text-amber-400 uppercase tracking-widest">{{ team.greeting }}, {{ team.participant_name }}!</h1>
             <span class="bg-gradient-to-r from-amber-500 via-yellow-400 to-rose-500 text-slate-950 text-xs font-black px-5 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
                 🥇 Official Home Games 2026 🥇
             </span>
@@ -33,42 +32,44 @@
         </div>
     </div>
 
-    <!-- Stats Grid: Standings + Shots -->
+    <!-- Main Grid: Leaderboard & Side Widgets -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-2">
         
-        <!-- Live Medal Table -->
+        <!-- Live Medal Table (Takes 2 columns) -->
         <div class="lg:col-span-2 space-y-4">
             <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest flex items-center gap-2 px-1">🏆 Live Medal Standings</h2>
             <div class="bg-slate-900/90 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b border-slate-800 bg-slate-950/50 text-[10px] font-black text-slate-400 uppercase">
-                            <th class="py-4 px-4">Nation</th>
-                            <th class="py-4 px-4 text-center">🥇</th>
-                            <th class="py-4 px-4 text-center">🥈</th>
-                            <th class="py-4 px-4 text-center">🥉</th>
-                            <th class="py-4 px-4 text-right text-amber-400">Pts</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-800/60 text-sm">
-                        {% for row in standings %}
-                            <tr class="hover:bg-slate-800/40 transition">
-                                <td class="py-4 px-4 font-extrabold text-slate-100 flex items-center gap-3">
-                                    <span class="text-xl">{{ row.flag_emoji }}</span>
-                                    <span>{{ row.nation_name }}</span>
-                                </td>
-                                <td class="py-4 px-4 text-center font-bold text-amber-400">{{ row.gold }}</td>
-                                <td class="py-4 px-4 text-center font-bold text-slate-300">{{ row.silver }}</td>
-                                <td class="py-4 px-4 text-center font-bold text-amber-600">{{ row.bronze }}</td>
-                                <td class="py-4 px-4 text-right font-black text-amber-400">{{ row.total_points }}</td>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 bg-slate-950/50 text-[10px] font-black text-slate-400 uppercase">
+                                <th class="py-4 px-4">Nation</th>
+                                <th class="py-4 px-4 text-center">🥇</th>
+                                <th class="py-4 px-4 text-center">🥈</th>
+                                <th class="py-4 px-4 text-center">🥉</th>
+                                <th class="py-4 px-4 text-right text-amber-400">Pts</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60 text-sm">
+                            {% for row in standings %}
+                                <tr class="hover:bg-slate-800/40 transition">
+                                    <td class="py-4 px-4 font-extrabold text-slate-100 flex items-center gap-3">
+                                        <span class="text-xl">{{ row.flag_emoji }}</span>
+                                        <span>{{ row.nation_name }}</span>
+                                    </td>
+                                    <td class="py-4 px-4 text-center font-bold text-amber-400">{{ row.gold }}</td>
+                                    <td class="py-4 px-4 text-center font-bold text-slate-300">{{ row.silver }}</td>
+                                    <td class="py-4 px-4 text-center font-bold text-amber-600">{{ row.bronze }}</td>
+                                    <td class="py-4 px-4 text-right font-black text-amber-400">{{ row.total_points }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <!-- Activity Feed + Shots Owed -->
+        <!-- Right Column: Shots & VAR -->
         <div class="space-y-6">
             <!-- Shots Owed Counter -->
             <div class="bg-gradient-to-br from-rose-900/50 to-slate-900 border border-rose-500/30 p-6 rounded-3xl text-center shadow-2xl">
@@ -77,15 +78,65 @@
                 <p class="text-[10px] text-rose-300 mt-2 italic">Don't get too comfortable...</p>
             </div>
 
-            <!-- VAR Submission Form -->
+            <!-- Scuffed VAR Form with Target Dropdown -->
             <div class="bg-slate-900 border border-rose-500/20 rounded-3xl p-6 shadow-xl">
-                <h2 class="text-rose-500 font-black uppercase text-xs mb-4 flex items-center gap-2">🚨 Scuffed VAR</h2>
+                <h2 class="text-rose-500 font-black uppercase text-xs mb-4 flex items-center gap-2">🚨 Scuffed VAR (Dob Someone In)</h2>
                 <form action="/var/submit" method="POST" class="space-y-3">
-                    <textarea name="incident" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3 text-xs text-slate-200" placeholder="Report a violation or funny fail..."></textarea>
-                    <button type="submit" class="w-full bg-rose-500 text-slate-950 font-black text-[10px] uppercase py-2 rounded-xl hover:bg-rose-400 transition">Submit to Judgement Hall</button>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Target Nation / Athlete</label>
+                        <select name="target_team_id" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 outline-none focus:border-rose-500">
+                            <option value="">-- Choose Target --</option>
+                            {% for t in teams %}
+                                <option value="{{ t.id }}">{{ t.flag_emoji }} {{ t.nation_name }} ({{ t.participant_name }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Incident Description</label>
+                        <textarea name="incident" required rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 outline-none focus:border-rose-500" placeholder="What rule violation or absolute disaster occurred?"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-rose-500 text-slate-950 font-black text-[10px] uppercase py-2.5 rounded-xl hover:bg-rose-400 transition shadow-lg">Submit to Judgement Hall</button>
                 </form>
             </div>
         </div>
     </div>
+
+    <!-- Redesigned Recent Activity Ticker (Full Width, Mobile Friendly, Non-Intrusive) -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h2 class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
+                <span>⚡</span> Live Podium Ticker & Recent Glory
+            </h2>
+            <span class="text-[10px] text-slate-500 font-mono">Real-time updates</span>
+        </div>
+
+        {% if activities %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {% for act in activities %}
+                    <div class="bg-slate-950 border border-slate-800/80 p-3 rounded-2xl flex items-center space-x-3 transition hover:border-amber-500/40">
+                        <span class="text-xl">
+                            {% if act.medal_type == 'gold' %}🥇{% elif act.medal_type == 'silver' %}🥈{% else %}🥉{% endif %}
+                        </span>
+                        <div class="text-xs overflow-hidden">
+                            <p class="font-bold text-slate-200 truncate">
+                                {{ act.teams.flag_emoji }} {{ act.teams.nation_name }}
+                            </p>
+                            <p class="text-slate-400 text-[11px] truncate">
+                                Won <span class="text-amber-400 font-bold uppercase">{{ act.medal_type }}</span> in <span class="text-slate-300 font-semibold">{{ act.event_name }}</span>
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="bg-slate-950 border border-slate-800/80 p-6 rounded-2xl text-center space-y-1">
+                <p class="text-xs text-slate-400 font-medium">The games have just begun. No medals recorded yet!</p>
+                <p class="text-[10px] text-slate-600 font-mono">Check back once the commissioner logs the first event.</p>
+            </div>
+        {% endif %}
+    </div>
+
 </div>
 {% endblock %}
