@@ -194,17 +194,19 @@
             <p class="text-xs text-slate-400">Control which hidden pages are visible to competitors on their main navigation menus.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
                 <!-- Treasure Hunt Toggle -->
                 <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
                     <div>
                         <h3 class="font-bold text-slate-200 text-sm">🏴‍☠️ Treasure Hunt Hub</h3>
                         <p class="text-[10px] text-slate-400 mt-0.5">Currently: <strong class="{% if app_settings.treasure_hunt_active %}text-emerald-400{% else %}text-rose-400{% endif %}">{% if app_settings.treasure_hunt_active %}VISIBLE{% else %}HIDDEN{% endif %}</strong></p>
                     </div>
-                    <form action="/admin/toggle-setting" method="POST">
+                    <form action="/admin/toggle-setting" method="POST" class="flex items-center">
                         <input type="hidden" name="key" value="treasure_hunt_active">
                         <input type="hidden" name="value" value="{{ 'false' if app_settings.treasure_hunt_active else 'true' }}">
-                        <button type="submit" class="px-4 py-2 rounded-xl text-xs font-black transition {% if app_settings.treasure_hunt_active %} bg-rose-600 hover:bg-rose-500 text-white {% else %} bg-emerald-600 hover:bg-emerald-500 text-white {% endif %}">
-                            {% if app_settings.treasure_hunt_active %} Hide Page {% else %} Show Page {% endif %}
+                        
+                        <button type="submit" class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none {% if app_settings.treasure_hunt_active %} bg-amber-500 {% else %} bg-slate-800 {% endif %}">
+                            <span class="inline-block h-4 w-4 transform rounded-full bg-slate-950 transition-transform {% if app_settings.treasure_hunt_active %} translate-x-6 {% else %} translate-x-1 {% endif %}"></span>
                         </button>
                     </form>
                 </div>
@@ -215,14 +217,16 @@
                         <h3 class="font-bold text-slate-200 text-sm">🧩 Virtual Escape Room</h3>
                         <p class="text-[10px] text-slate-400 mt-0.5">Currently: <strong class="{% if app_settings.puzzle_room_active %}text-emerald-400{% else %}text-rose-400{% endif %}">{% if app_settings.puzzle_room_active %}VISIBLE{% else %}HIDDEN{% endif %}</strong></p>
                     </div>
-                    <form action="/admin/toggle-setting" method="POST">
+                    <form action="/admin/toggle-setting" method="POST" class="flex items-center">
                         <input type="hidden" name="key" value="puzzle_room_active">
                         <input type="hidden" name="value" value="{{ 'false' if app_settings.puzzle_room_active else 'true' }}">
-                        <button type="submit" class="px-4 py-2 rounded-xl text-xs font-black transition {% if app_settings.puzzle_room_active %} bg-rose-600 hover:bg-rose-500 text-white {% else %} bg-emerald-600 hover:bg-emerald-500 text-white {% endif %}">
-                            {% if app_settings.puzzle_room_active %} Hide Page {% else %} Show Page {% endif %}
+                        
+                        <button type="submit" class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none {% if app_settings.puzzle_room_active %} bg-amber-500 {% else %} bg-slate-800 {% endif %}">
+                            <span class="inline-block h-4 w-4 transform rounded-full bg-slate-950 transition-transform {% if app_settings.puzzle_room_active %} translate-x-6 {% else %} translate-x-1 {% endif %}"></span>
                         </button>
                     </form>
                 </div>
+
             </div>
         </div>
     </div>
