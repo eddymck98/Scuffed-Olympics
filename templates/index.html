@@ -69,13 +69,34 @@
             </div>
         </div>
 
-        <!-- Right Column: Shots & VAR -->
+        <!-- Right Column: Shots, Global Board & VAR -->
         <div class="space-y-6">
             <!-- Shots Owed Counter -->
             <div class="bg-gradient-to-br from-rose-900/50 to-slate-900 border border-rose-500/30 p-6 rounded-3xl text-center shadow-2xl">
                 <h3 class="text-rose-200 text-[10px] font-black uppercase tracking-widest">Shots/Forfeits Owed</h3>
                 <p class="text-6xl font-black text-white mt-2">{{ team.shots_owed }}</p>
                 <p class="text-[10px] text-rose-300 mt-2 italic">Don't get too comfortable...</p>
+            </div>
+
+            <!-- Global Shots Owed Tracker (Compact) -->
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-3xl shadow-xl space-y-3">
+                <h3 class="text-slate-400 text-[10px] font-black uppercase tracking-widest flex items-center justify-between">
+                    <span>🍻 Nation Shot Board</span>
+                    <span class="text-rose-400 font-mono">Total Owed</span>
+                </h3>
+                <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                    {% for t in teams %}
+                        <div class="bg-slate-950 border border-slate-800/60 px-3 py-2 rounded-xl flex items-center justify-between text-xs">
+                            <span class="font-bold text-slate-200 flex items-center gap-2">
+                                <span>{{ t.flag_emoji }}</span>
+                                <span>{{ t.nation_name }}</span>
+                            </span>
+                            <span class="font-mono font-black {% if t.shots_owed > 0 %}text-rose-400{% else %}text-slate-500{% endif %}">
+                                {{ t.shots_owed }} shots
+                            </span>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
 
             <!-- Scuffed VAR Form with Target Dropdown -->
