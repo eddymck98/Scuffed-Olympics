@@ -27,8 +27,6 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
     for r in results:
         tid = r["team_id"]
         if tid in standings:
-            # We no longer add points based on medal type here, 
-            # because points are already logged individually per event in the admin panel.
             medal = r["medal_type"]
             if medal == "gold":
                 standings[tid]["gold"] += 1
@@ -46,7 +44,13 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
         reverse=True
     )
 
-    activity_res = supabase.table("event_results").select("event_name, medal_type, recorded_at, teams(nation_name, flag_emoji)").order("recorded_at", desc=True).limit(5).execute()
+    # Fetch ONLY medal winners for the recent activity feed
+    activity_res = supabase.table("event_results") \
+        .select("event_name, medal_type, recorded_at, teams(nation_name, flag_emoji)") \
+        .neq("medal_type", "none") \
+        .order("recorded_at", desc=True) \
+        .limit(5) \
+        .execute()
     activities = activity_res.data if activity_res.data else []
 
     # Bypass Starlette's cached TemplateResponse to prevent Python 3.14 dict-hashing error
