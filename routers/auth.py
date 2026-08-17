@@ -32,8 +32,12 @@ def require_admin(request: Request):
 
 @router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
-    response = supabase.table("teams").select("id, nation_name, flag_emoji").execute()
-    teams = response.data if response.data else []
+    try:
+        response = supabase.table("teams").select("id, nation_name, flag_emoji").execute()
+        teams = response.data if response.data else []
+    except Exception as e:
+        print("Error fetching teams for login:", e)
+        teams = []
     
     # Bypass starlette TemplateResponse cache wrapper to prevent Python 3.14 dict-hashing error
     template = templates.get_template("login.html")
