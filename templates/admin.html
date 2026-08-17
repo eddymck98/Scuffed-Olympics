@@ -27,39 +27,35 @@
         <a href="/admin?tab=var" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'var' %} bg-rose-600 text-white shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-rose-400 border border-slate-800 {% endif %}">
             🚨 VAR Judgement Hall {% if var_submissions %}<span class="ml-1 bg-white text-rose-600 px-1.5 py-0.5 rounded-full text-[10px]">{{ var_submissions|length }}</span>{% endif %}
         </a>
+        <a href="/admin?tab=settings" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'settings' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
+            ⚙️ Weekend Toggles
+        </a>
         <a href="/admin?tab=logs" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'logs' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
-            📜 Recent Activity Logs
+            📜 Activity Logs
         </a>
     </div>
 
     <!-- TAB 1: EVENT RESULT MANAGER -->
     <div class="space-y-6 {% if active_tab != 'events' %}hidden{% endif %}">
-        
-        <!-- Obvious Category Switcher Tabs -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <a href="/admin?tab=events&subtab=standard&event={{ selected_event }}" class="p-4 rounded-2xl border text-left transition {% if active_subtab == 'standard' %} bg-amber-500/10 border-amber-500 text-amber-400 shadow-md {% else %} bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700 {% endif %}">
                 <span class="text-lg block mb-1">🎯</span>
                 <span class="text-xs font-black uppercase block">Standard Events</span>
-                <span class="text-[10px] opacity-75">7th to 1st placement scoring</span>
             </a>
             <a href="/admin?tab=events&subtab=duck" class="p-4 rounded-2xl border text-left transition {% if active_subtab == 'duck' %} bg-amber-500/10 border-amber-500 text-amber-400 shadow-md {% else %} bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700 {% endif %}">
                 <span class="text-lg block mb-1">🦆</span>
                 <span class="text-xs font-black uppercase block">Duck Hunt</span>
-                <span class="text-[10px] opacity-75">Direct duck count entry</span>
             </a>
             <a href="/admin?tab=events&subtab=treasure" class="p-4 rounded-2xl border text-left transition {% if active_subtab == 'treasure' %} bg-amber-500/10 border-amber-500 text-amber-400 shadow-md {% else %} bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700 {% endif %}">
                 <span class="text-lg block mb-1">📸</span>
                 <span class="text-xs font-black uppercase block">City Selfies</span>
-                <span class="text-[10px] opacity-75">Custom podium pod points</span>
             </a>
         </div>
 
         <!-- Standard Events Subtab -->
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6 {% if active_subtab != 'standard' %}hidden{% endif %}">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">Standard Event Scorecard</h2>
-                </div>
+            <div class="flex justify-between items-center">
+                <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">Standard Event Scorecard</h2>
                 <select onchange="window.location.href='/admin?tab=events&subtab=standard&event=' + this.value" class="bg-slate-950 border border-amber-500/50 rounded-2xl px-4 py-2.5 text-xs font-bold text-amber-400 outline-none">
                     {% for ev in standard_events %}<option value="{{ ev }}" {% if selected_event == ev %}selected{% endif %}>{{ ev }}</option>{% endfor %}
                 </select>
@@ -101,9 +97,7 @@
 
         <!-- Duck Hunt Subtab -->
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6 {% if active_subtab != 'duck' %}hidden{% endif %}">
-            <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-xs text-amber-300">
-                🦆 <strong>Duck Hunt Scoring:</strong> Enter the exact number of resin ducks found around the house. Each duck equals 1 point!
-            </div>
+            <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-xs text-amber-300">🦆 <strong>Duck Hunt Scoring:</strong> Enter the exact number of resin ducks found around the house.</div>
             <form action="/admin/event-results/save-duck-hunt" method="POST" class="space-y-4">
                 <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
@@ -118,15 +112,13 @@
                         </tbody>
                     </table>
                 </div>
-                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">Save & Publish Duck Hunt Scores</button>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">Save Duck Hunt Scores</button>
             </form>
         </div>
 
         <!-- City Selfies Subtab -->
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6 {% if active_subtab != 'treasure' %}hidden{% endif %}">
-            <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-xs text-amber-300">
-                📸 <strong>City Selfies Scoring:</strong> Podiums award custom pod points (1st = 10pts + Gold, 2nd = 7pts + Silver, 3rd = 4pts + Bronze, Last = 1pt, DNP = 0pts).
-            </div>
+            <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-xs text-amber-300">📸 <strong>City Selfies Scoring:</strong> Podiums award custom pod points.</div>
             <form action="/admin/event-results/save-treasure" method="POST" class="space-y-4">
                 <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
@@ -150,10 +142,9 @@
                         </tbody>
                     </table>
                 </div>
-                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">Save & Publish City Selfies Results</button>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">Save City Selfies Results</button>
             </form>
         </div>
-
     </div>
 
     <!-- TAB 2: TREASURE VERIFICATION -->
@@ -196,7 +187,47 @@
         </div>
     </div>
 
-    <!-- TAB 4: RECENT LOGS -->
+    <!-- TAB 4: WEEKEND TOGGLES & SETTINGS -->
+    <div class="space-y-6 {% if active_tab != 'settings' %}hidden{% endif %}">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
+            <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">⚙️ Weekend Feature Toggles</h2>
+            <p class="text-xs text-slate-400">Control which hidden pages are visible to competitors on their main navigation menus.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Treasure Hunt Toggle -->
+                <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-200 text-sm">🏴‍☠️ Treasure Hunt Hub</h3>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Currently: <strong class="{% if app_settings.treasure_hunt_active %}text-emerald-400{% else %}text-rose-400{% endif %}">{% if app_settings.treasure_hunt_active %}VISIBLE{% else %}HIDDEN{% endif %}</strong></p>
+                    </div>
+                    <form action="/admin/toggle-setting" method="POST">
+                        <input type="hidden" name="key" value="treasure_hunt_active">
+                        <input type="hidden" name="value" value="{{ 'false' if app_settings.treasure_hunt_active else 'true' }}">
+                        <button type="submit" class="px-4 py-2 rounded-xl text-xs font-black transition {% if app_settings.treasure_hunt_active %} bg-rose-600 hover:bg-rose-500 text-white {% else %} bg-emerald-600 hover:bg-emerald-500 text-white {% endif %}">
+                            {% if app_settings.treasure_hunt_active %} Hide Page {% else %} Show Page {% endif %}
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Virtual Escape Room Toggle -->
+                <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-200 text-sm">🧩 Virtual Escape Room</h3>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Currently: <strong class="{% if app_settings.puzzle_room_active %}text-emerald-400{% else %}text-rose-400{% endif %}">{% if app_settings.puzzle_room_active %}VISIBLE{% else %}HIDDEN{% endif %}</strong></p>
+                    </div>
+                    <form action="/admin/toggle-setting" method="POST">
+                        <input type="hidden" name="key" value="puzzle_room_active">
+                        <input type="hidden" name="value" value="{{ 'false' if app_settings.puzzle_room_active else 'true' }}">
+                        <button type="submit" class="px-4 py-2 rounded-xl text-xs font-black transition {% if app_settings.puzzle_room_active %} bg-rose-600 hover:bg-rose-500 text-white {% else %} bg-emerald-600 hover:bg-emerald-500 text-white {% endif %}">
+                            {% if app_settings.puzzle_room_active %} Hide Page {% else %} Show Page {% endif %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 5: RECENT LOGS -->
     <div class="space-y-6 {% if active_tab != 'logs' %}hidden{% endif %}">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
             <h2 class="text-sm font-black text-slate-100 uppercase tracking-widest text-xs">Recent Event Logs & Results</h2>
