@@ -6,43 +6,21 @@ from routers.auth import require_admin
 router = APIRouter(tags=["Admin"])
 
 PLACEMENT_POINTS = {
-    "7th": 10,
-    "1st": 8,
-    "2nd": 7,
-    "3rd": 6,
-    "4th": 5,
-    "5th": 4,
-    "6th": 3,
-    "8th": 2,
-    "9th": 1,
-    "DNP": 0
+    "7th": 10, "1st": 8, "2nd": 7, "3rd": 6, "4th": 5, 
+    "5th": 4, "6th": 3, "8th": 2, "9th": 1, "DNP": 0
 }
 
 @router.get("/admin", response_class=HTMLResponse)
 async def admin_dashboard(request: Request, tab: str = "events", subtab: str = "standard", event: str = "Crack the Code", admin: bool = Depends(require_admin)):
+    # Gather data for all tabs
     pending_res = supabase.table("team_treasure_progress").select("id, image_url, submitted_at, status, teams(nation_name, flag_emoji), treasure_hunt_items(title, points)").eq("status", "pending").execute()
-    pending_submissions = pending_res.data if pending_res.data else []
-
-    teams_res = supabase.table("teams").select("id, nation_name, flag_emoji").order("nation_name").execute()
+    teams_res = supabase.table("teams").select("id, nation_name, flag_emoji, shots_owed").order("nation_name").execute()
+    all_results = supabase.table("event_results").select("id, event_name, points, medal_type, team_id").execute()
+    var_res = supabase.table("var_submissions").select("*, teams(nation_name, flag_emoji)").eq("status", "pending").execute()
+    
     teams = teams_res.data if teams_res.data else []
-
-    results_res = supabase.table("event_results").select("id, event_name, points, medal_type, team_id").execute()
-    all_results = results_res.data if results_res.data else []
-
-    # Map existing results by team_id for the currently selected event
-    event_scores = {}
-    for r in all_results:
-        if r["event_name"] == event:
-            event_scores[r["team_id"]] = r
-
-    recent_results = supabase.table("event_results").select("id, event_name, points, medal_type, teams(nation_name, flag_emoji)").order("recorded_at", desc=True).limit(15).execute()
-    recent_list = recent_results.data if recent_results.data else []
-
-    standard_events = [
-        "Crack the Code", "Golf Putting", "Padel Pong", "Sticky Bounce", 
-        "Ring Toss", "Bean Bag Toss", "The Entrance", "Cut the Deck", 
-        "Beer Pong", "The Ultimate Relay Race"
-    ]
+    event_scores = {r["team_id"]: r for r in (all_results.data or []) if r["event_name"] == event}
+    recent_list = supabase.table("event_results").select("id, event_name, points, medal_type, teams(nation_name, flag_emoji)").order("recorded_at", desc=True).limit(15).execute().data or []
 
     template = templates.get_template("admin.html")
     html_content = template.render({
@@ -50,119 +28,86 @@ async def admin_dashboard(request: Request, tab: str = "events", subtab: str = "
         "active_tab": tab,
         "active_subtab": subtab,
         "selected_event": event,
-        "pending_submissions": pending_submissions,
+        "pending_submissions": pending_res.data or [],
+        "var_submissions": var_res.data or [],
         "teams": teams,
         "event_scores": event_scores,
         "recent_results": recent_list,
-        "standard_events": standard_events
+        "standard_events": ["Crack the Code", "Golf Putting", "Padel Pong", "Sticky Bounce", "Ring Toss", "Bean Bag Toss", "The Entrance", "Cut the Deck", "Beer Pong", "The Ultimate Relay Race"]
     })
     return HTMLResponse(content=html_content)
+
+# --- Event Scoring Endpoints ---
 
 @router.post("/admin/event-results/save-standard")
 async def save_standard_event(request: Request, admin: bool = Depends(require_admin)):
     form_data = await request.form()
     event_name = form_data.get("event_name")
-    
     supabase.table("event_results").delete().eq("event_name", event_name).execute()
-
-    teams_res = supabase.table("teams").select("id").execute()
-    teams = teams_res.data if teams_res.data else []
+    teams = supabase.table("teams").select("id").execute().data or []
 
     insert_batch = []
     for t in teams:
-        tid = t["id"]
-        placement = form_data.get(f"placement_{tid}")
-        if not placement or placement == "unscored":
-            continue
-
-        points = PLACEMENT_POINTS.get(placement, 0)
+        placement = form_data.get(f"placement_{t['id']}")
+        if not placement or placement == "unscored": continue
         
-        medal_type = "none"
-        if placement == "1st": medal_type = "gold"
-        elif placement == "2nd": medal_type = "silver"
-        elif placement == "3rd": medal_type = "bronze"
+        points = PLACEMENT_POINTS.get(placement, 0)
+        medal = "gold" if placement == "1st" else "silver" if placement == "2nd" else "bronze" if placement == "3rd" else "none"
+        insert_batch.append({"event_name": event_name, "team_id": t['id'], "points": points, "medal_type": medal})
 
-        insert_batch.append({
-            "event_name": event_name,
-            "team_id": tid,
-            "points": points,
-            "medal_type": medal_type
-        })
-
-    if insert_batch:
-        supabase.table("event_results").insert(insert_batch).execute()
-
+    if insert_batch: supabase.table("event_results").insert(insert_batch).execute()
     return RedirectResponse(url=f"/admin?tab=events&subtab=standard&event={event_name}", status_code=303)
 
 @router.post("/admin/event-results/save-duck-hunt")
 async def save_duck_hunt(request: Request, admin: bool = Depends(require_admin)):
     form_data = await request.form()
-    event_name = "Duck Hunt"
-    
-    supabase.table("event_results").delete().eq("event_name", event_name).execute()
-
-    teams_res = supabase.table("teams").select("id").execute()
-    teams = teams_res.data if teams_res.data else []
-
-    insert_batch = []
-    for t in teams:
-        tid = t["id"]
-        ducks_found = form_data.get(f"ducks_{tid}")
-        if not ducks_found:
-            continue
-        try:
-            points = int(ducks_found)
-        except ValueError:
-            points = 0
-
-        insert_batch.append({
-            "event_name": event_name,
-            "team_id": tid,
-            "points": points,
-            "medal_type": "none"
-        })
-
-    if insert_batch:
-        supabase.table("event_results").insert(insert_batch).execute()
-
+    supabase.table("event_results").delete().eq("event_name", "Duck Hunt").execute()
+    teams = supabase.table("teams").select("id").execute().data or []
+    insert_batch = [{"event_name": "Duck Hunt", "team_id": t['id'], "points": int(form_data.get(f"ducks_{t['id']}", 0) or 0), "medal_type": "none"} for t in teams]
+    supabase.table("event_results").insert(insert_batch).execute()
     return RedirectResponse(url="/admin?tab=events&subtab=duck", status_code=303)
 
 @router.post("/admin/event-results/save-treasure")
 async def save_treasure_event(request: Request, admin: bool = Depends(require_admin)):
     form_data = await request.form()
-    event_name = "City Selfies"
+    supabase.table("event_results").delete().eq("event_name", "City Selfies").execute()
+    teams = supabase.table("teams").select("id").execute().data or []
     
-    supabase.table("event_results").delete().eq("event_name", event_name).execute()
-
-    teams_res = supabase.table("teams").select("id").execute()
-    teams = teams_res.data if teams_res.data else []
-
     insert_batch = []
     for t in teams:
-        tid = t["id"]
-        pod = form_data.get(f"pod_{tid}")
-        if not pod or pod == "unscored":
-            continue
-        
-        pod_points = {"1st": 10, "2nd": 7, "3rd": 4, "last": 1, "dnp": 0}
-        points = pod_points.get(pod, 0)
-        
-        medal_type = "none"
-        if pod == "1st": medal_type = "gold"
-        elif pod == "2nd": medal_type = "silver"
-        elif pod == "3rd": medal_type = "bronze"
-
-        insert_batch.append({
-            "event_name": event_name,
-            "team_id": tid,
-            "points": points,
-            "medal_type": medal_type
-        })
-
-    if insert_batch:
-        supabase.table("event_results").insert(insert_batch).execute()
-
+        pod = form_data.get(f"pod_{t['id']}")
+        if not pod or pod == "unscored": continue
+        points = {"1st": 10, "2nd": 7, "3rd": 4, "last": 1, "dnp": 0}.get(pod, 0)
+        medal = "gold" if pod == "1st" else "silver" if pod == "2nd" else "bronze" if pod == "3rd" else "none"
+        insert_batch.append({"event_name": "City Selfies", "team_id": t['id'], "points": points, "medal_type": medal})
+    
+    if insert_batch: supabase.table("event_results").insert(insert_batch).execute()
     return RedirectResponse(url="/admin?tab=events&subtab=treasure", status_code=303)
+
+# --- VAR Ruling Endpoints ---
+
+@router.post("/admin/var/issue")
+async def issue_ruling(
+    submission_id: str = Form(...), 
+    decision: str = Form(...), 
+    points: int = Form(0), 
+    shots: int = Form(0),
+    reason: str = Form(...),
+    admin: bool = Depends(require_admin)
+):
+    supabase.table("var_submissions").update({"status": decision}).eq("id", submission_id).execute()
+    sub = supabase.table("var_submissions").select("team_id").eq("id", submission_id).execute().data[0]
+    tid = sub["team_id"]
+
+    if decision == "upheld":
+        if points != 0:
+            supabase.table("event_results").insert({"event_name": f"VAR Ruling: {reason}", "team_id": tid, "points": points, "medal_type": "none"}).execute()
+        if shots > 0:
+            team_res = supabase.table("teams").select("shots_owed").eq("id", tid).execute().data[0]
+            supabase.table("teams").update({"shots_owed": team_res["shots_owed"] + shots}).eq("id", tid).execute()
+            supabase.table("shots_log").insert({"team_id": tid, "amount": shots, "reason": f"VAR: {reason}"}).execute()
+
+    return RedirectResponse(url="/admin?tab=var", status_code=303)
 
 @router.post("/admin/event-results/delete")
 async def delete_event_result(result_id: str = Form(...), admin: bool = Depends(require_admin)):
@@ -171,6 +116,5 @@ async def delete_event_result(result_id: str = Form(...), admin: bool = Depends(
 
 @router.post("/admin/treasure/verify")
 async def verify_treasure_submission(submission_id: str = Form(...), action: str = Form(...), admin: bool = Depends(require_admin)):
-    new_status = "approved" if action == "approve" else "rejected"
-    supabase.table("team_treasure_progress").update({"status": new_status}).eq("id", submission_id).execute()
+    supabase.table("team_treasure_progress").update({"status": "approved" if action == "approve" else "rejected"}).eq("id", submission_id).execute()
     return RedirectResponse(url="/admin?tab=verification", status_code=303)
