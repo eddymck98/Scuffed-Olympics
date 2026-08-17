@@ -1,11 +1,9 @@
 from fastapi import APIRouter, Depends, Form, Request, HTTPException, status
 from fastapi.responses import RedirectResponse, HTMLResponse
-from fastapi.templating import Jinja2Templates
-from database import supabase
+from database import supabase, templates
 import os
 
 router = APIRouter(tags=["Authentication"])
-templates = Jinja2Templates(directory="templates")
 
 def get_current_team(request: Request):
     team_id = request.cookies.get("team_id")
@@ -36,7 +34,11 @@ def require_admin(request: Request):
 async def login_page(request: Request):
     response = supabase.table("teams").select("id, nation_name, flag_emoji").execute()
     teams = response.data if response.data else []
-    return templates.TemplateResponse("login.html", {"request": request, "teams": teams})
+    
+    # Bypass starlette TemplateResponse cache wrapper to prevent Python 3.14 dict-hashing error
+    template = templates.get_template("login.html")
+    html_content = template.render({"request": request, "teams": teams})
+    return HTMLResponse(content=html_content)
 
 @router.post("/login")
 async def login_action(team_id: str = Form(...), pin_code: str = Form(...)):
@@ -61,7 +63,10 @@ async def logout():
 
 @router.get("/admin/login", response_class=HTMLResponse)
 async def admin_login_page(request: Request):
-    return templates.TemplateResponse("admin_login.html", {"request": request})
+    # Bypass starlette TemplateResponse cache wrapper here too
+    template = templates.get_template("admin_login.html")
+    html_content = template.render({"request": request})
+    return HTMLResponse(content=html_content)
 
 @router.post("/admin/login")
 async def admin_login_action(admin_password: str = Form(...)):
