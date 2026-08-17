@@ -7,163 +7,85 @@
     <div class="absolute top-24 right-6 text-3xl opacity-15 select-none pointer-events-none animate-pulse">🥇</div>
     <div class="absolute bottom-10 left-10 text-3xl opacity-15 select-none pointer-events-none">🔥</div>
 
-    <!-- Hero Header matching the Login Screen Style -->
+    <!-- Hero Header -->
     <div class="text-center space-y-4 relative py-4">
         <div class="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent rounded-full blur-3xl pointer-events-none"></div>
 
         <div class="relative z-10 flex flex-col items-center space-y-3">
-            <!-- Olympic Laurel & Larger Logo -->
             <div class="relative flex items-center justify-center">
                 <span class="absolute -left-12 text-4xl opacity-60 select-none animate-pulse">🌿</span>
                 <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/Adobe%20Express%20-%20file.png?raw=true" alt="Scuffed Olympics Logo" class="h-36 w-36 object-contain drop-shadow-[0_0_25px_rgba(245,158,11,0.7)] relative z-10">
                 <span class="absolute -right-12 text-4xl opacity-60 select-none animate-pulse">🌿</span>
             </div>
 
+            <!-- Personalized Welcome -->
+            <h1 class="text-2xl font-black text-amber-400 uppercase tracking-widest">{{ team.greeting }}, {{ team.participant_name }}!</h1>
             <span class="bg-gradient-to-r from-amber-500 via-yellow-400 to-rose-500 text-slate-950 text-xs font-black px-5 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
                 🥇 Official Home Games 2026 🥇
             </span>
             <h1 class="text-3xl sm:text-5xl font-black text-slate-100 tracking-tight">THE SCUFFED OLYMPICS</h1>
-            <p class="text-xs sm:text-sm text-slate-400 max-w-lg mx-auto leading-relaxed">
-                Glory, low-stakes competition, and absolute chaos. Represent your nation, conquer the house games, and survive the city treasure hunt.
-            </p>
             
-            <!-- Live Rep Badge & Countdown Container -->
             <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
-                <div class="inline-flex items-center gap-2 bg-slate-900 border border-amber-500/30 px-4 py-2 rounded-2xl text-xs font-mono text-amber-400 shadow-md">
+                <div class="inline-flex items-center gap-2 bg-slate-900 border border-amber-500/30 px-4 py-2 rounded-2xl text-xs font-mono text-amber-400">
                     <span>⚡ REPRESENTING:</span> <strong class="text-slate-100 uppercase">{{ team.nation_name }}</strong>
                 </div>
-
-                <!-- Live Countdown Timer -->
-                <div class="flex items-center space-x-3 bg-slate-900 border border-slate-800 px-4 py-2 rounded-2xl shadow-md">
-                    <span class="text-[10px] uppercase font-black text-amber-400 tracking-wider">Opening Ceremony:</span>
-                    <div id="countdown" class="text-xs font-mono font-bold text-slate-100">Loading...</div>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- Main Grid: Leaderboard & Activity Feed -->
+    <!-- Stats Grid: Standings + Shots -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-2">
         
-        <!-- Live Medal Table (Takes 2 columns on large screens) -->
+        <!-- Live Medal Table -->
         <div class="lg:col-span-2 space-y-4">
-            <div class="flex items-center justify-between px-1">
-                <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
-                    <span>🏆</span> Live Medal Standings
-                </h2>
-                <span class="text-[10px] text-slate-500 font-mono">Weighted Points System</span>
-            </div>
-
+            <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest flex items-center gap-2 px-1">🏆 Live Medal Standings</h2>
             <div class="bg-slate-900/90 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b border-slate-800 bg-slate-950/50 text-[10px] font-black text-slate-400 uppercase tracking-wider">
-                                <th class="py-4 px-4 text-center w-16">Rank</th>
-                                <th class="py-4 px-4">Nation</th>
-                                <th class="py-4 px-4 text-center">🥇 Gold</th>
-                                <th class="py-4 px-4 text-center">🥈 Silver</th>
-                                <th class="py-4 px-4 text-center">🥉 Bronze</th>
-                                <th class="py-4 px-4 text-right text-amber-400">Points</th>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-800 bg-slate-950/50 text-[10px] font-black text-slate-400 uppercase">
+                            <th class="py-4 px-4">Nation</th>
+                            <th class="py-4 px-4 text-center">🥇</th>
+                            <th class="py-4 px-4 text-center">🥈</th>
+                            <th class="py-4 px-4 text-center">🥉</th>
+                            <th class="py-4 px-4 text-right text-amber-400">Pts</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60 text-sm">
+                        {% for row in standings %}
+                            <tr class="hover:bg-slate-800/40 transition">
+                                <td class="py-4 px-4 font-extrabold text-slate-100 flex items-center gap-3">
+                                    <span class="text-xl">{{ row.flag_emoji }}</span>
+                                    <span>{{ row.nation_name }}</span>
+                                </td>
+                                <td class="py-4 px-4 text-center font-bold text-amber-400">{{ row.gold }}</td>
+                                <td class="py-4 px-4 text-center font-bold text-slate-300">{{ row.silver }}</td>
+                                <td class="py-4 px-4 text-center font-bold text-amber-600">{{ row.bronze }}</td>
+                                <td class="py-4 px-4 text-right font-black text-amber-400">{{ row.total_points }}</td>
                             </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800/60 text-sm">
-                            {% for row in standings %}
-                                <tr class="hover:bg-slate-800/40 transition">
-                                    <td class="py-4 px-4 text-center font-black text-slate-400">
-                                        {% if loop.index == 1 %} 🥇 {% elif loop.index == 2 %} 🥈 {% elif loop.index == 3 %} 🥉 {% else %} #{{ loop.index }} {% endif %}
-                                    </td>
-                                    <td class="py-4 px-4 font-extrabold text-slate-100 flex items-center gap-3">
-                                        <span class="text-2xl">{{ row.flag_emoji }}</span>
-                                        <span>{{ row.nation_name }}</span>
-                                    </td>
-                                    <td class="py-4 px-4 text-center font-mono font-bold text-amber-400">{{ row.gold }}</td>
-                                    <td class="py-4 px-4 text-center font-mono font-bold text-slate-300">{{ row.silver }}</td>
-                                    <td class="py-4 px-4 text-center font-mono font-bold text-amber-600">{{ row.bronze }}</td>
-                                    <td class="py-4 px-4 text-right font-mono font-black text-amber-400 text-base">{{ row.total_points }}</td>
-                                </tr>
-                            {% endfor %}
-                            {% if not standings %}
-                                <tr>
-                                    <td colspan="6" class="text-center py-8 text-xs text-slate-500 italic">No standings data available yet.</td>
-                                </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recent Activity Feed (Takes 1 column) -->
-        <div class="space-y-4">
-            <div class="flex items-center justify-between px-1">
-                <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
-                    <span>⚡</span> Recent Activity
-                </h2>
-            </div>
-
-            <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col justify-between space-y-4">
-                <div class="space-y-3">
-                    {% if activities %}
-                        {% for act in activities %}
-                            <div class="bg-slate-950 border border-slate-800/80 p-3 rounded-2xl flex items-start space-x-3">
-                                <span class="text-lg">🏅</span>
-                                <div class="text-xs">
-                                    <p class="font-bold text-slate-200">
-                                        {{ act.teams.flag_emoji }} {{ act.teams.nation_name }}
-                                    </p>
-                                    <p class="text-slate-400 mt-0.5">
-                                        Secured <span class="text-amber-400 font-bold uppercase">{{ act.medal_type }}</span> in <span class="text-slate-300 font-semibold">{{ act.event_name }}</span>
-                                    </p>
-                                </div>
-                            </div>
                         {% endfor %}
-                    {% else %}
-                        <div class="bg-slate-950 border border-slate-800/80 p-8 rounded-2xl text-center space-y-2">
-                            <span class="text-2xl">🏅</span>
-                            <p class="text-xs text-slate-400 font-medium">No event results recorded yet.</p>
-                            <p class="text-[10px] text-slate-600 font-mono">Let the games begin!</p>
-                        </div>
-                    {% endif %}
-                </div>
-
-                <!-- Quick Action Notice -->
-                <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-center">
-                    <p class="text-xs font-bold text-amber-400">Ready to hunt?</p>
-                    <a href="/treasure-hunt" class="inline-block mt-2 text-xs font-extrabold bg-amber-500 text-slate-950 px-4 py-2 rounded-xl hover:bg-amber-400 transition shadow">
-                        Open Treasure Hunt Hub &rarr;
-                    </a>
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
 
+        <!-- Activity Feed + Shots Owed -->
+        <div class="space-y-6">
+            <!-- Shots Owed Counter -->
+            <div class="bg-gradient-to-br from-rose-900/50 to-slate-900 border border-rose-500/30 p-6 rounded-3xl text-center shadow-2xl">
+                <h3 class="text-rose-200 text-[10px] font-black uppercase tracking-widest">Shots/Forfeits Owed</h3>
+                <p class="text-6xl font-black text-white mt-2">{{ team.shots_owed }}</p>
+                <p class="text-[10px] text-rose-300 mt-2 italic">Don't get too comfortable...</p>
+            </div>
+
+            <!-- VAR Submission Form -->
+            <div class="bg-slate-900 border border-rose-500/20 rounded-3xl p-6 shadow-xl">
+                <h2 class="text-rose-500 font-black uppercase text-xs mb-4 flex items-center gap-2">🚨 Scuffed VAR</h2>
+                <form action="/var/submit" method="POST" class="space-y-3">
+                    <textarea name="incident" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3 text-xs text-slate-200" placeholder="Report a violation or funny fail..."></textarea>
+                    <button type="submit" class="w-full bg-rose-500 text-slate-950 font-black text-[10px] uppercase py-2 rounded-xl hover:bg-rose-400 transition">Submit to Judgement Hall</button>
+                </form>
+            </div>
+        </div>
     </div>
-
 </div>
-
-<!-- Countdown Timer Script -->
-<script>
-    // Target date for the Olympics
-    const targetDate = new Date("November 20, 2026 12:00:00").getTime();
-
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const distance = targetDate - now;
-
-        if (distance < 0) {
-            document.getElementById("countdown").innerText = "GAMES ARE LIVE!";
-            return;
-        }
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.getElementById("countdown").innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }
-
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-</script>
 {% endblock %}
