@@ -8,7 +8,7 @@
             <span class="text-4xl">👑</span>
             <div>
                 <span class="text-xs font-black text-amber-400 uppercase tracking-widest">Commissioner Control Center</span>
-                <h1 class="text-2xl font-black text-slate-100">BULK EVENT RESULT MANAGER</h1>
+                <h1 class="text-2xl font-black text-slate-100">ADMINISTRATION PORTAL</h1>
             </div>
         </div>
         <a href="/" class="text-xs font-bold bg-slate-950 border border-slate-800 text-slate-300 px-4 py-2 rounded-xl hover:border-amber-500 transition">
@@ -16,160 +16,245 @@
         </a>
     </div>
 
-    <!-- Main Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        <!-- Left 2 Columns: Bulk Event Scorecard Form -->
-        <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
-            <div>
-                <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
-                    <span>🏆</span> Scoreboard Entry by Event
-                </h2>
-                <p class="text-xs text-slate-400 mt-1">Select an event below to manage all 9 competitors on a single sheet, then publish in one click.</p>
+    <!-- Admin Sub-Navigation Tabs -->
+    <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-4">
+        <a href="/admin?tab=events" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'events' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
+            🏆 Event Result Manager
+        </a>
+        <a href="/admin?tab=verification" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'verification' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
+            📸 Treasure Verification {% if pending_submissions %}<span class="ml-1 bg-rose-500 text-slate-950 px-1.5 py-0.5 rounded-full text-[10px]">{{ pending_submissions|length }}</span>{% endif %}
+        </a>
+        <a href="/admin?tab=logs" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'logs' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
+            📜 Recent Activity Logs
+        </a>
+    </div>
+
+    <!-- TAB 1: EVENT RESULT MANAGER -->
+    <div class="space-y-6 {% if active_tab != 'events' %}hidden{% endif %}">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">Scoreboard Entry by Event</h2>
+                    <p class="text-xs text-slate-400 mt-1">Select an event category to log scores. Medals auto-populate for podium finishes!</p>
+                </div>
+                <div>
+                    <select id="eventCategorySelect" onchange="switchEventCategory(this.value)" class="bg-slate-950 border border-amber-500/50 rounded-2xl px-4 py-2.5 text-xs font-bold text-amber-400 outline-none">
+                        <option value="standard">Standard Events (7th-1st Placement)</option>
+                        <option value="duck">Duck Hunt (Duck Count)</option>
+                        <option value="treasure">City Selfies (Custom Pod Points)</option>
+                    </select>
+                </div>
             </div>
 
-            <!-- Event Selector Tabs / Dropdown -->
-            <div class="space-y-4">
-                <label class="block text-xs font-bold text-slate-300 uppercase">Choose Event to Edit</label>
-                <select id="eventSelector" onchange="switchEventForm(this.value)" class="w-full bg-slate-950 border border-amber-500/50 rounded-2xl px-4 py-3 text-xs font-bold text-amber-400 outline-none">
-                    {% for ev in events_list %}
-                        <option value="{{ loop.index0 }}">{{ ev }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+            <!-- 1. STANDARD EVENTS FORM -->
+            <div id="cat-standard" class="event-cat-form space-y-4">
+                <div class="space-y-2">
+                    <label class="block text-xs font-bold text-slate-300 uppercase">Select Standard Event</label>
+                    <select id="standardEventName" onchange="updateStandardEventInput(this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-xs font-bold text-slate-100 outline-none">
+                        {% for ev in standard_events %}
+                            <option value="{{ ev }}">{{ ev }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            <!-- Forms Container for each event -->
-            <div id="eventFormsContainer">
-                {% for ev in events_list %}
-                    <form action="/admin/event-results/bulk-save" method="POST" class="event-form space-y-4 {% if not loop.first %}hidden{% endif %}" id="form-{{ loop.index0 }}">
-                        <input type="hidden" name="event_name" value="{{ ev }}">
-                        
-                        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
-                            <table class="w-full text-left border-collapse text-xs">
-                                <thead>
-                                    <tr class="border-b border-slate-800 text-[10px] text-slate-400 uppercase">
-                                        <th class="py-2 px-2">Nation</th>
-                                        <th class="py-2 px-2">Placement / System</th>
-                                        <th class="py-2 px-2">Custom Pts (Duck Hunt / Pods)</th>
-                                        <th class="py-2 px-2">Medal</th>
+                <form action="/admin/event-results/save-standard" method="POST" class="space-y-4">
+                    <input type="hidden" name="event_name" id="hiddenStandardEventName" value="{{ standard_events[0] }}">
+                    
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-[10px] text-slate-400 uppercase">
+                                    <th class="py-2 px-2">Nation</th>
+                                    <th class="py-2 px-2">Placement (Points Assigned)</th>
+                                    <th class="py-2 px-2">Auto-Assigned Medal</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                {% for t in teams %}
+                                    <tr>
+                                        <td class="py-3 px-2 font-bold text-slate-100 flex items-center gap-2">
+                                            <span class="text-lg">{{ t.flag_emoji }}</span>
+                                            <span>{{ t.nation_name }}</span>
+                                        </td>
+                                        <td class="py-3 px-2">
+                                            <select name="placement_{{ t.id }}" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500">
+                                                <option value="7th">7th Place (10 pts)</option>
+                                                <option value="1st">1st Place (8 pts)</option>
+                                                <option value="2nd">2nd Place (7 pts)</option>
+                                                <option value="3rd">3rd Place (6 pts)</option>
+                                                <option value="4th">4th Place (5 pts)</option>
+                                                <option value="5th">5th Place (4 pts)</option>
+                                                <option value="6th">6th Place (3 pts)</option>
+                                                <option value="8th">8th Place (2 pts)</option>
+                                                <option value="9th">9th Place (1 pt)</option>
+                                                <option value="DNP">DNP (0 pts)</option>
+                                            </select>
+                                        </td>
+                                        <td class="py-3 px-2 text-amber-400 font-mono font-bold text-[11px]">
+                                            🥇 1st = Gold | 🥈 2nd = Silver | 🥉 3rd = Bronze
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-800/50">
-                                    {% for t in teams %}
-                                        <tr>
-                                            <td class="py-3 px-2 font-bold text-slate-100 flex items-center gap-2">
-                                                <span class="text-lg">{{ t.flag_emoji }}</span>
-                                                <span>{{ t.nation_name }}</span>
-                                            </td>
-                                            <td class="py-3 px-2">
-                                                <select name="placement_{{ t.id }}" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500">
-                                                    <option value="7th">7th (10 pts)</option>
-                                                    <option value="1st">1st (8 pts)</option>
-                                                    <option value="2nd">2nd (7 pts)</option>
-                                                    <option value="3rd">3rd (6 pts)</option>
-                                                    <option value="4th">4th (5 pts)</option>
-                                                    <option value="5th">5th (4 pts)</option>
-                                                    <option value="6th">6th (3 pts)</option>
-                                                    <option value="8th">8th (2 pts)</option>
-                                                    <option value="9th">9th (1 pt)</option>
-                                                    <option value="DNP">DNP (0 pts)</option>
-                                                    <option value="custom">Custom Points</option>
-                                                </select>
-                                            </td>
-                                            <td class="py-3 px-2">
-                                                <input type="number" name="custom_points_{{ t.id }}" placeholder="e.g. 5 ducks" class="w-28 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500">
-                                            </td>
-                                            <td class="py-3 px-2">
-                                                <select name="medal_{{ t.id }}" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500">
-                                                    <option value="none">-</option>
-                                                    <option value="gold">🥇 Gold</option>
-                                                    <option value="silver">🥈 Silver</option>
-                                                    <option value="bronze">🥉 Bronze</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">
+                        💾 Save & Publish Standard Event Results &rarr;
+                    </button>
+                </form>
+            </div>
+
+            <!-- 2. DUCK HUNT FORM -->
+            <div id="cat-duck" class="event-cat-form space-y-4 hidden">
+                <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-xs text-amber-300">
+                    🦆 <strong>Duck Hunt Scoring:</strong> Enter the exact number of resin ducks found around the house. Each duck equals 1 point!
+                </div>
+
+                <form action="/admin/event-results/save-duck-hunt" method="POST" class="space-y-4">
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-[10px] text-slate-400 uppercase">
+                                    <th class="py-2 px-2">Nation</th>
+                                    <th class="py-2 px-2">Total Ducks Found (Points)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                {% for t in teams %}
+                                    <tr>
+                                        <td class="py-3 px-2 font-bold text-slate-100 flex items-center gap-2">
+                                            <span class="text-lg">{{ t.flag_emoji }}</span>
+                                            <span>{{ t.nation_name }}</span>
+                                        </td>
+                                        <td class="py-3 px-2">
+                                            <input type="number" name="ducks_{{ t.id }}" placeholder="e.g. 5" min="0" class="w-36 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500">
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">
+                        💾 Save & Publish Duck Hunt Scores &rarr;
+                    </button>
+                </form>
+            </div>
+
+            <!-- 3. CITY SELFIES (TREASURE HUNT) FORM -->
+            <div id="cat-treasure" class="event-cat-form space-y-4 hidden">
+                <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-xs text-amber-300">
+                    📸 <strong>City Selfies Scoring:</strong> Podiums award custom pod points (1st = 10pts, 2nd = 7pts, 3rd = 4pts, Last = 1pt, DNP = 0pts).
+                </div>
+
+                <form action="/admin/event-results/save-treasure" method="POST" class="space-y-4">
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-[10px] text-slate-400 uppercase">
+                                    <th class="py-2 px-2">Nation</th>
+                                    <th class="py-2 px-2">Podium Placement</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                {% for t in teams %}
+                                    <tr>
+                                        <td class="py-3 px-2 font-bold text-slate-100 flex items-center gap-2">
+                                            <span class="text-lg">{{ t.flag_emoji }}</span>
+                                            <span>{{ t.nation_name }}</span>
+                                        </td>
+                                        <td class="py-3 px-2">
+                                            <select name="pod_{{ t.id }}" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500">
+                                                <option value="1st">1st Team (10 pts + Gold)</option>
+                                                <option value="2nd">2nd Team (7 pts + Silver)</option>
+                                                <option value="3rd">3rd Team (4 pts + Bronze)</option>
+                                                <option value="last">Last Team (1 pt)</option>
+                                                <option value="dnp">DNP (0 pts)</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">
+                        💾 Save & Publish City Selfies Results &rarr;
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TAB 2: TREASURE VERIFICATION -->
+    <div class="space-y-6 {% if active_tab != 'verification' %}hidden{% endif %}">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+            <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">Pending Treasure Hunt Submissions</h2>
+
+            {% if pending_submissions %}
+                <div class="space-y-3">
+                    {% for sub in pending_submissions %}
+                        <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex items-center justify-between gap-4">
+                            <div>
+                                <span class="text-xs font-bold text-amber-400 block">{{ sub.teams.flag_emoji }} {{ sub.teams.nation_name }}</span>
+                                <span class="text-xs text-slate-200 font-semibold block mt-0.5">{{ sub.treasure_hunt_items.title }}</span>
+                                <a href="{{ sub.image_url }}" target="_blank" class="text-[10px] text-sky-400 underline mt-1 block">View Photo Evidence</a>
+                            </div>
+                            <form action="/admin/treasure/verify" method="POST" class="flex gap-2">
+                                <input type="hidden" name="submission_id" value="{{ sub.id }}">
+                                <button type="submit" name="action" value="approve" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs transition">Approve</button>
+                                <button type="submit" name="action" value="reject" class="bg-rose-500 hover:bg-rose-400 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs transition">Reject</button>
+                            </form>
                         </div>
-
-                        <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">
-                            💾 Save & Publish All Results for {{ ev }} &rarr;
-                        </button>
-                    </form>
-                {% endfor %}
-            </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-xs text-slate-500 italic text-center py-8">No pending photo submissions to review.</p>
+            {% endif %}
         </div>
+    </div>
 
-        <!-- Right Column: Verification & Recent Logs -->
-        <div class="space-y-6">
-            
-            <!-- Pending Treasure Submissions -->
-            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-                <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
-                    <span>📸</span> Pending Treasure Verification
-                </h2>
-
-                {% if pending_submissions %}
-                    <div class="space-y-3">
-                        {% for sub in pending_submissions %}
-                            <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex items-center justify-between gap-4">
-                                <div>
-                                    <span class="text-xs font-bold text-amber-400 block">{{ sub.teams.flag_emoji }} {{ sub.teams.nation_name }}</span>
-                                    <span class="text-xs text-slate-200 font-semibold block mt-0.5">{{ sub.treasure_hunt_items.title }}</span>
-                                    <a href="{{ sub.image_url }}" target="_blank" class="text-[10px] text-sky-400 underline mt-1 block">View Photo Evidence</a>
-                                </div>
-                                <form action="/admin/treasure/verify" method="POST" class="flex gap-2">
-                                    <input type="hidden" name="submission_id" value="{{ sub.id }}">
-                                    <button type="submit" name="action" value="approve" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs transition">Approve</button>
-                                    <button type="submit" name="action" value="reject" class="bg-rose-500 hover:bg-rose-400 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs transition">Reject</button>
-                                </form>
+    <!-- TAB 3: RECENT LOGS -->
+    <div class="space-y-6 {% if active_tab != 'logs' %}hidden{% endif %}">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+            <h2 class="text-sm font-black text-slate-100 uppercase tracking-widest text-xs">Recent Event Logs & Results</h2>
+            {% if recent_results %}
+                <div class="space-y-2">
+                    {% for res in recent_results %}
+                        <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl flex items-center justify-between text-xs">
+                            <div>
+                                <span class="font-bold text-slate-200">{{ res.teams.flag_emoji }} {{ res.teams.nation_name }}</span>
+                                <span class="text-slate-400 block text-[10px]">{{ res.event_name }} &bull; <strong class="text-amber-400">+{{ res.points }} pts</strong> {% if res.medal_type != 'none' %}&bull; <span class="uppercase text-amber-300 font-bold">{{ res.medal_type }}</span>{% endif %}</span>
                             </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <p class="text-xs text-slate-500 italic text-center py-4">No pending photo submissions to review.</p>
-                {% endif %}
-            </div>
-
-            <!-- Recent Logged Results -->
-            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-                <h2 class="text-sm font-black text-slate-100 uppercase tracking-widest text-xs">Recent Event Logs</h2>
-                {% if recent_results %}
-                    <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
-                        {% for res in recent_results %}
-                            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl flex items-center justify-between text-xs">
-                                <div>
-                                    <span class="font-bold text-slate-200">{{ res.teams.flag_emoji }} {{ res.teams.nation_name }}</span>
-                                    <span class="text-slate-400 block text-[10px]">{{ res.event_name }} &bull; <strong class="text-amber-400">+{{ res.points }} pts</strong></span>
-                                </div>
-                                <form action="/admin/event-results/delete" method="POST">
-                                    <input type="hidden" name="result_id" value="{{ res.id }}">
-                                    <button type="submit" class="text-[10px] text-rose-400 hover:underline">Delete</button>
-                                </form>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <p class="text-xs text-slate-500 italic text-center py-2">No event results recorded yet.</p>
-                {% endif %}
-            </div>
-
+                            <form action="/admin/event-results/delete" method="POST">
+                                <input type="hidden" name="result_id" value="{{ res.id }}">
+                                <button type="submit" class="text-[10px] text-rose-400 hover:underline">Delete</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-xs text-slate-500 italic text-center py-8">No event results recorded yet.</p>
+            {% endif %}
         </div>
-
     </div>
 
 </div>
 
-<!-- JavaScript to switch between event scoring forms -->
+<!-- JavaScript for Switching Admin Event Categories -->
 <script>
-    function switchEventForm(index) {
-        const forms = document.querySelectorAll('.event-form');
-        forms.forEach(f => f.classList.add('hidden'));
-        const activeForm = document.getElementById(`form-${index}`);
-        if (activeForm) {
-            activeForm.classList.remove('hidden');
+    function switchEventCategory(category) {
+        document.querySelectorAll('.event-cat-form').forEach(f => f.classList.add('hidden'));
+        const active = document.getElementById(`cat-${category}`);
+        if (active) {
+            active.classList.remove('hidden');
         }
+    }
+
+    function updateStandardEventInput(val) {
+        document.getElementById('hiddenStandardEventName').value = val;
     }
 </script>
 {% endblock %}
