@@ -1,41 +1,142 @@
-<!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-950 text-slate-100">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Login - Scuffed Olympics</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="h-full flex items-center justify-center px-4">
-
-    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
-        <div class="text-center mb-8">
-            <img src="/static/images/logo.png" alt="Logo" class="h-16 w-16 mx-auto mb-3 object-contain">
-            <h1 class="text-2xl font-black text-amber-400 tracking-wide">ATHLETE LOGIN</h1>
-            <p class="text-xs text-slate-400 mt-1">Select your nation and enter your team PIN</p>
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-md mx-auto py-12 px-4">
+    
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6">
+        
+        <div class="text-center space-y-2">
+            <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                Authentication Required
+            </span>
+            <h1 class="text-2xl font-black text-slate-100 tracking-tight">SELECT YOUR NATION</h1>
+            <p class="text-xs text-slate-400">Choose your country and enter your 4-digit secret PIN code.</p>
         </div>
 
-        <form action="/login" method="POST" class="space-y-6">
-            <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Representing Nation</label>
-                <select name="team_id" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-amber-400 transition">
-                    <option value="" disabled selected>Choose your nation...</option>
+        {% if request.query_params.get('error') %}
+            <div class="bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold p-3 rounded-xl text-center">
+                {{ request.query_params.get('error') }}
+            </div>
+        {% endif %}
+
+        <!-- Main Login Form -->
+        <form action="/login" method="POST" id="loginForm" class="space-y-6">
+            
+            <!-- Hidden input that holds the selected nation's team_id -->
+            <input type="hidden" name="team_id" id="selectedTeamId" required>
+            <!-- Hidden input that holds the 4-digit pin entered via keypad -->
+            <input type="hidden" name="pin_code" id="pinInput" required>
+
+            <!-- Step 1: Nation Selection Grid -->
+            <div id="nationStep" class="space-y-3">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider text-center">1. Tap Your Nation</label>
+                <div class="grid grid-cols-2 gap-3">
                     {% for team in teams %}
-                        <option value="{{ team.id }}">{{ team.flag_emoji }} {{ team.nation_name }}</option>
+                        <button type="button" onclick="selectNation('{{ team.id }}', '{{ team.nation_name }} {{ team.flag_emoji }}')" 
+                            class="nation-btn bg-slate-950 border border-slate-800 hover:border-amber-500/50 p-4 rounded-2xl flex items-center gap-3 transition text-left group">
+                            <span class="text-2xl">{{ team.flag_emoji }}</span>
+                            <div>
+                                <span class="font-bold text-sm block text-slate-200 group-hover:text-amber-400 transition">{{ team.nation_name }}</span>
+                            </div>
+                        </button>
                     {% endfor %}
-                </select>
+                </div>
             </div>
 
-            <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Team PIN Code</label>
-                <input type="password" name="pin_code" placeholder="Enter 4-digit PIN" required maxlength="6" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-amber-400 transition tracking-widest text-center">
+            <!-- Step 2: Keypad Entry (Hidden until nation is selected) -->
+            <div id="keypadStep" class="hidden space-y-6">
+                <div class="flex items-center justify-between bg-slate-950 px-4 py-3 rounded-2xl border border-slate-800">
+                    <span id="chosenNationDisplay" class="text-xs font-bold text-amber-400"></span>
+                    <button type="button" onclick="resetSelection()" class="text-xs text-slate-500 hover:text-slate-300 underline">Change</button>
+                </div>
+
+                <!-- PIN Dots Display -->
+                <div class="space-y-2 text-center">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">2. Enter Secret PIN</label>
+                    <div class="flex justify-center gap-3 py-2">
+                        <div class="pin-dot w-4 h-4 rounded-full border border-slate-700 bg-slate-950 transition"></div>
+                        <div class="pin-dot w-4 h-4 rounded-full border border-slate-700 bg-slate-950 transition"></div>
+                        <div class="pin-dot w-4 h-4 rounded-full border border-slate-700 bg-slate-950 transition"></div>
+                        <div class="pin-dot w-4 h-4 rounded-full border border-slate-700 bg-slate-950 transition"></div>
+                    </div>
+                </div>
+
+                <!-- iOS Style Keypad Grid -->
+                <div class="grid grid-cols-3 gap-3 max-w-xs mx-auto">
+                    <button type="button" onclick="pressKey('1')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">1</button>
+                    <button type="button" onclick="pressKey('2')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">2</button>
+                    <button type="button" onclick="pressKey('3')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">3</button>
+                    <button type="button" onclick="pressKey('4')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">4</button>
+                    <button type="button" onclick="pressKey('5')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">5</button>
+                    <button type="button" onclick="pressKey('6')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">6</button>
+                    <button type="button" onclick="pressKey('7')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">7</button>
+                    <button type="button" onclick="pressKey('8')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">8</button>
+                    <button type="button" onclick="pressKey('9')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">9</button>
+                    <div></div>
+                    <button type="button" onclick="pressKey('0')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">0</button>
+                    <button type="button" onclick="deleteKey()" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-slate-200 text-xs font-bold py-4 rounded-2xl transition flex items-center justify-center">⌫</button>
+                </div>
             </div>
 
-            <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-3 rounded-xl transition shadow-lg shadow-amber-500/10">
-                ENTER THE GAMES
-            </button>
         </form>
-    </div>
 
-</body>
-</html>
+    </div>
+</div>
+
+<!-- Keypad Interaction Script -->
+<script>
+    let currentPin = "";
+
+    function selectNation(id, name) {
+        document.getElementById("selectedTeamId").value = id;
+        document.getElementById("chosenNationDisplay").innerText = "Selected: " + name;
+        
+        // Hide nation step, show keypad step
+        document.getElementById("nationStep").classList.add("hidden");
+        document.getElementById("keypadStep").classList.remove("hidden");
+    }
+
+    function resetSelection() {
+        document.getElementById("selectedTeamId").value = "";
+        currentPin = "";
+        updatePinDisplay();
+        
+        document.getElementById("keypadStep").classList.add("hidden");
+        document.getElementById("nationStep").classList.remove("hidden");
+    }
+
+    function pressKey(num) {
+        if (currentPin.length < 4) {
+            currentPin += num;
+            updatePinDisplay();
+            
+            if (currentPin.length === 4) {
+                document.getElementById("pinInput").value = currentPin;
+                // Auto-submit form when 4 digits are entered
+                setTimeout(() => {
+                    document.getElementById("loginForm").submit();
+                }, 200);
+            }
+        }
+    }
+
+    function deleteKey() {
+        if (currentPin.length > 0) {
+            currentPin = currentPin.slice(0, -1);
+            updatePinDisplay();
+        }
+    }
+
+    function updatePinDisplay() {
+        const dots = document.querySelectorAll(".pin-dot");
+        dots.forEach((dot, index) => {
+            if (index < currentPin.length) {
+                dot.classList.add("bg-amber-500", "border-amber-500");
+                dot.classList.remove("bg-slate-950", "border-slate-700");
+            } else {
+                dot.classList.remove("bg-amber-500", "border-amber-500");
+                dot.classList.add("bg-slate-950", "border-slate-700");
+            }
+        });
+    }
+</script>
+{% endblock %}
