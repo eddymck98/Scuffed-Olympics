@@ -1,1 +1,20 @@
+/* Remove the heavy background container wrapper */
+.section-container {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
 
+/* Let individual country buttons float cleanly */
+.country-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.2s ease-in-out;
+}
+
+.country-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
