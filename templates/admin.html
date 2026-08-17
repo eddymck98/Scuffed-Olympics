@@ -19,10 +19,13 @@
     <!-- Admin Sub-Navigation Tabs -->
     <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-4">
         <a href="/admin?tab=events" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'events' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
-            🏆 Event Result Manager
+            🏆 Event Manager
         </a>
         <a href="/admin?tab=verification" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'verification' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
-            📸 Treasure Verification {% if pending_submissions %}<span class="ml-1 bg-rose-500 text-slate-950 px-1.5 py-0.5 rounded-full text-[10px]">{{ pending_submissions|length }}</span>{% endif %}
+            📸 Treasure Verification
+        </a>
+        <a href="/admin?tab=var" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'var' %} bg-rose-600 text-white shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-rose-400 border border-slate-800 {% endif %}">
+            🚨 VAR Judgement Hall {% if var_submissions %}<span class="ml-1 bg-white text-rose-600 px-1.5 py-0.5 rounded-full text-[10px]">{{ var_submissions|length }}</span>{% endif %}
         </a>
         <a href="/admin?tab=logs" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'logs' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
             📜 Recent Activity Logs
@@ -39,13 +42,11 @@
                 <span class="text-xs font-black uppercase block">Standard Events</span>
                 <span class="text-[10px] opacity-75">7th to 1st placement scoring</span>
             </a>
-
             <a href="/admin?tab=events&subtab=duck" class="p-4 rounded-2xl border text-left transition {% if active_subtab == 'duck' %} bg-amber-500/10 border-amber-500 text-amber-400 shadow-md {% else %} bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700 {% endif %}">
                 <span class="text-lg block mb-1">🦆</span>
                 <span class="text-xs font-black uppercase block">Duck Hunt</span>
                 <span class="text-[10px] opacity-75">Direct duck count entry</span>
             </a>
-
             <a href="/admin?tab=events&subtab=treasure" class="p-4 rounded-2xl border text-left transition {% if active_subtab == 'treasure' %} bg-amber-500/10 border-amber-500 text-amber-400 shadow-md {% else %} bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700 {% endif %}">
                 <span class="text-lg block mb-1">📸</span>
                 <span class="text-xs font-black uppercase block">City Selfies</span>
@@ -53,188 +54,93 @@
             </a>
         </div>
 
-        <!-- 1. STANDARD EVENTS SUBTAB -->
+        <!-- Standard Events Subtab -->
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6 {% if active_subtab != 'standard' %}hidden{% endif %}">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">Standard Event Scorecard</h2>
-                    <p class="text-xs text-slate-400 mt-1">Select an event and assign placements. Medals and points auto-calculate!</p>
                 </div>
-                <div>
-                    <select onchange="window.location.href='/admin?tab=events&subtab=standard&event=' + this.value" class="bg-slate-950 border border-amber-500/50 rounded-2xl px-4 py-2.5 text-xs font-bold text-amber-400 outline-none">
-                        {% for ev in standard_events %}
-                            <option value="{{ ev }}" {% if selected_event == ev %}selected{% endif %}>{{ ev }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                <select onchange="window.location.href='/admin?tab=events&subtab=standard&event=' + this.value" class="bg-slate-950 border border-amber-500/50 rounded-2xl px-4 py-2.5 text-xs font-bold text-amber-400 outline-none">
+                    {% for ev in standard_events %}<option value="{{ ev }}" {% if selected_event == ev %}selected{% endif %}>{{ ev }}</option>{% endfor %}
+                </select>
             </div>
-
             <form action="/admin/event-results/save-standard" method="POST" class="space-y-4">
                 <input type="hidden" name="event_name" value="{{ selected_event }}">
-                
                 <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="border-b border-slate-800 text-[10px] text-slate-400 uppercase">
-                                <th class="py-2 px-2">Nation</th>
-                                <th class="py-2 px-2">Select Placement</th>
-                                <th class="py-2 px-2">Saved Status / Auto-Medal</th>
-                            </tr>
-                        </thead>
+                        <thead><tr class="border-b border-slate-800 text-[10px] text-slate-400 uppercase"><th class="py-2 px-2">Nation</th><th class="py-2 px-2">Select Placement</th><th class="py-2 px-2">Saved Status</th></tr></thead>
                         <tbody class="divide-y divide-slate-800/50">
                             {% for t in teams %}
-                                {% set saved = event_scores.get(t.id) %}
-                                <tr>
-                                    <td class="py-3 px-2 font-bold text-slate-100 flex items-center gap-2">
-                                        <span class="text-lg">{{ t.flag_emoji }}</span>
-                                        <span>{{ t.nation_name }}</span>
-                                    </td>
-                                    <td class="py-3 px-2">
-                                        <select name="placement_{{ t.id }}" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500">
-                                            <option value="unscored" {% if not saved %}selected{% endif %}>-- Select Placement --</option>
-                                            <option value="1st" {% if saved and saved.medal_type == 'gold' %}selected{% endif %}>1st Place (8 pts)</option>
-                                            <option value="2nd" {% if saved and saved.medal_type == 'silver' %}selected{% endif %}>2nd Place (7 pts)</option>
-                                            <option value="3rd" {% if saved and saved.medal_type == 'bronze' %}selected{% endif %}>3rd Place (6 pts)</option>
-                                            <option value="4th" {% if saved and saved.points == 5 %}selected{% endif %}>4th Place (5 pts)</option>
-                                            <option value="5th" {% if saved and saved.points == 4 %}selected{% endif %}>5th Place (4 pts)</option>
-                                            <option value="6th" {% if saved and saved.points == 3 %}selected{% endif %}>6th Place (3 pts)</option>
-                                            <option value="7th" {% if saved and saved.points == 10 %}selected{% endif %}>7th Place (10 pts)</option>
-                                            <option value="8th" {% if saved and saved.points == 2 %}selected{% endif %}>8th Place (2 pts)</option>
-                                            <option value="9th" {% if saved and saved.points == 1 %}selected{% endif %}>9th Place (1 pt)</option>
-                                            <option value="DNP" {% if saved and saved.points == 0 and saved.medal_type == 'none' %}selected{% endif %}>DNP (0 pts)</option>
-                                        </select>
-                                    </td>
-                                    <td class="py-3 px-2 text-[11px] font-mono">
-                                        {% if saved %}
-                                            <span class="text-emerald-400 font-bold">✓ Saved: {{ saved.points }} pts</span> {% if saved.medal_type != 'none' %}<span class="text-amber-400 uppercase font-bold">&bull; {{ saved.medal_type }}</span>{% endif %}
-                                        {% else %}
-                                            <span class="text-slate-500 italic">Unscored</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
+                            {% set saved = event_scores.get(t.id) %}
+                            <tr>
+                                <td class="py-3 px-2 font-bold text-slate-100 flex items-center gap-2"><span class="text-lg">{{ t.flag_emoji }}</span><span>{{ t.nation_name }}</span></td>
+                                <td class="py-3 px-2">
+                                    <select name="placement_{{ t.id }}" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500">
+                                        <option value="unscored" {% if not saved %}selected{% endif %}>-- Select Placement --</option>
+                                        <option value="1st" {% if saved and saved.medal_type == 'gold' %}selected{% endif %}>1st Place (8 pts)</option>
+                                        <option value="2nd" {% if saved and saved.medal_type == 'silver' %}selected{% endif %}>2nd Place (7 pts)</option>
+                                        <option value="3rd" {% if saved and saved.medal_type == 'bronze' %}selected{% endif %}>3rd Place (6 pts)</option>
+                                        <option value="4th" {% if saved and saved.points == 5 %}selected{% endif %}>4th Place (5 pts)</option>
+                                        <option value="5th" {% if saved and saved.points == 4 %}selected{% endif %}>5th Place (4 pts)</option>
+                                        <option value="6th" {% if saved and saved.points == 3 %}selected{% endif %}>6th Place (3 pts)</option>
+                                        <option value="7th" {% if saved and saved.points == 10 %}selected{% endif %}>7th Place (10 pts)</option>
+                                        <option value="8th" {% if saved and saved.points == 2 %}selected{% endif %}>8th Place (2 pts)</option>
+                                        <option value="9th" {% if saved and saved.points == 1 %}selected{% endif %}>9th Place (1 pt)</option>
+                                        <option value="DNP" {% if saved and saved.points == 0 and saved.medal_type == 'none' %}selected{% endif %}>DNP (0 pts)</option>
+                                    </select>
+                                </td>
+                                <td class="py-3 px-2 text-[11px] font-mono">{% if saved %}<span class="text-emerald-400 font-bold">✓ Saved</span>{% else %}<span class="text-slate-500 italic">Unscored</span>{% endif %}</td>
+                            </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-
-                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">
-                    💾 Save & Publish {{ selected_event }} Results &rarr;
-                </button>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">Save & Publish {{ selected_event }} Results</button>
             </form>
         </div>
-
-        <!-- 2. DUCK HUNT SUBTAB -->
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6 {% if active_subtab != 'duck' %}hidden{% endif %}">
-            <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-xs text-amber-300">
-                🦆 <strong>Duck Hunt Scoring:</strong> Enter the exact number of resin ducks found around the house. Each duck equals 1 point!
-            </div>
-
-            <form action="/admin/event-results/save-duck-hunt" method="POST" class="space-y-4">
-                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="border-b border-slate-800 text-[10px] text-slate-400 uppercase">
-                                <th class="py-2 px-2">Nation</th>
-                                <th class="py-2 px-2">Total Ducks Found</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800/50">
-                            {% for t in teams %}
-                                <tr>
-                                    <td class="py-3 px-2 font-bold text-slate-100 flex items-center gap-2">
-                                        <span class="text-lg">{{ t.flag_emoji }}</span>
-                                        <span>{{ t.nation_name }}</span>
-                                    </td>
-                                    <td class="py-3 px-2">
-                                        <input type="number" name="ducks_{{ t.id }}" placeholder="e.g. 5" min="0" class="w-36 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500">
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">
-                    💾 Save & Publish Duck Hunt Scores &rarr;
-                </button>
-            </form>
-        </div>
-
-        <!-- 3. CITY SELFIES SUBTAB -->
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6 {% if active_subtab != 'treasure' %}hidden{% endif %}">
-            <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-xs text-amber-300">
-                📸 <strong>City Selfies Scoring:</strong> Podiums award custom pod points (1st = 10pts + Gold, 2nd = 7pts + Silver, 3rd = 4pts + Bronze, Last = 1pt, DNP = 0pts).
-            </div>
-
-            <form action="/admin/event-results/save-treasure" method="POST" class="space-y-4">
-                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="border-b border-slate-800 text-[10px] text-slate-400 uppercase">
-                                <th class="py-2 px-2">Nation</th>
-                                <th class="py-2 px-2">Podium Placement</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800/50">
-                            {% for t in teams %}
-                                <tr>
-                                    <td class="py-3 px-2 font-bold text-slate-100 flex items-center gap-2">
-                                        <span class="text-lg">{{ t.flag_emoji }}</span>
-                                        <span>{{ t.nation_name }}</span>
-                                    </td>
-                                    <td class="py-3 px-2">
-                                        <select name="pod_{{ t.id }}" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500">
-                                            <option value="unscored">-- Select Pod Placement --</option>
-                                            <option value="1st">1st Team (10 pts + Gold)</option>
-                                            <option value="2nd">2nd Team (7 pts + Silver)</option>
-                                            <option value="3rd">3rd Team (4 pts + Bronze)</option>
-                                            <option value="last">Last Team (1 pt)</option>
-                                            <option value="dnp">DNP (0 pts)</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">
-                    💾 Save & Publish City Selfies Results &rarr;
-                </button>
-            </form>
-        </div>
-
     </div>
 
     <!-- TAB 2: TREASURE VERIFICATION -->
     <div class="space-y-6 {% if active_tab != 'verification' %}hidden{% endif %}">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
             <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">Pending Treasure Hunt Submissions</h2>
-
             {% if pending_submissions %}
                 <div class="space-y-3">
                     {% for sub in pending_submissions %}
                         <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex items-center justify-between gap-4">
-                            <div>
-                                <span class="text-xs font-bold text-amber-400 block">{{ sub.teams.flag_emoji }} {{ sub.teams.nation_name }}</span>
-                                <span class="text-xs text-slate-200 font-semibold block mt-0.5">{{ sub.treasure_hunt_items.title }}</span>
-                                <a href="{{ sub.image_url }}" target="_blank" class="text-[10px] text-sky-400 underline mt-1 block">View Photo Evidence</a>
-                            </div>
-                            <form action="/admin/treasure/verify" method="POST" class="flex gap-2">
-                                <input type="hidden" name="submission_id" value="{{ sub.id }}">
-                                <button type="submit" name="action" value="approve" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs transition">Approve</button>
-                                <button type="submit" name="action" value="reject" class="bg-rose-500 hover:bg-rose-400 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs transition">Reject</button>
+                            <div><span class="text-xs font-bold text-amber-400">{{ sub.teams.flag_emoji }} {{ sub.teams.nation_name }}</span><p class="text-xs text-slate-200">{{ sub.treasure_hunt_items.title }}</p><a href="{{ sub.image_url }}" target="_blank" class="text-[10px] text-sky-400 underline">View Photo</a></div>
+                            <form action="/admin/treasure/verify" method="POST" class="flex gap-2"><input type="hidden" name="submission_id" value="{{ sub.id }}"><button type="submit" name="action" value="approve" class="bg-emerald-500 text-slate-950 font-bold px-3 py-1 rounded-lg text-xs">Approve</button><button type="submit" name="action" value="reject" class="bg-rose-500 text-slate-950 font-bold px-3 py-1 rounded-lg text-xs">Reject</button></form>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}<p class="text-xs text-slate-500 italic text-center py-8">No pending photo submissions to review.</p>{% endif %}
+        </div>
+    </div>
+
+    <!-- TAB 3: VAR JUDGEMENT HALL -->
+    <div class="space-y-6 {% if active_tab != 'var' %}hidden{% endif %}">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
+            <h2 class="text-sm font-black text-rose-500 uppercase tracking-widest flex items-center gap-2">🚨 Judgement Hall</h2>
+            {% if var_submissions %}
+                <div class="space-y-4">
+                    {% for sub in var_submissions %}
+                        <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl space-y-4">
+                            <div><span class="text-amber-400 font-bold text-xs">{{ sub.teams.flag_emoji }} {{ sub.teams.nation_name }}</span><p class="text-slate-300 text-xs mt-2 italic">"{{ sub.incident_description }}"</p></div>
+                            <form action="/admin/var/issue" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end bg-slate-900 p-4 rounded-xl">
+                                <input type="hidden" name="submission_id" value="{{ sub.id }}"><input type="hidden" name="reason" value="{{ sub.incident_description }}">
+                                <div><label class="text-[10px] uppercase font-bold text-slate-500">Ruling</label><select name="decision" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs"><option value="upheld">Upheld (Penalty)</option><option value="dismissed">Dismissed</option></select></div>
+                                <div><label class="text-[10px] uppercase font-bold text-slate-500">Pts Penalty</label><input type="number" name="points" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs"></div>
+                                <div><label class="text-[10px] uppercase font-bold text-slate-500">Shots Owed</label><input type="number" name="shots" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs"></div>
+                                <button type="submit" class="bg-rose-500 text-slate-950 font-black text-[10px] uppercase py-2 rounded-lg hover:bg-rose-400">Issue Ruling</button>
                             </form>
                         </div>
                     {% endfor %}
                 </div>
-            {% else %}
-                <p class="text-xs text-slate-500 italic text-center py-8">No pending photo submissions to review.</p>
-            {% endif %}
+            {% else %}<p class="text-xs text-slate-500 italic text-center py-8">The Judgement Hall is quiet. No incidents pending.</p>{% endif %}
         </div>
     </div>
 
-    <!-- TAB 3: RECENT LOGS -->
+    <!-- TAB 4: RECENT LOGS -->
     <div class="space-y-6 {% if active_tab != 'logs' %}hidden{% endif %}">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
             <h2 class="text-sm font-black text-slate-100 uppercase tracking-widest text-xs">Recent Event Logs & Results</h2>
@@ -242,22 +148,13 @@
                 <div class="space-y-2">
                     {% for res in recent_results %}
                         <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl flex items-center justify-between text-xs">
-                            <div>
-                                <span class="font-bold text-slate-200">{{ res.teams.flag_emoji }} {{ res.teams.nation_name }}</span>
-                                <span class="text-slate-400 block text-[10px]">{{ res.event_name }} &bull; <strong class="text-amber-400">+{{ res.points }} pts</strong> {% if res.medal_type != 'none' %}&bull; <span class="uppercase text-amber-300 font-bold">{{ res.medal_type }}</span>{% endif %}</span>
-                            </div>
-                            <form action="/admin/event-results/delete" method="POST">
-                                <input type="hidden" name="result_id" value="{{ res.id }}">
-                                <button type="submit" class="text-[10px] text-rose-400 hover:underline">Delete</button>
-                            </form>
+                            <div><span class="font-bold text-slate-200">{{ res.teams.flag_emoji }} {{ res.teams.nation_name }}</span><span class="text-slate-400 block text-[10px]">{{ res.event_name }} &bull; <strong class="text-amber-400">+{{ res.points }} pts</strong></span></div>
+                            <form action="/admin/event-results/delete" method="POST"><input type="hidden" name="result_id" value="{{ res.id }}"><button type="submit" class="text-[10px] text-rose-400 hover:underline">Delete</button></form>
                         </div>
                     {% endfor %}
                 </div>
-            {% else %}
-                <p class="text-xs text-slate-500 italic text-center py-8">No event results recorded yet.</p>
-            {% endif %}
+            {% else %}<p class="text-xs text-slate-500 italic text-center py-8">No event results recorded yet.</p>{% endif %}
         </div>
     </div>
-
 </div>
 {% endblock %}
