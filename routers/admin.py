@@ -5,6 +5,20 @@ from routers.auth import require_admin
 
 router = APIRouter(tags=["Admin"])
 
+# Point mapping rules for standard events
+PLACEMENT_POINTS = {
+    "1st": 8,
+    "2nd": 7,
+    "3rd": 6,
+    "4th": 5,
+    "5th": 4,
+    "6th": 3,
+    "7th": 10,
+    "8th": 2,
+    "9th": 1,
+    "DNP": 0
+}
+
 @router.get("/admin", response_class=HTMLResponse)
 async def admin_dashboard(request: Request, admin: bool = Depends(require_admin)):
     pending_res = supabase.table("team_treasure_progress").select("id, image_url, submitted_at, status, teams(nation_name, flag_emoji), treasure_hunt_items(title, points)").eq("status", "pending").execute()
@@ -16,7 +30,6 @@ async def admin_dashboard(request: Request, admin: bool = Depends(require_admin)
     results_res = supabase.table("event_results").select("id, event_name, points, medal_type, teams(nation_name, flag_emoji)").order("recorded_at", desc=True).limit(10).execute()
     recent_results = results_res.data if results_res.data else []
 
-    # Bypass Starlette's cached TemplateResponse to prevent Python 3.14 dict-hashing error
     template = templates.get_template("admin.html")
     html_content = template.render({
         "request": request,
@@ -30,12 +43,19 @@ async def admin_dashboard(request: Request, admin: bool = Depends(require_admin)
 async def add_event_result(
     event_name: str = Form(...),
     team_id: str = Form(...),
-    points: int = Form(...),
+    placement: str = Form(...), # e.g. "1st", "7th", "DNP" or "custom"
+    custom_points: int = Form(None), # Used for Duck Hunt or custom pod points
     medal_type: str = Form("none"),
     admin: bool = Depends(require_admin)
 ):
+    # Determine points: use custom points if provided (like Duck Hunt), otherwise lookup from placement
+    if placement == "custom" and custom_points is not None:
+        points = custom_points
+    else:
+        points = PLACEMENT_POINTS.get(placement, 0)
+
     supabase.table("event_results").insert({
-        "event_name": event_name,
+        "event_name": f"{event_name} ({placement})" if placement != "custom" else event_name,
         "team_id": team_id,
         "points": points,
         "medal_type": medal_type
