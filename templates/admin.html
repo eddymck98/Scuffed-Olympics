@@ -1,67 +1,137 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="space-y-8">
+<div class="max-w-6xl mx-auto py-6 px-4 space-y-8">
     
     <!-- Admin Header -->
-    <div class="bg-slate-900 border border-rose-900/40 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div>
-            <h1 class="text-2xl font-black text-rose-500">COMMISSIONER COMMAND CENTER</h1>
-            <p class="text-xs text-slate-400 mt-1">Control global event unlocks, manage game states, and review submissions.</p>
+    <div class="bg-slate-900 border border-amber-500/40 rounded-3xl p-6 shadow-2xl flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <span class="text-4xl">👑</span>
+            <div>
+                <span class="text-xs font-black text-amber-400 uppercase tracking-widest">Commissioner Control Center</span>
+                <h1 class="text-2xl font-black text-slate-100">ADMINISTRATION & VERIFICATION</h1>
+            </div>
         </div>
-        <div class="flex items-center space-x-3">
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                ADMIN ACTIVE
-            </span>
-        </div>
+        <a href="/" class="text-xs font-bold bg-slate-950 border border-slate-800 text-slate-300 px-4 py-2 rounded-xl hover:border-amber-500 transition">
+            &larr; Back to Dashboard
+        </a>
     </div>
 
-    <!-- Grid Section: Global Toggles & Quick Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Main Admin Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
-        <!-- Game Toggles Box -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <h2 class="text-lg font-bold text-amber-400 mb-4 flex items-center gap-2">
-                <span>⚡</span> Global Event Toggles
-            </h2>
-            <p class="text-xs text-slate-400 mb-6">Flip switches to instantly unlock features on all participant devices.</p>
-            
-            <div class="space-y-4">
-                <!-- Treasure Hunt Toggle Form -->
-                <form action="/admin/toggle" method="POST" class="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <div>
-                        <span class="font-bold text-sm block text-slate-200">City Treasure Hunt</span>
-                        <span class="text-xs text-slate-400">Allows teams to view items and submit photos</span>
-                    </div>
-                    <input type="hidden" name="key" value="treasure_hunt_active">
-                    <button type="submit" class="px-4 py-2 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 hover:bg-amber-400 transition">
-                        Toggle State
-                    </button>
-                </form>
-
-                <!-- Puzzle Room Toggle Form -->
-                <form action="/admin/toggle" method="POST" class="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <div>
-                        <span class="font-bold text-sm block text-slate-200">Escape Room / Puzzle Round</span>
-                        <span class="text-xs text-slate-400">Unlocks the multi-stage code breaking round</span>
-                    </div>
-                    <input type="hidden" name="key" value="puzzle_room_active">
-                    <button type="submit" class="px-4 py-2 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 hover:bg-amber-400 transition">
-                        Toggle State
-                    </button>
-                </form>
+        <!-- Left Column: Log Event Results -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
+            <div>
+                <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
+                    <span>🏆</span> Record Event Result
+                </h2>
+                <p class="text-xs text-slate-400 mt-1">Log scores for standard events, Duck Hunt counts, or custom treasure placements.</p>
             </div>
+
+            <form action="/admin/event-results/add" method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1 uppercase">Select Event</label>
+                    <select name="event_name" required class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-xs text-slate-100 focus:border-amber-500 outline-none">
+                        <option value="Duck Hunt">Duck Hunt (Enter duck count as points)</option>
+                        <option value="City Selfies">City Selfies (City Treasure Hunt)</option>
+                        <option value="Crack the Code">Crack the Code (Escape Room)</option>
+                        <option value="Golf Putting">Golf Putting</option>
+                        <option value="Padel Pong">Padel Pong</option>
+                        <option value="Sticky Bounce">Sticky Bounce</option>
+                        <option value="Ring Toss">Ring Toss</option>
+                        <option value="Bean Bag Toss">Bean Bag Toss</option>
+                        <option value="The Entrance">The Entrance</option>
+                        <option value="Cut the Deck">Cut the Deck</option>
+                        <option value="Beer Pong">Beer Pong</option>
+                        <option value="The Ultimate Relay Race">The Ultimate Relay Race</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1 uppercase">Select Nation</label>
+                    <select name="team_id" required class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-xs text-slate-100 focus:border-amber-500 outline-none">
+                        {% for t in teams %}
+                            <option value="{{ t.id }}">{{ t.flag_emoji }} {{ t.nation_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1 uppercase">Points Awarded</label>
+                        <input type="number" name="points" required placeholder="e.g. 10" class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-xs text-slate-100 focus:border-amber-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1 uppercase">Medal Type</label>
+                        <select name="medal_type" class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-xs text-slate-100 focus:border-amber-500 outline-none">
+                            <option value="none">None / Points Only</option>
+                            <option value="gold">🥇 Gold Medal</option>
+                            <option value="silver">🥈 Silver Medal</option>
+                            <option value="bronze">🥉 Bronze Medal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">
+                    Publish Result to Standings &rarr;
+                </button>
+            </form>
         </div>
 
-        <!-- Pending Verifications Summary -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <h2 class="text-lg font-bold text-amber-400 mb-4 flex items-center gap-2">
-                <span>📸</span> Treasure Hunt Verification Queue
-            </h2>
-            <p class="text-xs text-slate-400 mb-6">Review incoming team photo proofs and award points instantly.</p>
+        <!-- Right Column: Pending Treasure Verification & Recent Logs -->
+        <div class="space-y-6">
             
-            <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 text-center text-xs text-slate-400">
-                Queue endpoint ready. We will wire up the verification cards next!
+            <!-- Pending Treasure Submissions -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+                <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
+                    <span>📸</span> Pending Treasure Verification
+                </h2>
+
+                {% if pending_submissions %}
+                    <div class="space-y-3">
+                        {% for sub in pending_submissions %}
+                            <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex items-center justify-between gap-4">
+                                <div>
+                                    <span class="text-xs font-bold text-amber-400 block">{{ sub.teams.flag_emoji }} {{ sub.teams.nation_name }}</span>
+                                    <span class="text-xs text-slate-200 font-semibold block mt-0.5">{{ sub.treasure_hunt_items.title }}</span>
+                                    <a href="{{ sub.image_url }}" target="_blank" class="text-[10px] text-sky-400 underline mt-1 block">View Photo Evidence</a>
+                                </div>
+                                <form action="/admin/treasure/verify" method="POST" class="flex gap-2">
+                                    <input type="hidden" name="submission_id" value="{{ sub.id }}">
+                                    <button type="submit" name="action" value="approve" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs transition">Approve</button>
+                                    <button type="submit" name="action" value="reject" class="bg-rose-500 hover:bg-rose-400 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs transition">Reject</button>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-xs text-slate-500 italic text-center py-4">No pending photo submissions to review.</p>
+                {% endif %}
             </div>
+
+            <!-- Recent Logged Results -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+                <h2 class="text-sm font-black text-slate-100 uppercase tracking-widest text-xs">Recent Event Logs</h2>
+                {% if recent_results %}
+                    <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                        {% for res in recent_results %}
+                            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl flex items-center justify-between text-xs">
+                                <div>
+                                    <span class="font-bold text-slate-200">{{ res.teams.flag_emoji }} {{ res.teams.nation_name }}</span>
+                                    <span class="text-slate-400 block text-[10px]">{{ res.event_name }} &bull; <strong class="text-amber-400">+{{ res.points }} pts</strong></span>
+                                </div>
+                                <form action="/admin/event-results/delete" method="POST">
+                                    <input type="hidden" name="result_id" value="{{ res.id }}">
+                                    <button type="submit" class="text-[10px] text-rose-400 hover:underline">Delete</button>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-xs text-slate-500 italic text-center py-2">No event results recorded yet.</p>
+                {% endif %}
+            </div>
+
         </div>
 
     </div>
