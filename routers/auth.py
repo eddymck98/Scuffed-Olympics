@@ -52,6 +52,13 @@ async def login_action(team_id: str = Form(...), pin_code: str = Form(...)):
     response = RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
     response.set_cookie(key="team_id", value=team["id"], httponly=True)
     response.set_cookie(key="nation_name", value=team["nation_name"], httponly=True)
+    
+    # Automatically grant admin session if this nation is flagged as admin in Supabase
+    if team.get("is_admin"):
+        response.set_cookie(key="is_admin", value="true", httponly=True)
+    else:
+        response.delete_cookie("is_admin")
+        
     return response
 
 @router.get("/logout")
@@ -59,6 +66,7 @@ async def logout():
     response = RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
     response.delete_cookie("team_id")
     response.delete_cookie("nation_name")
+    response.delete_cookie("is_admin")
     return response
 
 @router.get("/admin/login", response_class=HTMLResponse)
