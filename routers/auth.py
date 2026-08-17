@@ -7,10 +7,14 @@ router = APIRouter(tags=["Authentication"])
 
 def get_current_team(request: Request):
     team_id = request.cookies.get("team_id")
-    nation_name = request.cookies.get("nation_name")
-    if not team_id or not nation_name:
+    if not team_id:
         return None
-    return {"id": team_id, "nation_name": nation_name}
+    
+    # Fetch the fresh, full team data from the database
+    res = supabase.table("teams").select("id, nation_name, participant_name, greeting, shots_owed").eq("id", team_id).execute()
+    if not res.data:
+        return None
+    return res.data[0]
 
 def require_team(request: Request):
     team = get_current_team(request)
@@ -39,7 +43,6 @@ async def login_page(request: Request):
         print("Error fetching teams for login:", e)
         teams = []
     
-    # Bypass starlette TemplateResponse cache wrapper to prevent Python 3.14 dict-hashing error
     template = templates.get_template("login.html")
     html_content = template.render({"request": request, "teams": teams})
     return HTMLResponse(content=html_content)
@@ -57,7 +60,6 @@ async def login_action(team_id: str = Form(...), pin_code: str = Form(...)):
     response.set_cookie(key="team_id", value=team["id"], httponly=True)
     response.set_cookie(key="nation_name", value=team["nation_name"], httponly=True)
     
-    # Automatically grant admin session if this nation is flagged as admin in Supabase
     if team.get("is_admin"):
         response.set_cookie(key="is_admin", value="true", httponly=True)
     else:
@@ -75,7 +77,6 @@ async def logout():
 
 @router.get("/admin/login", response_class=HTMLResponse)
 async def admin_login_page(request: Request):
-    # Bypass starlette TemplateResponse cache wrapper here too
     template = templates.get_template("admin_login.html")
     html_content = template.render({"request": request})
     return HTMLResponse(content=html_content)
