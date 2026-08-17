@@ -7,7 +7,7 @@ router = APIRouter(tags=["Participants"])
 
 @router.get("/", response_class=HTMLResponse)
 async def home_dashboard(request: Request, team: dict = Depends(require_team)):
-    teams_res = supabase.table("teams").select("id, nation_name, flag_emoji").execute()
+    teams_res = supabase.table("teams").select("id, nation_name, participant_name, flag_emoji").order("nation_name").execute()
     teams = teams_res.data if teams_res.data else []
     
     results_res = supabase.table("event_results").select("team_id, medal_type, points").execute()
@@ -53,7 +53,7 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
         .select("event_name, medal_type, recorded_at, teams(nation_name, flag_emoji)") \
         .neq("medal_type", "none") \
         .order("recorded_at", desc=True) \
-        .limit(5) \
+        .limit(6) \
         .execute()
     activities = activity_res.data if activity_res.data else []
 
@@ -61,6 +61,7 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
     html_content = template.render({
         "request": request, 
         "team": team, 
+        "teams": teams,
         "standings": sorted_standings,
         "activities": activities,
         "shots_history": shots_history
@@ -68,10 +69,16 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
     return HTMLResponse(content=html_content)
 
 @router.post("/var/submit")
-async def submit_var(incident: str = Form(...), team: dict = Depends(require_team)):
+async def submit_var(target_team_id: str = Form(...), incident: str = Form(...), team: dict = Depends(require_team)):
+    # Get target team details to make the incident description clear
+    target_res = supabase.table("teams").select("nation_name, participant_name").eq("id", target_team_id).execute()
+    target_info = target_res.data[0] if target_res.data else {"nation_name": "Unknown", "participant_name": "Athlete"}
+    
+    formatted_incident = f"[Target: {target_info['nation_name']} ({target_info['participant_name']})] {incident}"
+    
     supabase.table("var_submissions").insert({
-        "team_id": team["id"],
-        "incident_description": incident,
+        "team_id": target_team_id,
+        "incident_description": formatted_incident,
         "status": "pending"
     }).execute()
     return RedirectResponse(url="/?message=VAR+submitted", status_code=303)
