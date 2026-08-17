@@ -1,81 +1,93 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-md mx-auto py-12 px-4">
+<div class="max-w-xl mx-auto py-8 px-4">
     
-    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6">
-        
-        <div class="text-center space-y-2">
-            <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                Official Games Login
+    <!-- Hero Banner with Logo -->
+    <div class="bg-gradient-to-b from-slate-900 to-slate-950 border border-amber-500/30 rounded-3xl p-8 shadow-2xl text-center space-y-4 relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl"></div>
+        <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-rose-500/10 rounded-full blur-2xl"></div>
+
+        <div class="relative z-10 flex flex-col items-center space-y-3">
+            <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/Adobe%20Express%20-%20file.png?raw=true" alt="Scuffed Olympics Logo" class="h-20 w-20 object-contain drop-shadow-[0_0_15px_rgba(245,158,11,0.4)] animate-pulse">
+            <span class="bg-gradient-to-r from-amber-500 to-rose-500 text-slate-950 text-xs font-black px-4 py-1 rounded-full uppercase tracking-widest shadow-lg">
+                🍻 Official Panic & Party Portal 🍻
             </span>
-            <h1 class="text-2xl font-black text-slate-100 tracking-tight">SELECT YOUR NATION</h1>
-            <p class="text-xs text-slate-400">Choose your country and enter your 4-digit secret PIN code.</p>
+            <h1 class="text-3xl sm:text-4xl font-black text-slate-100 tracking-tight">CHOOSE YOUR FIGHTER</h1>
+            <p class="text-xs text-slate-400 max-w-sm">Select your nation, enter your 4-digit PIN, and prepare for glory, poor coordination, and questionable tactical decisions.</p>
         </div>
+    </div>
 
-        {% if request.query_params.get('error') %}
-            <div class="bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold p-3 rounded-xl text-center">
-                {{ request.query_params.get('error') }}
-            </div>
-        {% endif %}
+    {% if request.query_params.get('error') %}
+        <div class="mt-4 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-black p-4 rounded-2xl text-center uppercase tracking-wide animate-bounce">
+            ⚠️ {{ request.query_params.get('error') }} — Drink a penalty shot and try again! 🍻
+        </div>
+    {% endif %}
 
-        <!-- Main Login Form -->
+    <!-- Main Form container -->
+    <div class="mt-6 bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
         <form action="/login" method="POST" id="loginForm" class="space-y-6">
             
             <input type="hidden" name="team_id" id="selectedTeamId" required>
             <input type="hidden" name="pin_code" id="pinInput" required>
 
             <!-- Step 1: Nation Selection Grid -->
-            <div id="nationStep" class="space-y-3">
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider text-center">1. Tap Your Nation</label>
-                <div class="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto pr-1">
+            <div id="nationStep" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <label class="text-xs font-black text-amber-400 uppercase tracking-widest">Step 1: Declare Your Allegiance</label>
+                    <span class="text-[10px] text-slate-500 font-mono">Tap country card</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-72 overflow-y-auto pr-1">
                     {% for team in teams %}
                         <button type="button" onclick="selectNation('{{ team.id }}', '{{ team.nation_name }} {{ team.flag_emoji }}')" 
-                            class="nation-btn bg-slate-950 border border-slate-800 hover:border-amber-500/50 p-4 rounded-2xl flex items-center gap-3 transition text-left group">
-                            <span class="text-2xl">{{ team.flag_emoji }}</span>
+                            class="nation-btn bg-slate-950/80 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/60 p-4 rounded-2xl flex items-center gap-4 transition text-left group shadow-md hover:shadow-amber-500/10">
+                            <span class="text-3xl p-2 bg-slate-900 rounded-xl border border-slate-800 group-hover:scale-110 transition">{{ team.flag_emoji }}</span>
                             <div>
-                                <span class="font-bold text-xs block text-slate-200 group-hover:text-amber-400 transition">{{ team.nation_name }}</span>
+                                <span class="font-extrabold text-sm block text-slate-200 group-hover:text-amber-400 transition">{{ team.nation_name }}</span>
+                                <span class="text-[10px] text-slate-500 font-mono uppercase">Ready for chaos</span>
                             </div>
                         </button>
                     {% endfor %}
                 </div>
             </div>
 
-            <!-- Step 2: Keypad Entry -->
+            <!-- Step 2: Keypad Entry (Hidden until nation is picked) -->
             <div id="keypadStep" class="hidden space-y-6">
-                <div class="flex items-center justify-between bg-slate-950 px-4 py-3 rounded-2xl border border-slate-800">
-                    <span id="chosenNationDisplay" class="text-xs font-bold text-amber-400"></span>
-                    <button type="button" onclick="resetSelection()" class="text-xs text-slate-500 hover:text-slate-300 underline">Change</button>
+                <div class="flex items-center justify-between bg-slate-950 px-4 py-3 rounded-2xl border border-amber-500/30">
+                    <span id="chosenNationDisplay" class="text-xs font-extrabold text-amber-400"></span>
+                    <button type="button" onclick="resetSelection()" class="text-xs text-rose-400 hover:text-rose-300 font-bold underline">Switch Nation</button>
                 </div>
 
-                <div class="space-y-2 text-center">
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">2. Enter Secret PIN</label>
-                    <div class="flex justify-center gap-3 py-2">
-                        <div class="pin-dot w-4 h-4 rounded-full border border-slate-700 bg-slate-950 transition"></div>
-                        <div class="pin-dot w-4 h-4 rounded-full border border-slate-700 bg-slate-950 transition"></div>
-                        <div class="pin-dot w-4 h-4 rounded-full border border-slate-700 bg-slate-950 transition"></div>
-                        <div class="pin-dot w-4 h-4 rounded-full border border-slate-700 bg-slate-950 transition"></div>
+                <div class="space-y-3 text-center">
+                    <label class="block text-xs font-black text-amber-400 uppercase tracking-widest">Step 2: Enter Secret 4-Digit PIN</label>
+                    <div class="flex justify-center gap-4 py-2">
+                        <div class="pin-dot w-5 h-5 rounded-full border-2 border-slate-700 bg-slate-950 transition"></div>
+                        <div class="pin-dot w-5 h-5 rounded-full border-2 border-slate-700 bg-slate-950 transition"></div>
+                        <div class="pin-dot w-5 h-5 rounded-full border-2 border-slate-700 bg-slate-950 transition"></div>
+                        <div class="pin-dot w-5 h-5 rounded-full border-2 border-slate-700 bg-slate-950 transition"></div>
                     </div>
                 </div>
 
+                <!-- Arcade / iOS Keypad -->
                 <div class="grid grid-cols-3 gap-3 max-w-xs mx-auto">
-                    <button type="button" onclick="pressKey('1')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">1</button>
-                    <button type="button" onclick="pressKey('2')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">2</button>
-                    <button type="button" onclick="pressKey('3')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">3</button>
-                    <button type="button" onclick="pressKey('4')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">4</button>
-                    <button type="button" onclick="pressKey('5')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">5</button>
-                    <button type="button" onclick="pressKey('6')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">6</button>
-                    <button type="button" onclick="pressKey('7')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">7</button>
-                    <button type="button" onclick="pressKey('8')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">8</button>
-                    <button type="button" onclick="pressKey('9')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">9</button>
+                    <button type="button" onclick="pressKey('1')" class="bg-slate-950 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg">1</button>
+                    <button type="button" onclick="pressKey('2')" class="bg-slate-950 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg">2</button>
+                    <button type="button" onclick="pressKey('3')" class="bg-slate-950 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg">3</button>
+                    <button type="button" onclick="pressKey('4')" class="bg-slate-950 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg">4</button>
+                    <button type="button" onclick="pressKey('5')" class="bg-slate-950 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg">5</button>
+                    <button type="button" onclick="pressKey('6')" class="bg-slate-950 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg">6</button>
+                    <button type="button" onclick="pressKey('7')" class="bg-slate-950 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg">7</button>
+                    <button type="button" onclick="pressKey('8')" class="bg-slate-950 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg">8</button>
+                    <button type="button" onclick="pressKey('9')" class="bg-slate-950 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg">9</button>
                     <div></div>
-                    <button type="button" onclick="pressKey('0')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-100 text-xl font-bold py-4 rounded-2xl transition shadow">0</button>
-                    <button type="button" onclick="deleteKey()" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-slate-200 text-xs font-bold py-4 rounded-2xl transition flex items-center justify-center">⌫</button>
+                    <button type="button" onclick="pressKey('0')" class="bg-slate-950 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg">0</button>
+                    <button type="button" onclick="deleteKey()" class="bg-slate-950 hover:bg-rose-500 hover:text-slate-950 border border-slate-800 text-slate-400 hover:text-slate-950 text-sm font-black py-4 rounded-2xl transition flex items-center justify-center shadow-lg">⌫</button>
                 </div>
             </div>
 
         </form>
-
     </div>
+
 </div>
 
 <script>
@@ -102,7 +114,7 @@
             updatePinDisplay();
             if (currentPin.length === 4) {
                 document.getElementById("pinInput").value = currentPin;
-                setTimeout(() => { document.getElementById("loginForm").submit(); }, 200);
+                setTimeout(() => { document.getElementById("loginForm").submit(); }, 250);
             }
         }
     }
@@ -118,10 +130,10 @@
         const dots = document.querySelectorAll(".pin-dot");
         dots.forEach((dot, index) => {
             if (index < currentPin.length) {
-                dot.classList.add("bg-amber-500", "border-amber-500");
+                dot.classList.add("bg-amber-400", "border-amber-400", "shadow-[0_0_10px_rgba(251,191,36,0.8)]");
                 dot.classList.remove("bg-slate-950", "border-slate-700");
             } else {
-                dot.classList.remove("bg-amber-500", "border-amber-500");
+                dot.classList.remove("bg-amber-400", "border-amber-400", "shadow-[0_0_10px_rgba(251,191,36,0.8)]");
                 dot.classList.add("bg-slate-950", "border-slate-700");
             }
         });
