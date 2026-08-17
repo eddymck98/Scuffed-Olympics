@@ -1,66 +1,76 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-6xl mx-auto py-6 px-4 space-y-8 relative overflow-hidden">
+<div class="max-w-7xl mx-auto space-y-10 relative overflow-hidden">
     
     <!-- Floating Background Olympics Accents -->
-    <div class="absolute top-2 left-4 text-3xl opacity-15 select-none pointer-events-none animate-bounce">🏆</div>
-    <div class="absolute top-24 right-6 text-3xl opacity-15 select-none pointer-events-none animate-pulse">🥇</div>
-    <div class="absolute bottom-10 left-10 text-3xl opacity-15 select-none pointer-events-none">🔥</div>
+    <div class="absolute top-10 left-6 text-4xl opacity-20 select-none pointer-events-none animate-bounce">🏆</div>
+    <div class="absolute top-32 right-12 text-4xl opacity-20 select-none pointer-events-none animate-pulse">🥇</div>
+    <div class="absolute bottom-20 left-1/4 text-4xl opacity-20 select-none pointer-events-none">🔥</div>
 
-    <!-- Hero Header -->
-    <div class="text-center space-y-4 relative py-4">
-        <div class="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Hero Header with Rich Gradients & Glow -->
+    <div class="relative py-8 px-6 bg-gradient-to-b from-slate-900/90 via-slate-900/50 to-transparent border border-amber-500/20 rounded-[2.5rem] shadow-2xl backdrop-blur-xl text-center space-y-5 overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent blur-2xl pointer-events-none"></div>
 
-        <div class="relative z-10 flex flex-col items-center space-y-3">
-            <div class="relative flex items-center justify-center">
-                <span class="absolute -left-12 text-4xl opacity-60 select-none animate-pulse">🌿</span>
-                <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/Adobe%20Express%20-%20file.png?raw=true" alt="Scuffed Olympics Logo" class="h-36 w-36 object-contain drop-shadow-[0_0_25px_rgba(245,158,11,0.7)] relative z-10">
-                <span class="absolute -right-12 text-4xl opacity-60 select-none animate-pulse">🌿</span>
+        <div class="relative z-10 flex flex-col items-center space-y-4">
+            <!-- Logo Accent Frame -->
+            <div class="relative flex items-center justify-center p-3 bg-slate-950/60 border border-amber-500/30 rounded-full shadow-inner">
+                <span class="absolute -left-14 text-3xl opacity-80 select-none animate-pulse">🌿</span>
+                <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/static/image/logo.png?raw=true" alt="Scuffed Olympics Logo" class="h-28 w-28 object-contain drop-shadow-[0_0_20px_rgba(245,158,11,0.8)] relative z-10">
+                <span class="absolute -right-14 text-3xl opacity-80 select-none animate-pulse">🌿</span>
             </div>
 
-            <h1 class="text-xl sm:text-2xl font-black text-amber-400 uppercase tracking-widest">{{ team.greeting }}, {{ team.participant_name }}!</h1>
-            <span class="bg-gradient-to-r from-amber-500 via-yellow-400 to-rose-500 text-slate-950 text-xs font-black px-5 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
+            <div class="space-y-1">
+                <span class="text-xs font-black tracking-widest text-amber-400 uppercase">Welcome, Athlete</span>
+                <h1 class="text-2xl sm:text-4xl font-black bg-gradient-to-r from-amber-300 via-yellow-400 to-rose-500 bg-clip-text text-transparent uppercase tracking-wider">
+                    {{ team.participant_name }}
+                </h1>
+            </div>
+
+            <span class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-yellow-400 to-rose-500 text-slate-950 text-xs font-black px-6 py-2 rounded-full uppercase tracking-widest shadow-lg shadow-amber-500/20">
                 🥇 Official Home Games 2026 🥇
             </span>
-            <h1 class="text-3xl sm:text-5xl font-black text-slate-100 tracking-tight">THE SCUFFED OLYMPICS</h1>
-            
-            <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
-                <div class="inline-flex items-center gap-2 bg-slate-900 border border-amber-500/30 px-4 py-2 rounded-2xl text-xs font-mono text-amber-400">
-                    <span>⚡ REPRESENTING:</span> <strong class="text-slate-100 uppercase">{{ team.nation_name }}</strong>
-                </div>
+
+            <div class="inline-flex items-center gap-2 bg-slate-950/80 border border-amber-500/40 px-5 py-2.5 rounded-2xl text-xs font-mono text-amber-300 shadow-lg">
+                <span class="text-amber-500">⚡ REPRESENTING:</span> <strong class="text-white tracking-widest uppercase">{{ team.nation_name }}</strong>
             </div>
         </div>
     </div>
 
-    <!-- Main Grid: Leaderboard & Side Widgets -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-2">
+    <!-- Main Grid: Leaderboard & Dynamic Side Control Panel -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <!-- Live Medal Table (Takes 2 columns) -->
-        <div class="lg:col-span-2 space-y-4">
-            <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest flex items-center gap-2 px-1">🏆 Live Medal Standings</h2>
-            <div class="bg-slate-900/90 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+        <!-- Live Medal Table (Takes 7 columns) -->
+        <div class="lg:col-span-7 space-y-4">
+            <div class="flex items-center justify-between px-2">
+                <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
+                    <span class="text-lg">🏆</span> Live Medal Standings
+                </h2>
+                <span class="text-[10px] text-slate-400 font-mono bg-slate-900 border border-slate-800 px-3 py-1 rounded-full">Weighted Ranking</span>
+            </div>
+
+            <div class="bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-slate-800 rounded-[2rem] overflow-hidden shadow-2xl backdrop-blur-md">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="border-b border-slate-800 bg-slate-950/50 text-[10px] font-black text-slate-400 uppercase">
-                                <th class="py-4 px-4">Nation</th>
-                                <th class="py-4 px-4 text-center">🥇</th>
-                                <th class="py-4 px-4 text-center">🥈</th>
-                                <th class="py-4 px-4 text-center">🥉</th>
-                                <th class="py-4 px-4 text-right text-amber-400">Pts</th>
+                            <tr class="border-b border-slate-800/80 bg-slate-950/70 text-[10px] font-black text-slate-400 uppercase tracking-wider">
+                                <th class="py-4 px-5">Nation</th>
+                                <th class="py-4 px-4 text-center">🥇 Gold</th>
+                                <th class="py-4 px-4 text-center">🥈 Silver</th>
+                                <th class="py-4 px-4 text-center">🥉 Bronze</th>
+                                <th class="py-4 px-5 text-right text-amber-400">Total Pts</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-800/60 text-sm">
+                        <tbody class="divide-y divide-slate-800/50 text-sm">
                             {% for row in standings %}
-                                <tr class="hover:bg-slate-800/40 transition">
-                                    <td class="py-4 px-4 font-extrabold text-slate-100 flex items-center gap-3">
-                                        <span class="text-xl">{{ row.flag_emoji }}</span>
-                                        <span>{{ row.nation_name }}</span>
+                                <tr class="hover:bg-amber-500/[0.03] transition group">
+                                    <td class="py-4 px-5 font-extrabold text-slate-100 flex items-center gap-3">
+                                        <span class="text-2xl group-hover:scale-110 transition-transform">{{ row.flag_emoji }}</span>
+                                        <span class="tracking-wide">{{ row.nation_name }}</span>
                                     </td>
-                                    <td class="py-4 px-4 text-center font-bold text-amber-400">{{ row.gold }}</td>
-                                    <td class="py-4 px-4 text-center font-bold text-slate-300">{{ row.silver }}</td>
-                                    <td class="py-4 px-4 text-center font-bold text-amber-600">{{ row.bronze }}</td>
-                                    <td class="py-4 px-4 text-right font-black text-amber-400">{{ row.total_points }}</td>
+                                    <td class="py-4 px-4 text-center font-mono font-bold text-amber-400 bg-amber-500/[0.02]">{{ row.gold }}</td>
+                                    <td class="py-4 px-4 text-center font-mono font-bold text-slate-300">{{ row.silver }}</td>
+                                    <td class="py-4 px-4 text-center font-mono font-bold text-amber-600">{{ row.bronze }}</td>
+                                    <td class="py-4 px-5 text-right font-mono font-black text-amber-400 text-base">{{ row.total_points }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -69,29 +79,33 @@
             </div>
         </div>
 
-        <!-- Right Column: Shots, Global Board & VAR -->
-        <div class="space-y-6">
-            <!-- Shots Owed Counter -->
-            <div class="bg-gradient-to-br from-rose-900/50 to-slate-900 border border-rose-500/30 p-6 rounded-3xl text-center shadow-2xl">
-                <h3 class="text-rose-200 text-[10px] font-black uppercase tracking-widest">Shots/Forfeits Owed</h3>
-                <p class="text-6xl font-black text-white mt-2">{{ team.shots_owed }}</p>
-                <p class="text-[10px] text-rose-300 mt-2 italic">Don't get too comfortable...</p>
+        <!-- Right Column: Shots, Nation Board & Expanded VAR (Takes 5 columns) -->
+        <div class="lg:col-span-5 space-y-6">
+            
+            <!-- Personal Shots Owed Counter -->
+            <div class="relative bg-gradient-to-br from-rose-950/80 via-slate-900 to-slate-950 border border-rose-500/40 p-6 rounded-[2rem] text-center shadow-2xl overflow-hidden group">
+                <div class="absolute -right-6 -bottom-6 text-7xl opacity-10 select-none group-hover:scale-125 transition-transform">🍻</div>
+                <h3 class="text-rose-300 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2">
+                    <span>🍺</span> Your Shots/Forfeits Owed
+                </h3>
+                <p class="text-7xl font-black text-white mt-3 drop-shadow-[0_0_20px_rgba(244,63,94,0.5)]">{{ team.shots_owed }}</p>
+                <p class="text-xs text-rose-300/80 mt-2 font-medium italic">"Don't get too comfortable in the lead..."</p>
             </div>
 
-            <!-- Global Shots Owed Tracker (Compact) -->
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-3xl shadow-xl space-y-3">
-                <h3 class="text-slate-400 text-[10px] font-black uppercase tracking-widest flex items-center justify-between">
-                    <span>🍻 Nation Shot Board</span>
-                    <span class="text-rose-400 font-mono">Total Owed</span>
+            <!-- Nation Shot Board (Compact List) -->
+            <div class="bg-slate-900/90 border border-slate-800 p-6 rounded-[2rem] shadow-xl space-y-3 backdrop-blur-md">
+                <h3 class="text-slate-300 text-xs font-black uppercase tracking-widest flex items-center justify-between border-b border-slate-800 pb-3">
+                    <span class="flex items-center gap-2"><span>📊</span> Nation Shot Board</span>
+                    <span class="text-rose-400 font-mono text-[10px]">Owed Totals</span>
                 </h3>
-                <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                <div class="space-y-2 max-h-52 overflow-y-auto pr-1">
                     {% for t in teams %}
-                        <div class="bg-slate-950 border border-slate-800/60 px-3 py-2 rounded-xl flex items-center justify-between text-xs">
-                            <span class="font-bold text-slate-200 flex items-center gap-2">
-                                <span>{{ t.flag_emoji }}</span>
+                        <div class="bg-slate-950/80 border border-slate-800/80 px-4 py-2.5 rounded-2xl flex items-center justify-between text-xs hover:border-slate-700 transition">
+                            <span class="font-bold text-slate-200 flex items-center gap-2.5">
+                                <span class="text-base">{{ t.flag_emoji }}</span>
                                 <span>{{ t.nation_name }}</span>
                             </span>
-                            <span class="font-mono font-black {% if t.shots_owed > 0 %}text-rose-400{% else %}text-slate-500{% endif %}">
+                            <span class="font-mono font-black {% if t.shots_owed > 0 %}text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-xl border border-rose-500/20{% else %}text-slate-500{% endif %}">
                                 {{ t.shots_owed }} shots
                             </span>
                         </div>
@@ -99,13 +113,17 @@
                 </div>
             </div>
 
-            <!-- Scuffed VAR Form with Target Dropdown -->
-            <div class="bg-slate-900 border border-rose-500/20 rounded-3xl p-6 shadow-xl">
-                <h2 class="text-rose-500 font-black uppercase text-xs mb-4 flex items-center gap-2">🚨 Scuffed VAR (Dob Someone In)</h2>
-                <form action="/var/submit" method="POST" class="space-y-3">
+            <!-- Scuffed VAR Form (Un-tucked, prominent commissioner card) -->
+            <div class="bg-gradient-to-b from-slate-900 to-slate-950 border border-rose-500/40 rounded-[2rem] p-6 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                <h2 class="text-rose-400 font-black uppercase text-xs mb-4 flex items-center gap-2 tracking-wider">
+                    <span class="text-base animate-pulse">🚨</span> Scuffed VAR (Dob Someone In)
+                </h2>
+                
+                <form action="/var/submit" method="POST" class="space-y-4">
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Target Nation / Athlete</label>
-                        <select name="target_team_id" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 outline-none focus:border-rose-500">
+                        <label class="block text-[11px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Target Nation / Athlete</label>
+                        <select name="target_team_id" required class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3 text-xs text-slate-200 outline-none focus:border-rose-500 transition shadow-inner">
                             <option value="">-- Choose Target --</option>
                             {% for t in teams %}
                                 <option value="{{ t.id }}">{{ t.flag_emoji }} {{ t.nation_name }} ({{ t.participant_name }})</option>
@@ -114,47 +132,50 @@
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Incident Description</label>
-                        <textarea name="incident" required rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 outline-none focus:border-rose-500" placeholder="What rule violation or absolute disaster occurred?"></textarea>
+                        <label class="block text-[11px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Incident Description</label>
+                        <textarea name="incident" required rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3 text-xs text-slate-200 outline-none focus:border-rose-500 transition shadow-inner resize-none" placeholder="What rule violation or absolute disaster occurred?"></textarea>
                     </div>
 
-                    <button type="submit" class="w-full bg-rose-500 text-slate-950 font-black text-[10px] uppercase py-2.5 rounded-xl hover:bg-rose-400 transition shadow-lg">Submit to Judgement Hall</button>
+                    <button type="submit" class="w-full bg-gradient-to-r from-rose-600 to-rose-500 text-slate-950 font-black text-xs uppercase tracking-widest py-3.5 rounded-2xl hover:brightness-110 transition shadow-lg shadow-rose-600/30">
+                        Submit to Judgement Hall &rarr;
+                    </button>
                 </form>
             </div>
+
         </div>
     </div>
 
-    <!-- Redesigned Recent Activity Ticker (Full Width, Mobile Friendly, Non-Intrusive) -->
-    <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h2 class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
-                <span>⚡</span> Live Podium Ticker & Recent Glory
+    <!-- Live Podium Ticker & Recent Glory -->
+    <div class="bg-slate-900/90 border border-slate-800/90 rounded-[2.5rem] p-6 sm:p-8 shadow-2xl space-y-6 backdrop-blur-md">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <h2 class="text-xs sm:text-sm font-black text-amber-400 uppercase tracking-widest flex items-center gap-2.5">
+                <span class="text-lg">⚡</span> Live Podium Ticker & Recent Glory
             </h2>
-            <span class="text-[10px] text-slate-500 font-mono">Real-time updates</span>
+            <span class="text-[10px] text-slate-400 font-mono bg-slate-950 px-3 py-1 rounded-full border border-slate-800">Real-time updates</span>
         </div>
 
         {% if activities %}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {% for act in activities %}
-                    <div class="bg-slate-950 border border-slate-800/80 p-3 rounded-2xl flex items-center space-x-3 transition hover:border-amber-500/40">
-                        <span class="text-xl">
+                    <div class="bg-gradient-to-br from-slate-950 to-slate-900 border border-slate-800/80 p-4 rounded-2xl flex items-center space-x-4 transition hover:border-amber-500/50 hover:shadow-xl hover:shadow-amber-500/5 group">
+                        <span class="text-2xl p-3 bg-slate-900 rounded-2xl border border-slate-800 group-scale-110 transition-transform">
                             {% if act.medal_type == 'gold' %}🥇{% elif act.medal_type == 'silver' %}🥈{% else %}🥉{% endif %}
                         </span>
-                        <div class="text-xs overflow-hidden">
-                            <p class="font-bold text-slate-200 truncate">
+                        <div class="text-xs overflow-hidden space-y-1">
+                            <p class="font-extrabold text-slate-100 truncate text-sm">
                                 {{ act.teams.flag_emoji }} {{ act.teams.nation_name }}
                             </p>
-                            <p class="text-slate-400 text-[11px] truncate">
-                                Won <span class="text-amber-400 font-bold uppercase">{{ act.medal_type }}</span> in <span class="text-slate-300 font-semibold">{{ act.event_name }}</span>
+                            <p class="text-slate-400 text-xs">
+                                Won <span class="text-amber-400 font-bold uppercase tracking-wider">{{ act.medal_type }}</span> in <span class="text-slate-300 font-semibold">{{ act.event_name }}</span>
                             </p>
                         </div>
                     </div>
                 {% endfor %}
             </div>
         {% else %}
-            <div class="bg-slate-950 border border-slate-800/80 p-6 rounded-2xl text-center space-y-1">
-                <p class="text-xs text-slate-400 font-medium">The games have just begun. No medals recorded yet!</p>
-                <p class="text-[10px] text-slate-600 font-mono">Check back once the commissioner logs the first event.</p>
+            <div class="bg-slate-950 border border-slate-800/80 p-8 rounded-2xl text-center space-y-2">
+                <p class="text-xs text-slate-300 font-bold">The games have just begun. No medals recorded yet!</p>
+                <p class="text-[10px] text-slate-500 font-mono">Check back once the commissioner logs the first event.</p>
             </div>
         {% endif %}
     </div>
