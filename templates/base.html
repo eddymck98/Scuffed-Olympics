@@ -33,6 +33,14 @@
                     <a href="/events" class="hover:text-amber-400 transition">Events & Rules</a>
                     <a href="/nations" class="hover:text-amber-400 transition">Nations</a>
                     
+                    <!-- Conditionally shown based on admin feature toggles (passed via template context or handled globally) -->
+                    {% if treasure_visible %}
+                        <a href="/treasure-hunt" class="hover:text-amber-400 transition text-amber-300 font-semibold">🏴‍☠️ Treasure Hunt</a>
+                    {% endif %}
+                    {% if escape_visible %}
+                        <a href="/escape-room" class="hover:text-amber-400 transition text-amber-300 font-semibold">🧩 Escape Room</a>
+                    {% endif %}
+                    
                     {% if request.cookies.get("is_admin") == "true" %}
                         <a href="/admin" class="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-xl font-bold hover:bg-amber-500 hover:text-slate-950 transition">
                             👑 Commissioner Panel
@@ -53,10 +61,16 @@
         </div>
 
         <!-- Mobile Nav Bar -->
-        <div class="md:hidden flex justify-around bg-slate-900/90 border-t border-slate-800/80 py-2 text-xs items-center">
+        <div class="md:hidden flex justify-around bg-slate-900/90 border-t border-slate-800/80 py-2 text-xs items-center flex-wrap gap-y-1 px-2">
             <a href="/" class="hover:text-amber-400">Dashboard</a>
             <a href="/events" class="hover:text-amber-400">Events</a>
             <a href="/nations" class="hover:text-amber-400">Nations</a>
+            {% if treasure_visible %}
+                <a href="/treasure-hunt" class="text-amber-300 font-semibold">🏴‍☠️ Hunt</a>
+            {% endif %}
+            {% if escape_visible %}
+                <a href="/escape-room" class="text-amber-300 font-semibold">🧩 Escape</a>
+            {% endif %}
             {% if request.cookies.get("is_admin") == "true" %}
                 <a href="/admin" class="text-amber-400 font-bold bg-amber-500/10 px-2 py-1 rounded-lg border border-amber-500/30">👑 Admin</a>
             {% endif %}
