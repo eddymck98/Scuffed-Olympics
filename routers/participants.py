@@ -67,6 +67,13 @@ async def events_page(request: Request, team: dict = Depends(require_team)):
 
 @router.get("/nations", response_class=HTMLResponse)
 async def nations_page(request: Request, team: dict = Depends(require_team)):
+    teams_res = supabase.table("teams").select("id, nation_name, flag_emoji, is_admin").execute()
+    teams = teams_res.data if teams_res.data else []
+
     template = templates.get_template("nations.html")
-    html_content = template.render({"request": request, "team": team})
+    html_content = template.render({
+        "request": request, 
+        "team": team,
+        "teams": teams
+    })
     return HTMLResponse(content=html_content)
