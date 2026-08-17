@@ -22,145 +22,91 @@
             </span>
             <h1 class="text-3xl sm:text-5xl font-black text-slate-100 tracking-tight">EVENTS & BATTLEGROUNDS</h1>
             <p class="text-xs sm:text-sm text-slate-400 max-w-lg mx-auto leading-relaxed">
-                Prepare your reflexes, test your questionable coordination, and brace for absolute chaos. Here is a glimpse of the trials ahead. Exact rules remain classified until game time!
+                Review the trials ahead and check live results as the commissioner publishes outcomes from the field!
             </p>
         </div>
     </div>
 
-    <!-- General Scoring & Hype Banner -->
+    <!-- Scoring Protocol Banner -->
     <div class="bg-slate-900 border border-amber-500/30 rounded-3xl p-6 shadow-xl space-y-4 max-w-3xl mx-auto">
         <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest text-center">
-            ⚖️ Scoring Protocol & Rules
+            ⚖️ Scoring Protocol Summary
         </h2>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
             <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
                 <strong class="text-amber-400 block font-black">Standard Events</strong>
-                <p class="text-[11px] text-slate-400 leading-relaxed">Scored by placement: 7th gets 10 points, 1st gets 8 points (with scaling positions in between). DNP means 0 points.</p>
+                <p class="text-[11px] text-slate-400 leading-relaxed">7th gets 10 pts, 1st gets 8 pts (down to 1 pt for 9th). Medals auto-populate for top 3.</p>
             </div>
 
             <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
                 <strong class="text-amber-400 block font-black">Duck Hunt</strong>
-                <p class="text-[11px] text-slate-400 leading-relaxed">Special scoring: The total number of mini resin ducks you successfully find equals your exact point total!</p>
+                <p class="text-[11px] text-slate-400 leading-relaxed">Exact count of resin ducks found equals your total point score!</p>
             </div>
 
             <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
-                <strong class="text-amber-400 block font-black">City Treasure Hunt</strong>
-                <p class="text-[11px] text-slate-400 leading-relaxed">Custom pods: 1st team gets 10 points, 2nd gets 7 points, 3rd gets 4 points, and last gets 1 point.</p>
+                <strong class="text-amber-400 block font-black">City Selfies</strong>
+                <p class="text-[11px] text-slate-400 leading-relaxed">Podium points: 1st = 10pts, 2nd = 7pts, 3rd = 4pts, Last = 1pt.</p>
             </div>
         </div>
     </div>
 
-    <!-- Mysterious Event Showcase Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+    <!-- Event Showcase & Results Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
         
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-3xl p-6 shadow-xl space-y-2 transition group">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial 01</span>
-                <span class="text-2xl group-hover:scale-125 transition">🦆</span>
-            </div>
-            <h3 class="text-base font-black text-slate-100">Duck Hunt</h3>
-            <p class="text-xs text-slate-400">Keep your eyes sharp. Hidden treasures are lurking where you least expect them...</p>
-        </div>
+        {% set events_list = [
+            ("Duck Hunt", "🦆", "Keep your eyes sharp. Hidden treasures are lurking where you least expect them..."),
+            ("City Selfies", "📸", "Hit the streets, check off the target list, and sprint back before time runs out."),
+            ("Crack the Code", "🔓", "Digital puzzles meet sudden physical panic sprints. Expect the unexpected."),
+            ("Golf Putting", "⛳", "Precision under pressure. Can you hold your nerve on the green?"),
+            ("Padel Pong", "🏓", "Unorthodox racket skills and target execution at its finest."),
+            ("Sticky Bounce", "🎾", "Angles, velocity, and a bit of luck will determine who sticks the landing."),
+            ("Ring Toss", "💍", "Classic arcade mechanics, high-stakes scoring."),
+            ("Bean Bag Toss", "🛍️", "Toss with accuracy, secure the bag, and leave opponents in the dust."),
+            ("The Entrance", "✨", "First impressions matter. Bring your absolute best swagger and performance."),
+            ("Cut the Deck", "🃏", "Pure RNG elimination survival. Survive the draw or go home."),
+            ("Beer Pong", "🍻", "The timeless test of wrist-eye coordination and tactical cup sinking."),
+            ("The Ultimate Relay Race", "🏃", "Multi-stage chaos combining sorting, water hazards, stacking, and Nerf marksmanship.")
+        ] %}
 
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-3xl p-6 shadow-xl space-y-2 transition group">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial 02</span>
-                <span class="text-2xl group-hover:scale-125 transition">📸</span>
-            </div>
-            <h3 class="text-base font-black text-slate-100">City Selfies</h3>
-            <p class="text-xs text-slate-400">Hit the streets, check off the target list, and sprint back before time runs out.</p>
-        </div>
+        {% for name, emoji, desc in events_list %}
+            {% set res_list = event_results_map.get(name, []) %}
+            <div class="bg-slate-900/90 border {% if res_list %}border-amber-500/60 shadow-amber-500/10{% else %}border-slate-800{% endif %} rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between transition">
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial #{{ loop.index }}</span>
+                        <span class="text-2xl">{{ emoji }}</span>
+                    </div>
+                    <h3 class="text-base font-black text-slate-100">{{ name }}</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">{{ desc }}</p>
+                </div>
 
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-3xl p-6 shadow-xl space-y-2 transition group">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial 03</span>
-                <span class="text-2xl group-hover:scale-125 transition">🔓</span>
+                <!-- Live Results Section -->
+                <div class="pt-3 border-t border-slate-800/80">
+                    <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-2">Live Event Standings:</span>
+                    {% if res_list %}
+                        <div class="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                            {% for r in res_list %}
+                                <div class="bg-slate-950 border border-slate-800/80 px-3 py-2 rounded-xl flex items-center justify-between text-xs">
+                                    <span class="font-bold text-slate-200 flex items-center gap-2">
+                                        <span>{{ r.teams.flag_emoji }}</span>
+                                        <span>{{ r.teams.nation_name }}</span>
+                                    </span>
+                                    <span class="font-mono font-bold text-amber-400">
+                                        {% if r.medal_type == 'gold' %}🥇{% elif r.medal_type == 'silver' %}🥈{% elif r.medal_type == 'bronze' %}🥉{% endif %}
+                                        +{{ r.points }} pts
+                                    </span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="bg-slate-950/50 border border-slate-800/50 p-3 rounded-xl text-center">
+                            <span class="text-[11px] text-slate-500 italic">Results pending commissioner entry...</span>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-            <h3 class="text-base font-black text-slate-100">Crack the Code</h3>
-            <p class="text-xs text-slate-400">Digital puzzles meet sudden physical panic sprints. Expect the unexpected.</p>
-        </div>
-
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-3xl p-6 shadow-xl space-y-2 transition group">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial 04</span>
-                <span class="text-2xl group-hover:scale-125 transition">⛳</span>
-            </div>
-            <h3 class="text-base font-black text-slate-100">Golf Putting</h3>
-            <p class="text-xs text-slate-400">Precision under pressure. Can you hold your nerve on the green?</p>
-        </div>
-
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-3xl p-6 shadow-xl space-y-2 transition group">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial 05</span>
-                <span class="text-2xl group-hover:scale-125 transition">🏓</span>
-            </div>
-            <h3 class="text-base font-black text-slate-100">Padel Pong</h3>
-            <p class="text-xs text-slate-400">Unorthodox racket skills and target execution at its finest.</p>
-        </div>
-
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-3xl p-6 shadow-xl space-y-2 transition group">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial 06</span>
-                <span class="text-2xl group-hover:scale-125 transition">🎾</span>
-            </div>
-            <h3 class="text-base font-black text-slate-100">Sticky Bounce</h3>
-            <p class="text-xs text-slate-400">Angles, velocity, and a bit of luck will determine who sticks the landing.</p>
-        </div>
-
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-3xl p-6 shadow-xl space-y-2 transition group">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial 07</span>
-                <span class="text-2xl group-hover:scale-125 transition">💍</span>
-            </div>
-            <h3 class="text-base font-black text-slate-100">Ring Toss</h3>
-            <p class="text-xs text-slate-400">Classic arcade mechanics, high-stakes scoring.</p>
-        </div>
-
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-3xl p-6 shadow-xl space-y-2 transition group">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial 08</span>
-                <span class="text-2xl group-hover:scale-125 transition">🛍️</span>
-            </div>
-            <h3 class="text-base font-black text-slate-100">Bean Bag Toss</h3>
-            <p class="text-xs text-slate-400">Toss with accuracy, secure the bag, and leave opponents in the dust.</p>
-        </div>
-
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-3xl p-6 shadow-xl space-y-2 transition group">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial 09</span>
-                <span class="text-2xl group-hover:scale-125 transition">✨</span>
-            </div>
-            <h3 class="text-base font-black text-slate-100">The Entrance</h3>
-            <p class="text-xs text-slate-400">First impressions matter. Bring your absolute best swagger and performance.</p>
-        </div>
-
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-3xl p-6 shadow-xl space-y-2 transition group">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial 10</span>
-                <span class="text-2xl group-hover:scale-125 transition">🃏</span>
-            </div>
-            <h3 class="text-base font-black text-slate-100">Cut the Deck</h3>
-            <p class="text-xs text-slate-400">Pure RNG elimination survival. Survive the draw or go home.</p>
-        </div>
-
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-3xl p-6 shadow-xl space-y-2 transition group">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial 11</span>
-                <span class="text-2xl group-hover:scale-125 transition">🍻</span>
-            </div>
-            <h3 class="text-base font-black text-slate-100">Beer Pong</h3>
-            <p class="text-xs text-slate-400">The timeless test of wrist-eye coordination and tactical cup sinking.</p>
-        </div>
-
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-3xl p-6 shadow-xl space-y-2 transition group">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial 12</span>
-                <span class="text-2xl group-hover:scale-125 transition">🏃</span>
-            </div>
-            <h3 class="text-base font-black text-slate-100">The Ultimate Relay Race</h3>
-            <p class="text-xs text-slate-400">Multi-stage chaos combining sorting, water hazards, stacking, and Nerf marksmanship.</p>
-        </div>
+        {% endfor %}
 
     </div>
 
