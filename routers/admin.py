@@ -18,6 +18,10 @@ async def admin_dashboard(request: Request, tab: str = "events", subtab: str = "
     all_results = supabase.table("event_results").select("id, event_name, points, medal_type, team_id").execute()
     var_res = supabase.table("var_submissions").select("*, teams(nation_name, flag_emoji)").eq("status", "pending").execute()
     
+    # Fetch app settings for feature toggles
+    settings_res = supabase.table("app_settings").select("key, is_active").execute()
+    app_settings = {s["key"]: s["is_active"] for s in settings_res.data} if settings_res.data else {}
+    
     teams = teams_res.data if teams_res.data else []
     event_scores = {r["team_id"]: r for r in (all_results.data or []) if r["event_name"] == event}
     recent_list = supabase.table("event_results").select("id, event_name, points, medal_type, teams(nation_name, flag_emoji)").order("recorded_at", desc=True).limit(15).execute().data or []
@@ -33,9 +37,17 @@ async def admin_dashboard(request: Request, tab: str = "events", subtab: str = "
         "teams": teams,
         "event_scores": event_scores,
         "recent_results": recent_list,
+        "app_settings": app_settings,
         "standard_events": ["Crack the Code", "Golf Putting", "Padel Pong", "Sticky Bounce", "Ring Toss", "Bean Bag Toss", "The Entrance", "Cut the Deck", "Beer Pong", "The Ultimate Relay Race"]
     })
     return HTMLResponse(content=html_content)
+
+# --- Feature Toggle Endpoint ---
+
+@router.post("/admin/toggle-setting")
+async def toggle_setting(key: str = Form(...), value: bool = Form(...), admin: bool = Depends(require_admin)):
+    supabase.table("app_settings").update({"is_active": value}).eq("key", key).execute()
+    return RedirectResponse(url="/admin?tab=settings", status_code=303)
 
 # --- Event Scoring Endpoints ---
 
