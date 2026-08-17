@@ -18,11 +18,11 @@
 
     <!-- Admin Sub-Navigation Tabs -->
     <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-4">
-        <a href="/admin?tab=events" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'events' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
+        <a href="/admin?tab=events&subtab=standard" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'events' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
             🏆 Event Manager
         </a>
         <a href="/admin?tab=verification" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'verification' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
-            📸 Treasure Verification
+            📸 Treasure Verification {% if pending_submissions %}<span class="ml-1 bg-rose-500 text-slate-950 px-1.5 py-0.5 rounded-full text-[10px]">{{ pending_submissions|length }}</span>{% endif %}
         </a>
         <a href="/admin?tab=var" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'var' %} bg-rose-600 text-white shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-rose-400 border border-slate-800 {% endif %}">
             🚨 VAR Judgement Hall {% if var_submissions %}<span class="ml-1 bg-white text-rose-600 px-1.5 py-0.5 rounded-full text-[10px]">{{ var_submissions|length }}</span>{% endif %}
@@ -98,6 +98,62 @@
                 <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">Save & Publish {{ selected_event }} Results</button>
             </form>
         </div>
+
+        <!-- Duck Hunt Subtab -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6 {% if active_subtab != 'duck' %}hidden{% endif %}">
+            <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-xs text-amber-300">
+                🦆 <strong>Duck Hunt Scoring:</strong> Enter the exact number of resin ducks found around the house. Each duck equals 1 point!
+            </div>
+            <form action="/admin/event-results/save-duck-hunt" method="POST" class="space-y-4">
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead><tr class="border-b border-slate-800 text-[10px] text-slate-400 uppercase"><th class="py-2 px-2">Nation</th><th class="py-2 px-2">Total Ducks Found</th></tr></thead>
+                        <tbody class="divide-y divide-slate-800/50">
+                            {% for t in teams %}
+                            <tr>
+                                <td class="py-3 px-2 font-bold text-slate-100 flex items-center gap-2"><span class="text-lg">{{ t.flag_emoji }}</span><span>{{ t.nation_name }}</span></td>
+                                <td class="py-3 px-2"><input type="number" name="ducks_{{ t.id }}" placeholder="e.g. 5" min="0" class="w-36 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500"></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">Save & Publish Duck Hunt Scores</button>
+            </form>
+        </div>
+
+        <!-- City Selfies Subtab -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6 {% if active_subtab != 'treasure' %}hidden{% endif %}">
+            <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-xs text-amber-300">
+                📸 <strong>City Selfies Scoring:</strong> Podiums award custom pod points (1st = 10pts + Gold, 2nd = 7pts + Silver, 3rd = 4pts + Bronze, Last = 1pt, DNP = 0pts).
+            </div>
+            <form action="/admin/event-results/save-treasure" method="POST" class="space-y-4">
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead><tr class="border-b border-slate-800 text-[10px] text-slate-400 uppercase"><th class="py-2 px-2">Nation</th><th class="py-2 px-2">Podium Placement</th></tr></thead>
+                        <tbody class="divide-y divide-slate-800/50">
+                            {% for t in teams %}
+                            <tr>
+                                <td class="py-3 px-2 font-bold text-slate-100 flex items-center gap-2"><span class="text-lg">{{ t.flag_emoji }}</span><span>{{ t.nation_name }}</span></td>
+                                <td class="py-3 px-2">
+                                    <select name="pod_{{ t.id }}" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500">
+                                        <option value="unscored">-- Select Pod Placement --</option>
+                                        <option value="1st">1st Team (10 pts + Gold)</option>
+                                        <option value="2nd">2nd Team (7 pts + Silver)</option>
+                                        <option value="3rd">3rd Team (4 pts + Bronze)</option>
+                                        <option value="last">Last Team (1 pt)</option>
+                                        <option value="dnp">DNP (0 pts)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase py-3 rounded-2xl transition shadow-lg">Save & Publish City Selfies Results</button>
+            </form>
+        </div>
+
     </div>
 
     <!-- TAB 2: TREASURE VERIFICATION -->
