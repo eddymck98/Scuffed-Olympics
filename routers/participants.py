@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, Request
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Depends, Request, Form
+from fastapi.responses import HTMLResponse, RedirectResponse
 from database import supabase, templates
 from routers.auth import require_team
 
@@ -12,6 +12,10 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
     
     results_res = supabase.table("event_results").select("team_id, medal_type, points").execute()
     results = results_res.data if results_res.data else []
+    
+    # Fetch shot history for this specific team
+    shots_history_res = supabase.table("shots_log").select("amount, reason").eq("team_id", team["id"]).order("recorded_at", desc=True).limit(5).execute()
+    shots_history = shots_history_res.data if shots_history_res.data else []
     
     standings = {}
     for t in teams:
@@ -53,23 +57,30 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
         .execute()
     activities = activity_res.data if activity_res.data else []
 
-    # Bypass Starlette's cached TemplateResponse to prevent Python 3.14 dict-hashing error
     template = templates.get_template("index.html")
     html_content = template.render({
         "request": request, 
         "team": team, 
         "standings": sorted_standings,
-        "activities": activities
+        "activities": activities,
+        "shots_history": shots_history
     })
     return HTMLResponse(content=html_content)
 
+@router.post("/var/submit")
+async def submit_var(incident: str = Form(...), team: dict = Depends(require_team)):
+    supabase.table("var_submissions").insert({
+        "team_id": team["id"],
+        "incident_description": incident,
+        "status": "pending"
+    }).execute()
+    return RedirectResponse(url="/?message=VAR+submitted", status_code=303)
+
 @router.get("/events", response_class=HTMLResponse)
 async def events_page(request: Request, team: dict = Depends(require_team)):
-    # Fetch all event results to display standings per event
     results_res = supabase.table("event_results").select("event_name, points, medal_type, teams(nation_name, flag_emoji)").order("points", desc=True).execute()
     results = results_res.data if results_res.data else []
 
-    # Group results by event name
     event_results_map = {}
     for r in results:
         ev_name = r["event_name"]
