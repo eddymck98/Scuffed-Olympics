@@ -22,36 +22,36 @@
             </span>
             <h1 class="text-3xl sm:text-5xl font-black text-slate-100 tracking-tight">EVENTS & BATTLEGROUNDS</h1>
             <p class="text-xs sm:text-sm text-slate-400 max-w-lg mx-auto leading-relaxed">
-                Review the trials ahead and check live results as the commissioner publishes outcomes from the field!
+                Prepare your reflexes, test your questionable coordination, and brace for absolute chaos. Here is a glimpse of the trials ahead. Exact rules remain classified until game time!
             </p>
         </div>
     </div>
 
-    <!-- Scoring Protocol Banner -->
+    <!-- General Scoring & Hype Banner -->
     <div class="bg-slate-900 border border-amber-500/30 rounded-3xl p-6 shadow-xl space-y-4 max-w-3xl mx-auto">
         <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest text-center">
-            ⚖️ Scoring Protocol Summary
+            ⚖️ Scoring Protocol & Rules
         </h2>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
             <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
                 <strong class="text-amber-400 block font-black">Standard Events</strong>
-                <p class="text-[11px] text-slate-400 leading-relaxed">7th gets 10 pts, 1st gets 8 pts (down to 1 pt for 9th). Medals auto-populate for top 3.</p>
+                <p class="text-[11px] text-slate-400 leading-relaxed">Scored by placement: 7th gets 10 points, 1st gets 8 points (with scaling positions in between). DNP means 0 points.</p>
             </div>
 
             <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
                 <strong class="text-amber-400 block font-black">Duck Hunt</strong>
-                <p class="text-[11px] text-slate-400 leading-relaxed">Exact count of resin ducks found equals your total point score!</p>
+                <p class="text-[11px] text-slate-400 leading-relaxed">Special scoring: The total number of mini resin ducks you successfully find equals your exact point total!</p>
             </div>
 
             <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
-                <strong class="text-amber-400 block font-black">City Selfies</strong>
-                <p class="text-[11px] text-slate-400 leading-relaxed">Podium points: 1st = 10pts, 2nd = 7pts, 3rd = 4pts, Last = 1pt.</p>
+                <strong class="text-amber-400 block font-black">City Treasure Hunt</strong>
+                <p class="text-[11px] text-slate-400 leading-relaxed">Custom pods: 1st team gets 10 points, 2nd gets 7 points, 3rd gets 4 points, and last gets 1 point.</p>
             </div>
         </div>
     </div>
 
-    <!-- Event Showcase & Results Grid -->
+    <!-- Event Showcase Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
         
         {% set events_list = [
@@ -71,7 +71,7 @@
 
         {% for name, emoji, desc in events_list %}
             {% set res_list = event_results_map.get(name, []) %}
-            <div class="bg-slate-900/90 border {% if res_list %}border-amber-500/60 shadow-amber-500/10{% else %}border-slate-800{% endif %} rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between transition">
+            <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between transition">
                 <div class="space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial #{{ loop.index }}</span>
@@ -81,29 +81,32 @@
                     <p class="text-xs text-slate-400 leading-relaxed">{{ desc }}</p>
                 </div>
 
-                <!-- Live Results Section -->
-                <div class="pt-3 border-t border-slate-800/80">
-                    <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-2">Live Event Standings:</span>
-                    {% if res_list %}
-                        <div class="space-y-1.5 max-h-36 overflow-y-auto pr-1">
-                            {% for r in res_list %}
-                                <div class="bg-slate-950 border border-slate-800/80 px-3 py-2 rounded-xl flex items-center justify-between text-xs">
-                                    <span class="font-bold text-slate-200 flex items-center gap-2">
-                                        <span>{{ r.teams.flag_emoji }}</span>
-                                        <span>{{ r.teams.nation_name }}</span>
-                                    </span>
-                                    <span class="font-mono font-bold text-amber-400">
-                                        {% if r.medal_type == 'gold' %}🥇{% elif r.medal_type == 'silver' %}🥈{% elif r.medal_type == 'bronze' %}🥉{% endif %}
-                                        +{{ r.points }} pts
-                                    </span>
-                                </div>
-                            {% endfor %}
+                <!-- Toggle Button -->
+                {% if res_list %}
+                    <button onclick="toggleStandings('standings-{{ loop.index }}')" class="w-full py-2 bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-300 font-black text-[10px] uppercase rounded-xl transition">
+                        Click here to view standings
+                    </button>
+                {% else %}
+                    <button disabled class="w-full py-2 bg-slate-950 text-slate-600 font-bold text-[10px] uppercase rounded-xl cursor-not-allowed border border-slate-800">
+                        Results Pending
+                    </button>
+                {% endif %}
+
+                <!-- Collapsible Standings -->
+                <div id="standings-{{ loop.index }}" class="hidden pt-3 border-t border-slate-800/80 space-y-2">
+                    <span class="text-[10px] font-black uppercase text-amber-400">Final Results:</span>
+                    {% for r in res_list %}
+                        <div class="bg-slate-950 border border-slate-800/50 px-3 py-2 rounded-xl flex items-center justify-between text-xs">
+                            <span class="font-bold text-slate-200 flex items-center gap-2">
+                                <span>{{ r.teams.flag_emoji }}</span>
+                                <span>{{ r.teams.nation_name }}</span>
+                            </span>
+                            <span class="font-mono font-bold text-slate-400">
+                                {% if r.medal_type == 'gold' %}🥇{% elif r.medal_type == 'silver' %}🥈{% elif r.medal_type == 'bronze' %}🥉{% endif %}
+                                {{ r.points }} pts
+                            </span>
                         </div>
-                    {% else %}
-                        <div class="bg-slate-950/50 border border-slate-800/50 p-3 rounded-xl text-center">
-                            <span class="text-[11px] text-slate-500 italic">Results pending commissioner entry...</span>
-                        </div>
-                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         {% endfor %}
@@ -111,4 +114,12 @@
     </div>
 
 </div>
+
+<!-- Toggle Logic -->
+<script>
+    function toggleStandings(id) {
+        const el = document.getElementById(id);
+        el.classList.toggle('hidden');
+    }
+</script>
 {% endblock %}
