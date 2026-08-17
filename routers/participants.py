@@ -27,16 +27,16 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
     for r in results:
         tid = r["team_id"]
         if tid in standings:
+            # We no longer add points based on medal type here, 
+            # because points are already logged individually per event in the admin panel.
             medal = r["medal_type"]
             if medal == "gold":
                 standings[tid]["gold"] += 1
-                standings[tid]["total_points"] += 3
             elif medal == "silver":
                 standings[tid]["silver"] += 1
-                standings[tid]["total_points"] += 2
             elif medal == "bronze":
                 standings[tid]["bronze"] += 1
-                standings[tid]["total_points"] += 1
+            
             if r["points"]:
                 standings[tid]["total_points"] += r["points"]
 
@@ -61,8 +61,24 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
 
 @router.get("/events", response_class=HTMLResponse)
 async def events_page(request: Request, team: dict = Depends(require_team)):
+    # Fetch all event results to display standings per event
+    results_res = supabase.table("event_results").select("event_name, points, medal_type, teams(nation_name, flag_emoji)").order("points", desc=True).execute()
+    results = results_res.data if results_res.data else []
+
+    # Group results by event name
+    event_results_map = {}
+    for r in results:
+        ev_name = r["event_name"]
+        if ev_name not in event_results_map:
+            event_results_map[ev_name] = []
+        event_results_map[ev_name].append(r)
+
     template = templates.get_template("events.html")
-    html_content = template.render({"request": request, "team": team})
+    html_content = template.render({
+        "request": request, 
+        "team": team,
+        "event_results_map": event_results_map
+    })
     return HTMLResponse(content=html_content)
 
 @router.get("/nations", response_class=HTMLResponse)
