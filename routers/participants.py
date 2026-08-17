@@ -1,11 +1,9 @@
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
-from database import supabase
+from database import supabase, templates
 from routers.auth import require_team
 
 router = APIRouter(tags=["Participants"])
-templates = Jinja2Templates(directory="templates")
 
 @router.get("/", response_class=HTMLResponse)
 async def home_dashboard(request: Request, team: dict = Depends(require_team)):
@@ -51,17 +49,24 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
     activity_res = supabase.table("event_results").select("event_name, medal_type, recorded_at, teams(nation_name, flag_emoji)").order("recorded_at", desc=True).limit(5).execute()
     activities = activity_res.data if activity_res.data else []
 
-    return templates.TemplateResponse("index.html", {
+    # Bypass Starlette's cached TemplateResponse to prevent Python 3.14 dict-hashing error
+    template = templates.get_template("index.html")
+    html_content = template.render({
         "request": request, 
         "team": team, 
         "standings": sorted_standings,
         "activities": activities
     })
+    return HTMLResponse(content=html_content)
 
 @router.get("/events", response_class=HTMLResponse)
 async def events_page(request: Request, team: dict = Depends(require_team)):
-    return templates.TemplateResponse("events.html", {"request": request, "team": team})
+    template = templates.get_template("events.html")
+    html_content = template.render({"request": request, "team": team})
+    return HTMLResponse(content=html_content)
 
 @router.get("/nations", response_class=HTMLResponse)
 async def nations_page(request: Request, team: dict = Depends(require_team)):
-    return templates.TemplateResponse("nations.html", {"request": request, "team": team})
+    template = templates.get_template("nations.html")
+    html_content = template.render({"request": request, "team": team})
+    return HTMLResponse(content=html_content)
