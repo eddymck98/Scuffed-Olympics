@@ -22,10 +22,17 @@
                 </div>
 
                 <!-- Nav Links (Desktop) -->
-                <nav class="hidden md:flex space-x-6 text-sm font-medium">
+                <nav class="hidden md:flex space-x-6 text-sm font-medium items-center">
                     <a href="/" class="hover:text-amber-400 transition">Dashboard</a>
                     <a href="/events" class="hover:text-amber-400 transition">Events & Rules</a>
                     <a href="/nations" class="hover:text-amber-400 transition">Nations</a>
+                    
+                    <!-- Commissioner / Admin Panel Link -->
+                    {% if request.cookies.get("is_admin") == "true" %}
+                        <a href="/admin" class="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-xl font-bold hover:bg-amber-500 hover:text-slate-950 transition">
+                            👑 Commissioner Panel
+                        </a>
+                    {% endif %}
                 </nav>
 
                 <!-- Logged In User & Logout -->
@@ -41,10 +48,13 @@
         </div>
 
         <!-- Mobile Nav Bar -->
-        <div class="md:hidden flex justify-around bg-slate-900/90 border-t border-slate-800/80 py-2 text-xs">
+        <div class="md:hidden flex justify-around bg-slate-900/90 border-t border-slate-800/80 py-2 text-xs items-center">
             <a href="/" class="hover:text-amber-400">Dashboard</a>
             <a href="/events" class="hover:text-amber-400">Events</a>
             <a href="/nations" class="hover:text-amber-400">Nations</a>
+            {% if request.cookies.get("is_admin") == "true" %}
+                <a href="/admin" class="text-amber-400 font-bold bg-amber-500/10 px-2 py-1 rounded-lg border border-amber-500/30">👑 Admin</a>
+            {% endif %}
         </div>
     </header>
     {% endif %}
