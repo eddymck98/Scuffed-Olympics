@@ -147,7 +147,8 @@ async def events_page(request: Request, team: dict = Depends(require_team)):
 
 @router.get("/nations", response_class=HTMLResponse)
 async def nations_page(request: Request, team: dict = Depends(require_team)):
-    teams_res = supabase.table("teams").select("id, nation_name, flag_emoji, is_admin").execute()
+    # FIX: Explicitly select participant_name and olympics_attended alongside team details
+    teams_res = supabase.table("teams").select("id, nation_name, participant_name, flag_emoji, is_admin, olympics_attended").execute()
     teams = teams_res.data if teams_res.data else []
 
     # Also include feature toggles here just to keep navbar fully consistent
