@@ -118,6 +118,13 @@ async def submit_var(target_team_id: str = Form(...), incident: str = Form(...),
 
 @router.get("/events", response_class=HTMLResponse)
 async def events_page(request: Request, team: dict = Depends(require_team)):
+    # Fetch feature toggles so the navbar links display correctly on the events page too
+    settings_res = supabase.table("app_settings").select("key, is_active").execute()
+    settings = {s["key"]: s["is_active"] for s in settings_res.data} if settings_res.data else {}
+    
+    treasure_visible = settings.get("treasure_hunt_active", False)
+    escape_visible = settings.get("puzzle_room_active", False)
+
     results_res = supabase.table("event_results").select("event_name, points, medal_type, teams(nation_name, flag_emoji)").order("points", desc=True).execute()
     results = results_res.data if results_res.data else []
 
@@ -132,7 +139,9 @@ async def events_page(request: Request, team: dict = Depends(require_team)):
     html_content = template.render({
         "request": request, 
         "team": team,
-        "event_results_map": event_results_map
+        "event_results_map": event_results_map,
+        "treasure_visible": treasure_visible,
+        "escape_visible": escape_visible
     })
     return HTMLResponse(content=html_content)
 
@@ -141,10 +150,19 @@ async def nations_page(request: Request, team: dict = Depends(require_team)):
     teams_res = supabase.table("teams").select("id, nation_name, flag_emoji, is_admin").execute()
     teams = teams_res.data if teams_res.data else []
 
+    # Also include feature toggles here just to keep navbar fully consistent
+    settings_res = supabase.table("app_settings").select("key, is_active").execute()
+    settings = {s["key"]: s["is_active"] for s in settings_res.data} if settings_res.data else {}
+    
+    treasure_visible = settings.get("treasure_hunt_active", False)
+    escape_visible = settings.get("puzzle_room_active", False)
+
     template = templates.get_template("nations.html")
     html_content = template.render({
         "request": request, 
         "team": team,
-        "teams": teams
+        "teams": teams,
+        "treasure_visible": treasure_visible,
+        "escape_visible": escape_visible
     })
     return HTMLResponse(content=html_content)
