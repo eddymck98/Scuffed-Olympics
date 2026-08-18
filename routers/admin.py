@@ -45,7 +45,7 @@ async def admin_dashboard(request: Request, tab: str = "events", subtab: str = "
         "treasure_visible": treasure_visible,
         "escape_visible": escape_visible,
         "ceremony_countdown_active": ceremony_countdown_active,
-        "ceremony_date": "Nov 1, 2026 18:00:00",
+        "ceremony_date": "Oct 2, 2026 18:00:00",
         "standard_events": ["Crack the Code", "Golf Putting", "Padel Pong", "Sticky Bounce", "Ring Toss", "Bean Bag Toss", "The Entrance", "Cut the Deck", "Beer Pong", "The Ultimate Relay Race"]
     })
     return HTMLResponse(content=html_content)
