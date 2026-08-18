@@ -15,17 +15,23 @@
         </div>
     </div>
 
-    <!-- Nations Player Cards Grid (Squished & Compact) -->
+    <!-- Nations Player Cards Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pt-1">
         {% for t in teams %}
-            <!-- Fixed Flag CDN mapping for Wales, Austria, and others -->
-            {% set code = {'austria': 'at', 'wales': 'gb', 'ireland': 'ie', 'united states': 'us', 'china': 'cn', 'japan': 'jp', 'germany': 'de', 'canada': 'ca', 'brazil': 'br', 'united kingdom': 'gb'}.get(t.nation_name|lower, 'gb') %}
+            <!-- Flag mapping with custom override for Wales -->
+            {% set nation_lower = t.nation_name|lower %}
+            {% if 'wales' in nation_lower %}
+                {% set flag_url = 'https://upload.wikimedia.org/wikipedia/commons/5/59/Flag_of_Wales_%281959%E2%80%93present%29.svg' %}
+            {% else %}
+                {% set code = {'austria': 'at', 'ireland': 'ie', 'united states': 'us', 'china': 'cn', 'japan': 'jp', 'germany': 'de', 'canada': 'ca', 'brazil': 'br', 'united kingdom': 'gb'}.get(nation_lower, 'gb') %}
+                {% set flag_url = 'https://flagcdn.com/w640/' + code + '.png' %}
+            {% endif %}
             
             <div class="relative overflow-hidden bg-slate-900/85 border-2 {% if t.nation_name == team.nation_name %}border-yellow-500 shadow-yellow-500/10{% else %}border-slate-800 hover:border-blue-500/50{% endif %} rounded-2xl p-4 shadow-xl transition-all group">
                 
                 <!-- Transparent Waving Flag Watermark Background -->
-                <div class="absolute inset-0 opacity-[0.1] bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" 
-                     style="background-image: url('https://flagcdn.com/w640/{{ code }}.png');">
+                <div class="absolute inset-0 opacity-[0.12] bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" 
+                     style="background-image: url('{{ flag_url }}');">
                 </div>
 
                 <div class="relative z-10 space-y-3">
@@ -62,7 +68,7 @@
                         </div>
                     </div>
 
-                    <!-- Player Card Stat Badges (Short & Compact) -->
+                    <!-- Player Card Stat Badges -->
                     <div class="grid grid-cols-2 gap-2 text-xs font-mono pt-1 border-t border-slate-800/80">
                         <div class="bg-slate-950/80 border border-slate-800/60 p-2 rounded-xl text-center">
                             <span class="block text-[8px] text-slate-400 uppercase font-sans font-bold">Olympics Attended</span>
