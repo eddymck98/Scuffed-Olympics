@@ -10,8 +10,8 @@ def get_current_team(request: Request):
     if not team_id:
         return None
     
-    # Fetch fresh, full team data from the database including greeting
-    res = supabase.table("teams").select("id, nation_name, participant_name, greeting, shots_owed").eq("id", team_id).execute()
+    # Updated to select "*" so custom columns like treasure_group_id are fully loaded into the session
+    res = supabase.table("teams").select("*").eq("id", team_id).execute()
     if not res.data:
         return None
     return res.data[0]
