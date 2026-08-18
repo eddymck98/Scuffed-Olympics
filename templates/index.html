@@ -78,37 +78,11 @@
             <!-- Custom Watermarked Row Cards -->
             <div class="space-y-3">
                 {% for row in standings %}
-                    <!-- Bulletproof mapping using loose inclusion ("in") instead of exact equals ("==") -->
-                    {% set n = row.nation_name | string | lower %}
-                    {% set c = row.flag_emoji | string | lower %}
-                    
-                    {% if 'wales' in n or 'wls' in c %}
-                        {% set flag_url = 'https://flagcdn.com/w640/gb-wls.png' %}
-                    {% elif 'austria' in n or 'at' in c %}
-                        {% set flag_url = 'https://flagcdn.com/w640/at.png' %}
-                    {% elif 'ireland' in n or 'ie' in c %}
-                        {% set flag_url = 'https://flagcdn.com/w640/ie.png' %}
-                    {% elif 'united states' in n or 'usa' in n or 'us' in c %}
-                        {% set flag_url = 'https://flagcdn.com/w640/us.png' %}
-                    {% elif 'china' in n or 'cn' in c or 'ch' in c %}
-                        {% set flag_url = 'https://flagcdn.com/w640/cn.png' %}
-                    {% elif 'japan' in n or 'jp' in c %}
-                        {% set flag_url = 'https://flagcdn.com/w640/jp.png' %}
-                    {% elif 'germany' in n or 'de' in c %}
-                        {% set flag_url = 'https://flagcdn.com/w640/de.png' %}
-                    {% elif 'canada' in n or 'ca' in c %}
-                        {% set flag_url = 'https://flagcdn.com/w640/ca.png' %}
-                    {% elif 'brazil' in n or 'br' in c %}
-                        {% set flag_url = 'https://flagcdn.com/w640/br.png' %}
-                    {% else %}
-                        {% set flag_url = 'https://flagcdn.com/w640/gb.png' %}
-                    {% endif %}
-
                     <div class="relative overflow-hidden group bg-slate-900/70 border border-slate-800 rounded-2xl hover:border-yellow-500/50 transition-all shadow-lg">
                         
-                        <!-- Transparent Waving Flag Watermark Background -->
+                        <!-- Transparent Waving Flag Watermark Background (Using Python pre-computed row.flag_url) -->
                         <div class="absolute inset-0 opacity-[0.12] bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" 
-                             style="background-image: url('{{ flag_url }}');">
+                             style="background-image: url('{{ row.flag_url }}');">
                         </div>
 
                         <!-- Row Content -->
