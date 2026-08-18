@@ -18,7 +18,7 @@
     <!-- Nations Player Cards Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pt-1">
         {% for t in teams %}
-            <!-- Flag mapping with explicit code check matching flag_emoji / nation_name safely -->
+            <!-- Robust Flag URL Selector matching nation names and database flag codes -->
             {% set nation_lower = t.nation_name|lower|trim %}
             {% set flag_code_lower = t.flag_emoji|lower|trim %}
             
@@ -30,7 +30,7 @@
                 {% set flag_url = 'https://flagcdn.com/w640/ie.png' %}
             {% elif 'united states' in nation_lower or 'usa' in nation_lower or flag_code_lower == 'us' %}
                 {% set flag_url = 'https://flagcdn.com/w640/us.png' %}
-            {% elif 'china' in nation_lower or flag_code_lower == 'ch' or flag_code_lower == 'cn' %}
+            {% elif 'china' in nation_lower or flag_code_lower == 'cn' or flag_code_lower == 'ch' %}
                 {% set flag_url = 'https://flagcdn.com/w640/cn.png' %}
             {% elif 'japan' in nation_lower or flag_code_lower == 'jp' %}
                 {% set flag_url = 'https://flagcdn.com/w640/jp.png' %}
