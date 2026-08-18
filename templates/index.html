@@ -75,32 +75,45 @@
                 <span class="text-xs font-mono px-3 py-1 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">Official Rankings</span>
             </div>
 
-            <div class="overflow-hidden">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="text-[11px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-800/80">
-                            <th class="py-4 px-4">Nation</th>
-                            <th class="py-4 px-3 text-center text-yellow-400">🥇 Gold</th>
-                            <th class="py-4 px-3 text-center text-slate-300">🥈 Silver</th>
-                            <th class="py-4 px-3 text-center text-amber-600">🥉 Bronze</th>
-                            <th class="py-4 px-4 text-right text-red-400">Total Pts</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-900 text-sm">
-                        {% for row in standings %}
-                            <tr class="group hover:bg-slate-900/60 transition-colors">
-                                <td class="py-4 px-4 font-black text-white flex items-center gap-3">
-                                    <span class="text-2xl drop-shadow">{{ row.flag_emoji }}</span>
-                                    <span class="group-hover:text-yellow-400 transition-colors">{{ row.nation_name }}</span>
-                                </td>
-                                <td class="py-4 px-3 text-center font-mono font-bold text-yellow-400">{{ row.gold }}</td>
-                                <td class="py-4 px-3 text-center font-mono font-bold text-slate-300">{{ row.silver }}</td>
-                                <td class="py-4 px-3 text-center font-mono font-bold text-amber-600">{{ row.bronze }}</td>
-                                <td class="py-4 px-4 text-right font-mono font-black text-red-400 text-base">{{ row.total_points }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="overflow-hidden space-y-2">
+                {% for row in standings %}
+                    <div class="relative overflow-hidden group bg-slate-900/60 border border-slate-800/80 rounded-2xl hover:border-yellow-500/50 transition-all">
+                        
+                        <!-- Transparent Waving Flag / Country Watermark Background -->
+                        <div class="absolute inset-0 opacity-[0.07] bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" 
+                             style="background-image: url('https://flagcdn.com/w640/{{ row.nation_name|lower|replace(' ', '-') }}.png');">
+                        </div>
+
+                        <!-- Row Content -->
+                        <div class="relative z-10 flex items-center justify-between px-5 py-4">
+                            <!-- Nation & Flag Emoji -->
+                            <div class="flex items-center gap-3.5">
+                                <span class="text-3xl drop-shadow-md">{{ row.flag_emoji }}</span>
+                                <span class="font-black text-white text-base tracking-wide group-hover:text-yellow-400 transition-colors">{{ row.nation_name }}</span>
+                            </div>
+
+                            <!-- Medals & Points Breakdown -->
+                            <div class="flex items-center space-x-6 sm:space-x-8 text-sm font-mono">
+                                <div class="text-center">
+                                    <span class="block text-[10px] text-slate-400 font-sans font-bold uppercase">Gold</span>
+                                    <span class="font-bold text-yellow-400 text-base">{{ row.gold }}</span>
+                                </div>
+                                <div class="text-center">
+                                    <span class="block text-[10px] text-slate-400 font-sans font-bold uppercase">Silver</span>
+                                    <span class="font-bold text-slate-300 text-base">{{ row.silver }}</span>
+                                </div>
+                                <div class="text-center">
+                                    <span class="block text-[10px] text-slate-400 font-sans font-bold uppercase">Bronze</span>
+                                    <span class="font-bold text-amber-600 text-base">{{ row.bronze }}</span>
+                                </div>
+                                <div class="text-center pl-2 border-l border-slate-800">
+                                    <span class="block text-[10px] text-red-400 font-sans font-black uppercase">Pts</span>
+                                    <span class="font-black text-red-400 text-lg">{{ row.total_points }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
 
