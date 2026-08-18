@@ -9,6 +9,13 @@ templates = Jinja2Templates(directory="templates")
 
 @router.get("", response_class=HTMLResponse)
 async def treasure_hunt_page(request: Request, team: dict = Depends(require_team)):
+    # Fetch feature toggles for navbar consistency
+    settings_res = supabase.table("app_settings").select("key, is_active").execute()
+    settings = {s["key"]: s["is_active"] for s in settings_res.data} if settings_res.data else {}
+    
+    treasure_visible = settings.get("treasure_hunt_active", False)
+    escape_visible = settings.get("puzzle_room_active", False)
+    
     toggle_res = supabase.table("app_settings").select("is_active").eq("key", "treasure_hunt_active").execute()
     is_active = toggle_res.data[0]["is_active"] if toggle_res.data else False
     
@@ -18,13 +25,19 @@ async def treasure_hunt_page(request: Request, team: dict = Depends(require_team
     progress_res = supabase.table("team_treasure_progress").select("*").eq("team_id", team["id"]).execute()
     progress_map = {p["item_id"]: p for p in progress_res.data} if progress_res.data else {}
 
-    return templates.TemplateResponse("treasure_hunt.html", {
-        "request": request, 
-        "team": team, 
-        "is_active": is_active,
-        "items": items,
-        "progress_map": progress_map
-    })
+    return templates.TemplateResponse(
+        request=request,
+        name="treasure_hunt.html",
+        context={
+            "request": request, 
+            "team": team, 
+            "is_active": is_active,
+            "items": items,
+            "progress_map": progress_map,
+            "treasure_visible": treasure_visible,
+            "escape_visible": escape_visible
+        }
+    )
 
 @router.post("/submit")
 async def submit_treasure_item(request: Request, item_id: str = Form(...), photo: UploadFile = File(...), team: dict = Depends(require_team)):
