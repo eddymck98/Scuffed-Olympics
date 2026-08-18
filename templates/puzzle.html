@@ -51,12 +51,12 @@
             </div>
 
         {% elif current_stage == 2 %}
-            <!-- STAGE 2: Cipher Decode -->
+            <!-- STAGE 2: Cipher Decode (Hint Removed) -->
             <div class="space-y-4">
                 <div class="bg-slate-950 p-5 rounded-2xl border border-blue-500/30 space-y-2">
                     <span class="text-[10px] font-black uppercase text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded">Trial #2: Secret Cipher</span>
-                    <h3 class="text-sm font-bold text-slate-100">Decode this encrypted message (Hint: shift each letter back one in the alphabet):</h3>
-                    <p class="text-lg font-mono font-black text-amber-400 tracking-widest py-2">BUGMFUFT</p>
+                    <h3 class="text-sm font-bold text-slate-100">Decode this encrypted message:</h3>
+                    <p class="text-xl font-mono font-black text-amber-400 tracking-widest py-2">BUGMFUFT</p>
                 </div>
 
                 <form action="/escape-room/submit" method="POST" class="space-y-4">
@@ -69,22 +69,111 @@
             </div>
 
         {% elif current_stage == 3 %}
-            <!-- STAGE 3: Wordle style / Drink -->
-            <div class="space-y-4">
-                <div class="bg-slate-950 p-5 rounded-2xl border border-emerald-500/30 space-y-2">
+            <!-- STAGE 3: Interactive Wordle Grid -->
+            <div class="space-y-4 text-center">
+                <div class="bg-slate-950 p-5 rounded-2xl border border-emerald-500/30 space-y-2 text-left">
                     <span class="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded">Trial #3: Wordle Challenge</span>
-                    <h3 class="text-sm font-bold text-slate-100">Guess the 5-letter party secret word:</h3>
-                    <p class="text-xs text-slate-400">What is everyone's favorite activity at the end of a long Olympic event?</p>
+                    <h3 class="text-sm font-bold text-slate-100">Guess the 5-letter party secret word (What is everyone's favorite post-event activity?):</h3>
                 </div>
 
-                <form action="/escape-room/submit" method="POST" class="space-y-4">
+                <!-- Wordle Grid Board (6 rows x 5 cols) -->
+                <div id="wordleGrid" class="grid grid-rows-6 gap-2 max-w-[260px] mx-auto py-2">
+                    <!-- Rows generated via script below -->
+                </div>
+
+                <!-- Hidden form submitted when correct word is hit -->
+                <form id="wordleForm" action="/escape-room/submit" method="POST">
                     <input type="hidden" name="stage" value="3">
-                    <input type="text" name="answer" maxlength="5" required placeholder="5-letter word..." autocomplete="off" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-xs text-slate-200 uppercase tracking-widest text-center outline-none focus:border-emerald-400 transition shadow-inner">
-                    <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 text-slate-950 font-black text-xs uppercase tracking-widest py-4 rounded-2xl hover:brightness-110 transition shadow-lg shadow-emerald-500/20">
-                        Unlock Chamber 4 &rarr;
-                    </button>
+                    <input type="hidden" name="answer" id="wordleInputVal" value="">
                 </form>
+                
+                <p class="text-[11px] text-slate-400">Type letters on your keyboard and press Enter to submit a guess!</p>
             </div>
+
+            <script>
+                const targetWord = "DRINK";
+                let currentRow = 0;
+                let currentCol = 0;
+                let guesses = Array(6).fill("").map(() => Array(5).fill(""));
+
+                const grid = document.getElementById("wordleGrid");
+                for (let r = 0; r < 6; r++) {
+                    const rowDiv = document.createElement("div");
+                    rowDiv.className = "grid grid-cols-5 gap-2";
+                    for (let c = 0; c < 5; c++) {
+                        const tile = document.createElement("div");
+                        tile.id = `tile-${r}-${c}`;
+                        tile.className = "w-12 h-12 rounded-xl bg-slate-950 border-2 border-slate-800 flex items-center justify-center text-lg font-black text-white uppercase transition-all";
+                        rowDiv.appendChild(tile);
+                    }
+                    grid.appendChild(rowDiv);
+                }
+
+                document.addEventListener("keydown", (e) => {
+                    if (currentRow >= 6) return;
+                    
+                    if (e.key === "Backspace") {
+                        if (currentCol > 0) {
+                            currentCol--;
+                            guesses[currentRow][currentCol] = "";
+                            updateBoard();
+                        }
+                    } else if (e.key === "Enter") {
+                        if (currentCol === 5) {
+                            checkWordleRow();
+                        }
+                    } else if (/^[a-zA-Z]$/.test(e.key)) {
+                        if (currentCol < 5) {
+                            guesses[currentRow][currentCol] = e.key.toUpperCase();
+                            currentCol++;
+                            updateBoard();
+                        }
+                    }
+                });
+
+                function updateBoard() {
+                    for (let r = 0; r < 6; r++) {
+                        for (let c = 0; c < 5; c++) {
+                            const tile = document.getElementById(`tile-${r}-${c}`);
+                            tile.innerText = guesses[r][c];
+                        }
+                    }
+                }
+
+                function checkWordleRow() {
+                    const guessWord = guesses[currentRow].join("");
+                    if (guessWord.length < 5) return;
+
+                    // Evaluate colors
+                    for (let c = 0; c < 5; c++) {
+                        const tile = document.getElementById(`tile-${currentRow}-${c}`);
+                        const letter = guessWord[c];
+                        if (targetWord[c] === letter) {
+                            tile.className = "w-12 h-12 rounded-xl bg-emerald-600 border-2 border-emerald-500 flex items-center justify-center text-lg font-black text-white uppercase";
+                        } else if (targetWord.includes(letter)) {
+                            tile.className = "w-12 h-12 rounded-xl bg-amber-500 border-2 border-amber-400 flex items-center justify-center text-lg font-black text-slate-950 uppercase";
+                        } else {
+                            tile.className = "w-12 h-12 rounded-xl bg-slate-800 border-2 border-slate-700 flex items-center justify-center text-lg font-black text-slate-400 uppercase";
+                        }
+                    }
+
+                    if (guessWord === targetWord) {
+                        document.getElementById("wordleInputVal").value = guessWord.toLowerCase();
+                        setTimeout(() => {
+                            document.getElementById("wordleForm").submit();
+                        }, 800);
+                    } else {
+                        currentRow++;
+                        currentCol = 0;
+                        if (currentRow === 6) {
+                            setTimeout(() => {
+                                alert("Out of rows! Resetting board.");
+                                location.reload();
+                            }, 500);
+                        }
+                    }
+                }
+            </script>
 
         {% elif current_stage == 4 %}
             <!-- STAGE 4: Interactive 7-Wire Defusal -->
