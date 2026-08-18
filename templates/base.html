@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scuffed Olympics</title>
+    <title>Scuffed Olympics 🏆</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -17,31 +17,42 @@
 
     {% if request.url.path not in ['/login', '/admin/login'] %}
     <!-- Top Navigation Bar -->
-    <header class="bg-slate-900/80 backdrop-blur-md border-b border-amber-500/20 sticky top-0 z-50 shadow-lg">
+    <header class="bg-slate-900/90 backdrop-blur-md border-b border-amber-500/30 sticky top-0 z-50 shadow-2xl shadow-amber-500/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-18">
+            <div class="flex items-center justify-between h-20">
                 
-                <!-- Fixed Logo & Title -->
-                <div class="flex items-center space-x-3">
-                    <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/static/image/logo.png?raw=true" alt="Logo" class="h-11 w-11 object-contain drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]">
-                    <span class="font-black text-xl tracking-wider bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">SCUFFED OLYMPICS</span>
-                </div>
+                <!-- Fixed Logo & Title with Olympic Rings -->
+                <a href="/" class="flex items-center space-x-3 group">
+                    <div class="p-2 bg-slate-950/60 rounded-2xl border border-amber-500/30 group-hover:border-amber-400 transition shadow-inner">
+                        <img src="https://www.freepnglogos.com/uploads/olympic-rings-png/olympic-rings-nbc-universal-pay-billion-keep-olympics-17.png" 
+                             alt="Olympic Rings" 
+                             class="h-7 w-auto object-contain transform group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-black text-lg sm:text-xl tracking-wider bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-500 bg-clip-text text-transparent drop-shadow-sm">
+                            SCUFFED OLYMPICS
+                        </span>
+                        <span class="text-[10px] font-extrabold uppercase tracking-widest text-amber-400/80">
+                            ✨ Paris 2024 Vibe • 2026 Edition
+                        </span>
+                    </div>
+                </a>
 
                 <!-- Nav Links (Desktop) -->
-                <nav class="hidden md:flex space-x-5 text-xs font-bold uppercase tracking-wider items-center">
-                    <a href="/" class="px-3 py-2 rounded-xl text-slate-300 hover:text-amber-400 hover:bg-amber-500/10 transition">Dashboard</a>
-                    <a href="/events" class="px-3 py-2 rounded-xl text-slate-300 hover:text-amber-400 hover:bg-amber-500/10 transition">Events & Rules</a>
-                    <a href="/nations" class="px-3 py-2 rounded-xl text-slate-300 hover:text-amber-400 hover:bg-amber-500/10 transition">Nations</a>
+                <nav class="hidden md:flex space-x-3 text-xs font-bold uppercase tracking-wider items-center">
+                    <a href="/" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition border border-transparent hover:border-amber-500/20">📊 Dashboard</a>
+                    <a href="/events" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition border border-transparent hover:border-amber-500/20">🎯 Events & Rules</a>
+                    <a href="/nations" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition border border-transparent hover:border-amber-500/20">🌍 Nations</a>
                     
                     {% if treasure_visible %}
-                        <a href="/treasure-hunt" class="px-3 py-2 rounded-xl text-amber-300 hover:bg-amber-500/20 transition border border-amber-500/30">🏴‍☠️ Treasure Hunt</a>
+                        <a href="/treasure-hunt" class="px-3.5 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/40 shadow-sm">🏴‍☠️ Treasure Hunt</a>
                     {% endif %}
                     {% if escape_visible %}
-                        <a href="/escape-room" class="px-3 py-2 rounded-xl text-amber-300 hover:bg-amber-500/20 transition border border-amber-500/30">🧩 Escape Room</a>
+                        <a href="/escape-room" class="px-3.5 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/40 shadow-sm">🧩 Escape Room</a>
                     {% endif %}
                     
                     {% if request.cookies.get("is_admin") == "true" %}
-                        <a href="/admin" class="bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 px-4 py-2 rounded-xl font-black hover:brightness-110 transition shadow-md shadow-amber-500/20">
+                        <a href="/admin" class="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 px-4 py-2 rounded-xl font-black hover:brightness-110 transition shadow-lg shadow-amber-500/30 transform hover:-translate-y-0.5">
                             👑 Commissioner Panel
                         </a>
                     {% endif %}
@@ -50,28 +61,28 @@
                 <!-- Logged In User & Logout -->
                 <div class="flex items-center space-x-3">
                     {% if request.cookies.get("nation_name") %}
-                        <span class="hidden sm:inline-block text-[11px] bg-slate-950/80 text-amber-400 border border-amber-500/30 px-3 py-1.5 rounded-xl font-bold shadow-inner">
+                        <span class="hidden sm:inline-block text-[11px] bg-slate-950 text-amber-300 border border-amber-500/40 px-3.5 py-2 rounded-xl font-extrabold shadow-inner tracking-wide">
                             ⚡ Rep: {{ request.cookies.get("nation_name") }}
                         </span>
-                        <a href="/logout" class="text-xs text-slate-400 hover:text-rose-400 transition font-bold px-3 py-1.5 rounded-xl bg-slate-950/40 border border-slate-800">Logout</a>
+                        <a href="/logout" class="text-xs text-slate-400 hover:text-rose-400 transition font-bold px-3.5 py-2 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-rose-500/30">Logout</a>
                     {% endif %}
                 </div>
             </div>
         </div>
 
         <!-- Mobile Nav Bar -->
-        <div class="md:hidden flex justify-around bg-slate-900 border-t border-slate-800 py-2.5 text-[11px] font-bold uppercase tracking-wider items-center flex-wrap gap-y-1 px-2">
+        <div class="md:hidden flex justify-around bg-slate-950/90 border-t border-amber-500/20 py-2.5 text-[11px] font-bold uppercase tracking-wider items-center flex-wrap gap-y-1.5 px-2">
             <a href="/" class="text-slate-300 hover:text-amber-400">Dashboard</a>
             <a href="/events" class="text-slate-300 hover:text-amber-400">Events</a>
             <a href="/nations" class="text-slate-300 hover:text-amber-400">Nations</a>
             {% if treasure_visible %}
-                <a href="/treasure-hunt" class="text-amber-300">Hunt</a>
+                <a href="/treasure-hunt" class="text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">Hunt</a>
             {% endif %}
             {% if escape_visible %}
-                <a href="/escape-room" class="text-amber-300">Escape</a>
+                <a href="/escape-room" class="text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">Escape</a>
             {% endif %}
             {% if request.cookies.get("is_admin") == "true" %}
-                <a href="/admin" class="text-amber-400 bg-amber-500/10 px-2 py-1 rounded-lg border border-amber-500/30">👑 Admin</a>
+                <a href="/admin" class="text-amber-300 bg-amber-500/20 px-2 py-1 rounded-lg border border-amber-500/40 font-black">👑 Admin</a>
             {% endif %}
         </div>
     </header>
@@ -84,8 +95,11 @@
 
     {% if request.url.path not in ['/login', '/admin/login'] %}
     <!-- Footer -->
-    <footer class="bg-slate-900/60 border-t border-slate-800/80 py-4 text-center text-xs text-slate-500">
-        Scuffed Olympics &copy; 2026 &bull; Authorized Personnel & Competitors Only
+    <footer class="bg-slate-900/80 border-t border-slate-800 py-6 text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <span>Scuffed Olympics &copy; 2026 &bull; Authorized Personnel & Competitors Only</span>
+            <span class="text-amber-400/80 font-bold">🏆 Let the games begin!</span>
+        </div>
     </footer>
     {% endif %}
 
