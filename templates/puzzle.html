@@ -79,7 +79,7 @@
             </div>
 
         {% elif current_stage == 3 %}
-            <!-- STAGE 3: Interactive Wordle Grid -->
+            <!-- STAGE 3: Interactive Wordle Grid with Onscreen Keyboard -->
             <div class="space-y-4 text-center">
                 <div class="bg-purple-950/80 p-5 rounded-2xl border border-emerald-500/40 space-y-2 text-left shadow-inner">
                     <span class="text-[10px] font-black uppercase text-emerald-300 bg-emerald-500/20 px-2.5 py-1 rounded border border-emerald-500/30">Trial #3: Wordle Challenge</span>
@@ -89,13 +89,83 @@
                 <!-- Wordle Grid Board -->
                 <div id="wordleGrid" class="grid grid-rows-6 gap-2 max-w-[260px] mx-auto py-2"></div>
 
+                <!-- Onscreen Touch Keyboard & Submit Controls -->
+                <div id="wordleKeyboard" class="max-w-md mx-auto space-y-1.5 pt-2 select-none">
+                    <div class="flex justify-center gap-1">
+                        <button type="button" onclick="handleKey('Q')" class="kb-btn">Q</button>
+                        <button type="button" onclick="handleKey('W')" class="kb-btn">W</button>
+                        <button type="button" onclick="handleKey('E')" class="kb-btn">E</button>
+                        <button type="button" onclick="handleKey('R')" class="kb-btn">R</button>
+                        <button type="button" onclick="handleKey('T')" class="kb-btn">T</button>
+                        <button type="button" onclick="handleKey('Y')" class="kb-btn">Y</button>
+                        <button type="button" onclick="handleKey('U')" class="kb-btn">U</button>
+                        <button type="button" onclick="handleKey('I')" class="kb-btn">I</button>
+                        <button type="button" onclick="handleKey('O')" class="kb-btn">O</button>
+                        <button type="button" onclick="handleKey('P')" class="kb-btn">P</button>
+                    </div>
+                    <div class="flex justify-center gap-1">
+                        <button type="button" onclick="handleKey('A')" class="kb-btn">A</button>
+                        <button type="button" onclick="handleKey('S')" class="kb-btn">S</button>
+                        <button type="button" onclick="handleKey('D')" class="kb-btn">D</button>
+                        <button type="button" onclick="handleKey('F')" class="kb-btn">F</button>
+                        <button type="button" onclick="handleKey('G')" class="kb-btn">G</button>
+                        <button type="button" onclick="handleKey('H')" class="kb-btn">H</button>
+                        <button type="button" onclick="handleKey('J')" class="kb-btn">J</button>
+                        <button type="button" onclick="handleKey('K')" class="kb-btn">K</button>
+                        <button type="button" onclick="handleKey('L')" class="kb-btn">L</button>
+                    </div>
+                    <div class="flex justify-center gap-1">
+                        <button type="button" onclick="handleKey('ENTER')" class="kb-btn-action bg-emerald-600 hover:bg-emerald-500">SUBMIT</button>
+                        <button type="button" onclick="handleKey('Z')" class="kb-btn">Z</button>
+                        <button type="button" onclick="handleKey('X')" class="kb-btn">X</button>
+                        <button type="button" onclick="handleKey('C')" class="kb-btn">C</button>
+                        <button type="button" onclick="handleKey('V')" class="kb-btn">V</button>
+                        <button type="button" onclick="handleKey('B')" class="kb-btn">B</button>
+                        <button type="button" onclick="handleKey('N')" class="kb-btn">N</button>
+                        <button type="button" onclick="handleKey('M')" class="kb-btn">M</button>
+                        <button type="button" onclick="handleKey('BACKSPACE')" class="kb-btn-action bg-rose-600 hover:bg-rose-500">⌫</button>
+                    </div>
+                </div>
+
                 <form id="wordleForm" action="/escape-room/submit" method="POST">
                     <input type="hidden" name="stage" value="3">
                     <input type="hidden" name="answer" id="wordleInputVal" value="">
                 </form>
                 
-                <p class="text-[11px] text-indigo-200">Type letters on your keyboard and press Enter to submit a guess!</p>
+                <p class="text-[11px] text-indigo-200">Tap the keys above or use your physical keyboard to enter your guess!</p>
             </div>
+
+            <style>
+                .kb-btn {
+                    flex: 1;
+                    height: 42px;
+                    background-color: rgba(79, 70, 229, 0.3);
+                    border: 1px solid rgba(129, 140, 248, 0.4);
+                    color: white;
+                    font-weight: 900;
+                    font-size: 12px;
+                    border-radius: 10px;
+                    transition: all 0.1s;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+                }
+                .kb-btn:active {
+                    background-color: rgba(79, 70, 229, 0.7);
+                    transform: scale(0.95);
+                }
+                .kb-btn-action {
+                    padding: 0 12px;
+                    height: 42px;
+                    color: white;
+                    font-weight: 900;
+                    font-size: 10px;
+                    border-radius: 10px;
+                    transition: all 0.1s;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                }
+                .kb-btn-action:active {
+                    transform: scale(0.95);
+                }
+            </style>
 
             <script>
                 const targetWord = "DRINK";
@@ -116,27 +186,44 @@
                     grid.appendChild(rowDiv);
                 }
 
+                // Support Physical Keyboard Input
                 document.addEventListener("keydown", (e) => {
                     if (currentRow >= 6) return;
-                    
                     if (e.key === "Backspace") {
+                        handleKey("BACKSPACE");
+                    } else if (e.key === "Enter") {
+                        handleKey("ENTER");
+                    } else if (/^[a-zA-Z]$/.test(e.key)) {
+                        handleKey(e.key.toUpperCase());
+                    }
+                });
+
+                // Unified Key Handler for Both Physical & Onscreen Buttons
+                function handleKey(key) {
+                    if (currentRow >= 6) return;
+
+                    if (key === "BACKSPACE") {
                         if (currentCol > 0) {
                             currentCol--;
                             guesses[currentRow][currentCol] = "";
                             updateBoard();
                         }
-                    } else if (e.key === "Enter") {
+                    } else if (key === "ENTER") {
                         if (currentCol === 5) {
                             checkWordleRow();
+                        } else {
+                            if (typeof showToast === 'function') {
+                                showToast("Not enough letters!");
+                            }
                         }
-                    } else if (/^[a-zA-Z]$/.test(e.key)) {
+                    } else if (/^[A-Z]$/.test(key)) {
                         if (currentCol < 5) {
-                            guesses[currentRow][currentCol] = e.key.toUpperCase();
+                            guesses[currentRow][currentCol] = key;
                             currentCol++;
                             updateBoard();
                         }
                     }
-                });
+                }
 
                 function updateBoard() {
                     for (let r = 0; r < 6; r++) {
