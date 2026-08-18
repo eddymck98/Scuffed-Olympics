@@ -1,20 +1,56 @@
-/* Remove the heavy background container wrapper */
-.section-container {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 0;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #080714;
+    /* Rich, vibrant party background gradient with glowing depth */
+    background-image: 
+      radial-gradient(at 10% 10%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
+      radial-gradient(at 90% 15%, rgba(234, 179, 8, 0.15) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(225, 29, 72, 0.12) 0px, transparent 60%),
+      radial-gradient(at 15% 90%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
+      radial-gradient(at 85% 85%, rgba(147, 51, 234, 0.15) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: #f8fafc;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
 }
 
-/* Let individual country buttons float cleanly */
-.country-card {
-  background: rgba(255, 255, 255, 0.03);
+/* Custom Scrollbar for Party Vibe */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #080714;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e1b4b;
+  border-radius: 9999px;
+  border: 2px solid #080714;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #312e81;
+}
+
+/* Glowing Neon Card Utility */
+.party-card {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.2s ease-in-out;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
 }
 
-.country-card:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+.party-card:hover {
+  border-color: rgba(234, 179, 8, 0.4);
+  box-shadow: 0 0 25px rgba(234, 179, 8, 0.15), 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* Neon Text Gradient Shimmer */
+.olympic-gradient-text {
+  background: linear-gradient(135deg, #60a5fa 0%, #facc15 35%, #f43f5e 70%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
