@@ -177,7 +177,7 @@
             </div>
         </div>
 
-        <!-- Right Side: Compact Personal Shots & Unified Nation Shot Board & Security & VAR -->
+        <!-- Right Side: Compact Personal Shots & Unified Nation Shot Board & VAR -->
         <div class="lg:col-span-5 space-y-6">
             
             <!-- Compact Personal Shots Card -->
@@ -218,32 +218,6 @@
                 </div>
             </div>
 
-            <!-- Security & Code Reset Card -->
-            <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-2xl p-5 shadow-xl space-y-4">
-                <div class="flex items-center justify-between border-b border-indigo-800/60 pb-2.5">
-                    <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
-                        <span>🔑</span> Change Access PIN
-                    </h3>
-                    <span class="text-[10px] text-indigo-300 font-mono">Security</span>
-                </div>
-
-                <form action="/profile/reset-code" method="POST" class="space-y-3">
-                    <div>
-                        <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider mb-1">Current PIN Code</label>
-                        <input type="password" name="current_code" required placeholder="Enter current PIN..." class="w-full bg-purple-950/80 border border-indigo-700/80 rounded-xl p-2.5 text-xs text-white outline-none focus:border-amber-400 transition">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider mb-1">New PIN Code</label>
-                        <input type="password" name="new_code" required placeholder="Enter new PIN (min 3 chars)..." class="w-full bg-purple-950/80 border border-indigo-700/80 rounded-xl p-2.5 text-xs text-white outline-none focus:border-amber-400 transition">
-                    </div>
-
-                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-widest py-3 rounded-xl transition shadow-lg">
-                        Update PIN Code &rarr;
-                    </button>
-                </form>
-            </div>
-
             <!-- Scuffed VAR Form -->
             <div class="bg-gradient-to-b from-red-950/50 via-indigo-950/90 to-purple-950/90 border border-red-500/40 rounded-2xl p-6 shadow-xl relative space-y-4">
                 <div class="flex items-center justify-between border-b border-red-500/30 pb-2.5">
@@ -276,6 +250,32 @@
             </div>
 
         </div>
+    </div>
+
+    <!-- Security & Code Reset Card (Moved to the bottom full width) -->
+    <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-4 max-w-xl mx-auto">
+        <div class="flex items-center justify-between border-b border-indigo-800/60 pb-2.5">
+            <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
+                <span>🔑</span> Change Access PIN
+            </h3>
+            <span class="text-[10px] text-indigo-300 font-mono">Security</span>
+        </div>
+
+        <form action="/profile/reset-code" method="POST" class="space-y-3">
+            <div>
+                <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider mb-1">Current PIN Code</label>
+                <input type="password" name="current_code" required placeholder="Enter current PIN..." class="w-full bg-purple-950/80 border border-indigo-700/80 rounded-xl p-3 text-xs text-white outline-none focus:border-amber-400 transition">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider mb-1">New PIN Code</label>
+                <input type="password" name="new_code" required placeholder="Enter new PIN (min 3 chars)..." class="w-full bg-purple-950/80 border border-indigo-700/80 rounded-xl p-3 text-xs text-white outline-none focus:border-amber-400 transition">
+            </div>
+
+            <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-widest py-3 rounded-xl transition shadow-lg">
+                Update PIN Code &rarr;
+            </button>
+        </form>
     </div>
 
 </div>
