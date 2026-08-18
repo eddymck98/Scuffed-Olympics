@@ -21,7 +21,6 @@ async def escape_room_page(request: Request, team: dict = Depends(require_team))
     settings = {s["key"]: s["is_active"] for s in settings_res.data} if settings_res.data else {}
     escape_visible = settings.get("puzzle_room_active", False)
 
-    # Note: If your table is named 'puzzle_progress', use that here. If it's 'team_puzzle_progress', change it back.
     prog_res = supabase.table("puzzle_progress").select("current_stage").eq("team_id", team["id"]).execute()
     current_stage = prog_res.data[0]["current_stage"] if prog_res.data else 1
 
@@ -45,11 +44,19 @@ async def submit_puzzle(
 ):
     clean_answer = answer.strip().lower()
     
+    # Check if the submitted answer is correct for the current stage
     if stage in STAGE_ANSWERS and clean_answer == STAGE_ANSWERS[stage]:
         next_stage = stage + 1
-        supabase.table("puzzle_progress").upsert({
-            "team_id": team["id"],
-            "current_stage": next_stage
-        }, on_conflict="team_id").execute()
-
-    return RedirectResponse(url="/escape-room", status_code=status.HTTP_303_SEE_OTHER)
+        
+        # Check if a progress row already exists for this team to bypass strict RLS insert/upsert restrictions
+        existing = supabase.table("puzzle_progress").select("team_id").eq("team_id", team["id"]).execute()
+        
+        if existing.data:
+            supabase.table("puzzle_progress").update({"current_stage": next_stage}).eq("team_id", team["id"]).execute()
+        else:
+            supabase.table("puzzle_progress").insert({"team_id": team["id"], "current_stage": next_stage}).execute()
+            
+        return RedirectResponse(url="/escape-room", status_code=status.HTTP_303_SEE_OTHER)
+    
+    # If the answer is incorrect, redirect back with an error toast parameter
+    return RedirectResponse(url="/escape-room?error=Incorrect+Answer!", status_code=status.HTTP_303_SEE_OTHER)
