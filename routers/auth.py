@@ -90,3 +90,27 @@ async def admin_login_action(admin_password: str = Form(...)):
     response = RedirectResponse(url="/admin", status_code=status.HTTP_303_SEE_OTHER)
     response.set_cookie(key="is_admin", value="true", httponly=True)
     return response
+
+
+# --- Code Reset Endpoint ---
+
+@router.post("/profile/reset-code")
+async def reset_team_code(
+    current_code: str = Form(...),
+    new_code: str = Form(...),
+    team: dict = Depends(require_team)
+):
+    """Allows a logged-in team to securely update their PIN/access code."""
+    # Verify the current pin_code matches what's stored in the database for this team
+    if current_code.strip() != str(team.get("pin_code", "")):
+        return RedirectResponse(url="/?error=Current+code+is+incorrect!", status_code=status.HTTP_303_SEE_OTHER)
+    
+    # Validate the new code length
+    cleaned_new_code = new_code.strip()
+    if len(cleaned_new_code) < 3:
+        return RedirectResponse(url="/?error=New+code+must+be+at+least+3+characters!", status_code=status.HTTP_303_SEE_OTHER)
+
+    # Update the pin_code in Supabase
+    supabase.table("teams").update({"pin_code": cleaned_new_code}).eq("id", team["id"]).execute()
+    
+    return RedirectResponse(url="/?success=Code+updated+successfully!", status_code=status.HTTP_303_SEE_OTHER)
