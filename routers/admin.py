@@ -21,10 +21,10 @@ async def admin_dashboard(request: Request, tab: str = "events", subtab: str = "
     settings_res = supabase.table("app_settings").select("key, is_active").execute()
     app_settings = {s["key"]: s["is_active"] for s in settings_res.data} if settings_res.data else {}
      
-    # Pull visibility flags so the top navbar tabs and countdown render correctly in admin
+    # Pull visibility flags and countdown state
     treasure_visible = app_settings.get("treasure_hunt_active", False)
     escape_visible = app_settings.get("puzzle_room_active", False)
-    ceremony_countdown_active = app_settings.get("ceremony_countdown_active", True)
+    ceremony_countdown_active = app_settings.get("ceremony_countdown_active", False)
      
     teams = teams_res.data if teams_res.data else []
     event_scores = {r["team_id"]: r for r in (all_results.data or []) if r["event_name"] == event}
@@ -45,6 +45,7 @@ async def admin_dashboard(request: Request, tab: str = "events", subtab: str = "
         "treasure_visible": treasure_visible,
         "escape_visible": escape_visible,
         "ceremony_countdown_active": ceremony_countdown_active,
+        "ceremony_date": "Nov 1, 2026 18:00:00",
         "standard_events": ["Crack the Code", "Golf Putting", "Padel Pong", "Sticky Bounce", "Ring Toss", "Bean Bag Toss", "The Entrance", "Cut the Deck", "Beer Pong", "The Ultimate Relay Race"]
     })
     return HTMLResponse(content=html_content)
