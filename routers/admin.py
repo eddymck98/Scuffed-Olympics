@@ -12,13 +12,13 @@ PLACEMENT_POINTS = {
 
 @router.get("/admin", response_class=HTMLResponse)
 async def admin_dashboard(request: Request, tab: str = "events", subtab: str = "standard", event: str = "Crack the Code", admin: bool = Depends(require_admin)):
-    # Gather data for all tabs
-    pending_res = supabase.table("team_treasure_progress").select("id, image_url, submitted_at, status, team_id, item_id, teams(nation_name, flag_emoji), treasure_hunt_items(title, points)").eq("status", "pending").execute()
+    # Fixed query: removed 'points' from treasure_hunt_items
+    pending_res = supabase.table("team_treasure_progress").select("id, image_url, submitted_at, status, team_id, item_id, teams(nation_name, flag_emoji), treasure_hunt_items(title)").eq("status", "pending").execute()
+    
     teams_res = supabase.table("teams").select("id, nation_name, flag_emoji, shots_owed").order("nation_name").execute()
     all_results = supabase.table("event_results").select("id, event_name, points, medal_type, team_id").execute()
     var_res = supabase.table("var_submissions").select("*, teams(nation_name, flag_emoji)").eq("status", "pending").execute()
      
-    # Fetch app settings for feature toggles
     settings_res = supabase.table("app_settings").select("key, is_active").execute()
     app_settings = {s["key"]: s["is_active"] for s in settings_res.data} if settings_res.data else {}
      
@@ -133,34 +133,15 @@ async def verify_treasure_submission(
     rejection_reason: str = Form(""), 
     admin: bool = Depends(require_admin)
 ):
-    # Fetch submission details to know team_id and item_id
     sub_res = supabase.table("team_treasure_progress").select("team_id, item_id").eq("id", submission_id).execute()
     if not sub_res.data:
         return RedirectResponse(url="/admin?tab=verification", status_code=303)
     
     sub = sub_res.data[0]
-    team_id = sub["team_id"]
-    item_id = sub["item_id"]
-
+    
     if action == "approve":
-        # Mark progress as approved
         supabase.table("team_treasure_progress").update({"status": "approved", "rejection_reason": None}).eq("id", submission_id).execute()
-        
-        # Fetch item details to award its points
-        item_res = supabase.table("treasure_hunt_items").select("title, points").eq("id", item_id).execute()
-        if item_res.data:
-            item = item_res.data[0]
-            points = item.get("points", 0)
-            if points > 0:
-                # Log points into event_results so it counts toward global standings
-                supabase.table("event_results").insert({
-                    "event_name": f"Treasure Hunt: {item['title']}",
-                    "team_id": team_id,
-                    "points": points,
-                    "medal_type": "none"
-                }).execute()
     else:
-        # Mark progress as rejected with the reason provided
         supabase.table("team_treasure_progress").update({
             "status": "rejected", 
             "rejection_reason": rejection_reason or "Photo does not match checklist criteria."
