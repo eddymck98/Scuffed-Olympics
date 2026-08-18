@@ -78,26 +78,25 @@
             <!-- Custom Watermarked Row Cards -->
             <div class="space-y-3">
                 {% for row in standings %}
-                    {% set nation_lower = row.nation_name|lower|trim %}
-                    {% set flag_code_lower = row.flag_emoji|lower|trim %}
-                    
-                    {% if 'wales' in nation_lower or flag_code_lower == 'gb-wls' or flag_code_lower == 'wls' %}
-                        {% set flag_url = 'https://upload.wikimedia.org/wikipedia/commons/5/59/Flag_of_Wales_%281959%E2%80%93present%29.svg' %}
-                    {% elif 'austria' in nation_lower or flag_code_lower == 'at' %}
+                    <!-- Pure Nation Name Mapping -->
+                    {% set n = row.nation_name|lower|trim %}
+                    {% if n == 'wales' %}
+                        {% set flag_url = 'https://flagcdn.com/w640/gb-wls.png' %}
+                    {% elif n == 'austria' %}
                         {% set flag_url = 'https://flagcdn.com/w640/at.png' %}
-                    {% elif 'ireland' in nation_lower or flag_code_lower == 'ie' %}
-                        {% set flag_url = 'https://flagcdn.com/w640/ie.png' %}
-                    {% elif 'united states' in nation_lower or 'usa' in nation_lower or flag_code_lower == 'us' %}
-                        {% set flag_url = 'https://flagcdn.com/w640/us.png' %}
-                    {% elif 'china' in nation_lower or flag_code_lower == 'cn' or flag_code_lower == 'ch' %}
+                    {% elif n == 'china' %}
                         {% set flag_url = 'https://flagcdn.com/w640/cn.png' %}
-                    {% elif 'japan' in nation_lower or flag_code_lower == 'jp' %}
+                    {% elif n == 'ireland' %}
+                        {% set flag_url = 'https://flagcdn.com/w640/ie.png' %}
+                    {% elif n == 'united states' or n == 'usa' %}
+                        {% set flag_url = 'https://flagcdn.com/w640/us.png' %}
+                    {% elif n == 'japan' %}
                         {% set flag_url = 'https://flagcdn.com/w640/jp.png' %}
-                    {% elif 'germany' in nation_lower or flag_code_lower == 'de' %}
+                    {% elif n == 'germany' %}
                         {% set flag_url = 'https://flagcdn.com/w640/de.png' %}
-                    {% elif 'canada' in nation_lower or flag_code_lower == 'ca' %}
+                    {% elif n == 'canada' %}
                         {% set flag_url = 'https://flagcdn.com/w640/ca.png' %}
-                    {% elif 'brazil' in nation_lower or flag_code_lower == 'br' %}
+                    {% elif n == 'brazil' %}
                         {% set flag_url = 'https://flagcdn.com/w640/br.png' %}
                     {% else %}
                         {% set flag_url = 'https://flagcdn.com/w640/gb.png' %}
