@@ -5,6 +5,57 @@
     <!-- Olympic Ring Color Gradient Accent Bar -->
     <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
 
+    <!-- OPENING CEREMONY COUNTDOWN TIMER (Admin Toggle Controlled) -->
+    {% if ceremony_countdown_active %}
+    <div class="relative py-6 px-6 bg-gradient-to-r from-purple-950/80 via-slate-900/90 to-indigo-950/80 rounded-3xl border-2 border-amber-500/40 shadow-[0_0_30px_rgba(234,179,8,0.2)] text-center space-y-3 overflow-hidden">
+        <div class="absolute -left-10 -top-10 opacity-10 pointer-events-none text-9xl">⏳</div>
+        
+        <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1 rounded-full text-amber-400 text-[10px] font-black uppercase tracking-widest shadow-inner">
+            <span>🔥</span> Countdown to Opening Ceremony <span>🔥</span>
+        </div>
+        
+        <div id="countdownTimer" class="grid grid-cols-4 gap-2 max-w-sm mx-auto font-mono">
+            <div class="bg-slate-950/90 border border-slate-800 p-2.5 rounded-2xl shadow-inner">
+                <span id="days" class="text-xl sm:text-2xl font-black text-white block">00</span>
+                <span class="text-[9px] uppercase font-bold text-slate-400">Days</span>
+            </div>
+            <div class="bg-slate-950/90 border border-slate-800 p-2.5 rounded-2xl shadow-inner">
+                <span id="hours" class="text-xl sm:text-2xl font-black text-white block">00</span>
+                <span class="text-[9px] uppercase font-bold text-slate-400">Hours</span>
+            </div>
+            <div class="bg-slate-950/90 border border-slate-800 p-2.5 rounded-2xl shadow-inner">
+                <span id="minutes" class="text-xl sm:text-2xl font-black text-white block">00</span>
+                <span class="text-[9px] uppercase font-bold text-slate-400">Mins</span>
+            </div>
+            <div class="bg-slate-950/90 border border-slate-800 p-2.5 rounded-2xl shadow-inner">
+                <span id="seconds" class="text-xl sm:text-2xl font-black text-amber-400 block">00</span>
+                <span class="text-[9px] uppercase font-bold text-slate-400">Secs</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set target opening ceremony date & time (e.g., Nov 1, 2026 18:00:00)
+        const ceremonyDate = new Date("Nov 1, 2026 18:00:00").getTime();
+
+        const timer = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = ceremonyDate - now;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById("countdownTimer").innerHTML = "<div class='col-span-4 text-amber-400 font-black uppercase text-xs'>🎉 The Opening Ceremony Has Begun! 🎉</div>";
+                return;
+            }
+
+            document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        }, 1000);
+    </script>
+    {% endif %}
+
     <!-- Compact, Sleek Welcome Bar (No Logo, High Energy) -->
     <div class="relative py-6 px-6 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 rounded-3xl border border-amber-500/30 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 overflow-hidden">
         <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none text-9xl">🏆</div>
