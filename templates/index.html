@@ -78,25 +78,27 @@
             <!-- Custom Watermarked Row Cards -->
             <div class="space-y-3">
                 {% for row in standings %}
-                    <!-- Pure Nation Name Mapping -->
-                    {% set n = row.nation_name|lower|trim %}
-                    {% if n == 'wales' %}
+                    <!-- Bulletproof mapping using loose inclusion ("in") instead of exact equals ("==") -->
+                    {% set n = row.nation_name | string | lower %}
+                    {% set c = row.flag_emoji | string | lower %}
+                    
+                    {% if 'wales' in n or 'wls' in c %}
                         {% set flag_url = 'https://flagcdn.com/w640/gb-wls.png' %}
-                    {% elif n == 'austria' %}
+                    {% elif 'austria' in n or 'at' in c %}
                         {% set flag_url = 'https://flagcdn.com/w640/at.png' %}
-                    {% elif n == 'china' %}
-                        {% set flag_url = 'https://flagcdn.com/w640/cn.png' %}
-                    {% elif n == 'ireland' %}
+                    {% elif 'ireland' in n or 'ie' in c %}
                         {% set flag_url = 'https://flagcdn.com/w640/ie.png' %}
-                    {% elif n == 'united states' or n == 'usa' %}
+                    {% elif 'united states' in n or 'usa' in n or 'us' in c %}
                         {% set flag_url = 'https://flagcdn.com/w640/us.png' %}
-                    {% elif n == 'japan' %}
+                    {% elif 'china' in n or 'cn' in c or 'ch' in c %}
+                        {% set flag_url = 'https://flagcdn.com/w640/cn.png' %}
+                    {% elif 'japan' in n or 'jp' in c %}
                         {% set flag_url = 'https://flagcdn.com/w640/jp.png' %}
-                    {% elif n == 'germany' %}
+                    {% elif 'germany' in n or 'de' in c %}
                         {% set flag_url = 'https://flagcdn.com/w640/de.png' %}
-                    {% elif n == 'canada' %}
+                    {% elif 'canada' in n or 'ca' in c %}
                         {% set flag_url = 'https://flagcdn.com/w640/ca.png' %}
-                    {% elif n == 'brazil' %}
+                    {% elif 'brazil' in n or 'br' in c %}
                         {% set flag_url = 'https://flagcdn.com/w640/br.png' %}
                     {% else %}
                         {% set flag_url = 'https://flagcdn.com/w640/gb.png' %}
