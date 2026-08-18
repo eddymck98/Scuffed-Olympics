@@ -7,11 +7,12 @@ from routers.auth import require_team
 router = APIRouter(prefix="/escape-room", tags=["Escape Room"])
 templates = Jinja2Templates(directory="templates")
 
+# Exact answers for your 4 stages (Stage 4 is now the randomized wire sequence)
 STAGE_ANSWERS = {
     1: "keyboard",
     2: "athletes",
     3: "drink",
-    4: "red-orange-yellow-green-blue-indigo-violet"
+    4: "green-yellow-violet-red-indigo-blue-orange"
 }
 
 @router.get("", response_class=HTMLResponse)
