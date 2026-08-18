@@ -105,8 +105,13 @@
                     <div class="relative overflow-hidden group bg-slate-900/70 border border-slate-800 rounded-2xl hover:border-yellow-500/50 transition-all shadow-lg">
                         
                         <!-- Transparent Waving Flag Watermark Background -->
-                        <div class="absolute inset-0 opacity-[0.12] bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" style="background-image: url('{{ flag_url }}');">
-                        </div>
+                        {% if n == 'austria' %}
+                            <div class="absolute inset-0 opacity-[0.25] bg-contain bg-right bg-no-repeat pointer-events-none transition-transform group-hover:scale-105 duration-500" style="background-image: url('{{ flag_url }}');">
+                            </div>
+                        {% else %}
+                            <div class="absolute inset-0 opacity-[0.12] bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" style="background-image: url('{{ flag_url }}');">
+                            </div>
+                        {% endif %}
 
                         <!-- Row Content -->
                         <div class="relative z-10 flex items-center justify-between px-5 py-4">
