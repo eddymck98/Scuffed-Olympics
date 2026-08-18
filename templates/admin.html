@@ -3,34 +3,34 @@
 <div class="max-w-6xl mx-auto py-6 px-4 space-y-8">
     
     <!-- Admin Header -->
-    <div class="bg-slate-900 border border-amber-500/40 rounded-3xl p-6 shadow-2xl flex items-center justify-between">
+    <div class="bg-slate-900 border border-amber-500/40 rounded-3xl p-6 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="flex items-center space-x-4">
             <span class="text-4xl">👑</span>
             <div>
                 <span class="text-xs font-black text-amber-400 uppercase tracking-widest">Commissioner Control Center</span>
-                <h1 class="text-2xl font-black text-slate-100">ADMINISTRATION PORTAL</h1>
+                <h1 class="text-xl sm:text-2xl font-black text-slate-100">ADMINISTRATION PORTAL</h1>
             </div>
         </div>
-        <a href="/" class="text-xs font-bold bg-slate-950 border border-slate-800 text-slate-300 px-4 py-2 rounded-xl hover:border-amber-500 transition">
+        <a href="/" class="text-xs font-bold bg-slate-950 border border-slate-800 text-slate-300 px-4 py-2 rounded-xl hover:border-amber-500 transition text-center w-full sm:w-auto">
             &larr; Back to Dashboard
         </a>
     </div>
 
-    <!-- Admin Sub-Navigation Tabs -->
-    <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-4">
-        <a href="/admin?tab=events&subtab=standard" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'events' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
+    <!-- Admin Sub-Navigation Tabs (Mobile Scrollable) -->
+    <div class="flex items-center gap-2 border-b border-slate-800 pb-4 overflow-x-auto whitespace-nowrap scrollbar-none">
+        <a href="/admin?tab=events&subtab=standard" class="px-5 py-2.5 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'events' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
             🏆 Event Manager
         </a>
-        <a href="/admin?tab=verification" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'verification' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
+        <a href="/admin?tab=verification" class="px-5 py-2.5 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'verification' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
             📸 Treasure Verification {% if pending_submissions %}<span class="ml-1 bg-rose-500 text-slate-950 px-1.5 py-0.5 rounded-full text-[10px]">{{ pending_submissions|length }}</span>{% endif %}
         </a>
-        <a href="/admin?tab=var" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'var' %} bg-rose-600 text-white shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-rose-400 border border-slate-800 {% endif %}">
+        <a href="/admin?tab=var" class="px-5 py-2.5 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'var' %} bg-rose-600 text-white shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-rose-400 border border-slate-800 {% endif %}">
             🚨 VAR Judgement Hall {% if var_submissions %}<span class="ml-1 bg-white text-rose-600 px-1.5 py-0.5 rounded-full text-[10px]">{{ var_submissions|length }}</span>{% endif %}
         </a>
-        <a href="/admin?tab=settings" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'settings' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
+        <a href="/admin?tab=settings" class="px-5 py-2.5 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'settings' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
             ⚙️ Weekend Toggles
         </a>
-        <a href="/admin?tab=logs" class="px-5 py-2.5 rounded-2xl text-xs font-black transition {% if active_tab == 'logs' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
+        <a href="/admin?tab=logs" class="px-5 py-2.5 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'logs' %} bg-amber-500 text-slate-950 shadow-lg {% else %} bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 {% endif %}">
             📜 Activity Logs
         </a>
     </div>
@@ -54,16 +54,16 @@
 
         <!-- Standard Events Subtab -->
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6 {% if active_subtab != 'standard' %}hidden{% endif %}">
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">Standard Event Scorecard</h2>
-                <select onchange="window.location.href='/admin?tab=events&subtab=standard&event=' + this.value" class="bg-slate-950 border border-amber-500/50 rounded-2xl px-4 py-2.5 text-xs font-bold text-amber-400 outline-none">
+                <select onchange="window.location.href='/admin?tab=events&subtab=standard&event=' + this.value" class="bg-slate-950 border border-amber-500/50 rounded-2xl px-4 py-2.5 text-xs font-bold text-amber-400 outline-none w-full sm:w-auto">
                     {% for ev in standard_events %}<option value="{{ ev }}" {% if selected_event == ev %}selected{% endif %}>{{ ev }}</option>{% endfor %}
                 </select>
             </div>
             <form action="/admin/event-results/save-standard" method="POST" class="space-y-4">
                 <input type="hidden" name="event_name" value="{{ selected_event }}">
                 <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
+                    <table class="w-full text-left border-collapse text-xs min-w-[450px]">
                         <thead><tr class="border-b border-slate-800 text-[10px] text-slate-400 uppercase"><th class="py-2 px-2">Nation</th><th class="py-2 px-2">Select Placement</th><th class="py-2 px-2">Saved Status</th></tr></thead>
                         <tbody class="divide-y divide-slate-800/50">
                             {% for t in teams %}
@@ -71,7 +71,7 @@
                             <tr>
                                 <td class="py-3 px-2 font-bold text-slate-100 flex items-center gap-2"><span class="text-lg">{{ t.flag_emoji }}</span><span>{{ t.nation_name }}</span></td>
                                 <td class="py-3 px-2">
-                                    <select name="placement_{{ t.id }}" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500">
+                                    <select name="placement_{{ t.id }}" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500 w-full">
                                         <option value="unscored" {% if not saved %}selected{% endif %}>-- Select Placement --</option>
                                         <option value="1st" {% if saved and saved.medal_type == 'gold' %}selected{% endif %}>1st Place (8 pts)</option>
                                         <option value="2nd" {% if saved and saved.medal_type == 'silver' %}selected{% endif %}>2nd Place (7 pts)</option>
@@ -100,13 +100,13 @@
             <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-xs text-amber-300">🦆 <strong>Duck Hunt Scoring:</strong> Enter the exact number of resin ducks found around the house.</div>
             <form action="/admin/event-results/save-duck-hunt" method="POST" class="space-y-4">
                 <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
+                    <table class="w-full text-left border-collapse text-xs min-w-[300px]">
                         <thead><tr class="border-b border-slate-800 text-[10px] text-slate-400 uppercase"><th class="py-2 px-2">Nation</th><th class="py-2 px-2">Total Ducks Found</th></tr></thead>
                         <tbody class="divide-y divide-slate-800/50">
                             {% for t in teams %}
                             <tr>
                                 <td class="py-3 px-2 font-bold text-slate-100 flex items-center gap-2"><span class="text-lg">{{ t.flag_emoji }}</span><span>{{ t.nation_name }}</span></td>
-                                <td class="py-3 px-2"><input type="number" name="ducks_{{ t.id }}" placeholder="e.g. 5" min="0" class="w-36 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500"></td>
+                                <td class="py-3 px-2"><input type="number" name="ducks_{{ t.id }}" placeholder="e.g. 5" min="0" class="w-full sm:w-36 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500"></td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -121,14 +121,14 @@
             <div class="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl text-xs text-amber-300">📸 <strong>City Selfies Scoring:</strong> Podiums award custom pod points.</div>
             <form action="/admin/event-results/save-treasure" method="POST" class="space-y-4">
                 <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
+                    <table class="w-full text-left border-collapse text-xs min-w-[350px]">
                         <thead><tr class="border-b border-slate-800 text-[10px] text-slate-400 uppercase"><th class="py-2 px-2">Nation</th><th class="py-2 px-2">Podium Placement</th></tr></thead>
                         <tbody class="divide-y divide-slate-800/50">
                             {% for t in teams %}
                             <tr>
                                 <td class="py-3 px-2 font-bold text-slate-100 flex items-center gap-2"><span class="text-lg">{{ t.flag_emoji }}</span><span>{{ t.nation_name }}</span></td>
                                 <td class="py-3 px-2">
-                                    <select name="pod_{{ t.id }}" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500">
+                                    <select name="pod_{{ t.id }}" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-200 outline-none focus:border-amber-500 w-full">
                                         <option value="unscored">-- Select Pod Placement --</option>
                                         <option value="1st">1st Team (10 pts + Gold)</option>
                                         <option value="2nd">2nd Team (7 pts + Silver)</option>
@@ -150,7 +150,7 @@
     <!-- TAB 2: TREASURE VERIFICATION -->
     <div class="space-y-6 {% if active_tab != 'verification' %}hidden{% endif %}">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-800 pb-4 gap-2">
                 <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">Pending Treasure Hunt Submissions</h2>
                 <span class="text-xs font-mono px-3 py-1 rounded-lg bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">{{ pending_submissions | length }} Pending Review</span>
             </div>
@@ -165,7 +165,7 @@
                         <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
                             
                             <!-- Team & Item Info -->
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-800 pb-3 gap-2">
                                 <div class="flex items-center gap-2.5">
                                     <span class="text-2xl">{{ sub.teams.flag_emoji }}</span>
                                     <div>
@@ -224,10 +224,10 @@
                             <div><span class="text-amber-400 font-bold text-xs">{{ sub.teams.flag_emoji }} {{ sub.teams.nation_name }}</span><p class="text-slate-300 text-xs mt-2 italic">"{{ sub.incident_description }}"</p></div>
                             <form action="/admin/var/issue" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end bg-slate-900 p-4 rounded-xl">
                                 <input type="hidden" name="submission_id" value="{{ sub.id }}"><input type="hidden" name="reason" value="{{ sub.incident_description }}">
-                                <div><label class="text-[10px] uppercase font-bold text-slate-500">Ruling</label><select name="decision" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs"><option value="upheld">Upheld (Penalty)</option><option value="dismissed">Dismissed</option></select></div>
-                                <div><label class="text-[10px] uppercase font-bold text-slate-500">Pts Penalty</label><input type="number" name="points" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs"></div>
-                                <div><label class="text-[10px] uppercase font-bold text-slate-500">Shots Owed</label><input type="number" name="shots" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs"></div>
-                                <button type="submit" class="bg-rose-500 text-slate-950 font-black text-[10px] uppercase py-2 rounded-lg hover:bg-rose-400">Issue Ruling</button>
+                                <div><label class="text-[10px] uppercase font-bold text-slate-500">Ruling</label><select name="decision" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-200"><option value="upheld">Upheld (Penalty)</option><option value="dismissed">Dismissed</option></select></div>
+                                <div><label class="text-[10px] uppercase font-bold text-slate-500">Pts Penalty</label><input type="number" name="points" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-200"></div>
+                                <div><label class="text-[10px] uppercase font-bold text-slate-500">Shots Owed</label><input type="number" name="shots" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-200"></div>
+                                <button type="submit" class="bg-rose-500 text-slate-950 font-black text-[10px] uppercase py-2.5 rounded-lg hover:bg-rose-400 w-full">Issue Ruling</button>
                             </form>
                         </div>
                     {% endfor %}
@@ -240,7 +240,7 @@
     <div class="space-y-6 {% if active_tab != 'settings' %}hidden{% endif %}">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
             <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">⚙️ Weekend Feature Toggles</h2>
-            <p class="text-xs text-slate-400">Control which hidden pages are visible to competitors on their main navigation menus.</p>
+            <p class="text-xs text-slate-400">Control which hidden pages and countdown timers are visible to competitors.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
@@ -276,6 +276,22 @@
                     </form>
                 </div>
 
+                <!-- Opening Ceremony Countdown Toggle -->
+                <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-200 text-sm">⏳ Opening Ceremony Countdown</h3>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Currently: <strong class="{% if app_settings.ceremony_countdown_active %}text-emerald-400{% else %}text-rose-400{% endif %}">{% if app_settings.ceremony_countdown_active %}VISIBLE{% else %}HIDDEN{% endif %}</strong></p>
+                    </div>
+                    <form action="/admin/toggle-setting" method="POST" class="flex items-center">
+                        <input type="hidden" name="key" value="ceremony_countdown_active">
+                        <input type="hidden" name="value" value="{{ 'false' if app_settings.ceremony_countdown_active else 'true' }}">
+                        
+                        <button type="submit" class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none {% if app_settings.ceremony_countdown_active %} bg-amber-500 {% else %} bg-slate-800 {% endif %}">
+                            <span class="inline-block h-4 w-4 transform rounded-full bg-slate-950 transition-transform {% if app_settings.ceremony_countdown_active %} translate-x-6 {% else %} translate-x-1 {% endif %}"></span>
+                        </button>
+                    </form>
+                </div>
+
             </div>
         </div>
     </div>
@@ -287,9 +303,9 @@
             {% if recent_results %}
                 <div class="space-y-2">
                     {% for res in recent_results %}
-                        <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl flex items-center justify-between text-xs">
+                        <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
                             <div><span class="font-bold text-slate-200">{{ res.teams.flag_emoji }} {{ res.teams.nation_name }}</span><span class="text-slate-400 block text-[10px]">{{ res.event_name }} &bull; <strong class="text-amber-400">+{{ res.points }} pts</strong></span></div>
-                            <form action="/admin/event-results/delete" method="POST"><input type="hidden" name="result_id" value="{{ res.id }}"><button type="submit" class="text-[10px] text-rose-400 hover:underline">Delete</button></form>
+                            <form action="/admin/event-results/delete" method="POST"><input type="hidden" name="result_id" value="{{ res.id }}"><button type="submit" class="text-[10px] text-rose-400 hover:underline">Delete Result</button></form>
                         </div>
                     {% endfor %}
                 </div>
