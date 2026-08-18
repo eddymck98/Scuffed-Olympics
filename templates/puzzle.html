@@ -51,7 +51,7 @@
             </div>
 
         {% elif current_stage == 2 %}
-            <!-- STAGE 2: Cipher Decode (Hint Removed) -->
+            <!-- STAGE 2: Cipher Decode (No Hint) -->
             <div class="space-y-4">
                 <div class="bg-slate-950 p-5 rounded-2xl border border-blue-500/30 space-y-2">
                     <span class="text-[10px] font-black uppercase text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded">Trial #2: Secret Cipher</span>
@@ -69,19 +69,16 @@
             </div>
 
         {% elif current_stage == 3 %}
-            <!-- STAGE 3: Interactive Wordle Grid -->
+            <!-- STAGE 3: Interactive Wordle Grid (Fixed duplicate frequency bug) -->
             <div class="space-y-4 text-center">
                 <div class="bg-slate-950 p-5 rounded-2xl border border-emerald-500/30 space-y-2 text-left">
                     <span class="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded">Trial #3: Wordle Challenge</span>
                     <h3 class="text-sm font-bold text-slate-100">Guess the 5-letter party secret word (What is everyone's favorite post-event activity?):</h3>
                 </div>
 
-                <!-- Wordle Grid Board (6 rows x 5 cols) -->
-                <div id="wordleGrid" class="grid grid-rows-6 gap-2 max-w-[260px] mx-auto py-2">
-                    <!-- Rows generated via script below -->
-                </div>
+                <!-- Wordle Grid Board -->
+                <div id="wordleGrid" class="grid grid-rows-6 gap-2 max-w-[260px] mx-auto py-2"></div>
 
-                <!-- Hidden form submitted when correct word is hit -->
                 <form id="wordleForm" action="/escape-room/submit" method="POST">
                     <input type="hidden" name="stage" value="3">
                     <input type="hidden" name="answer" id="wordleInputVal" value="">
@@ -144,13 +141,36 @@
                     const guessWord = guesses[currentRow].join("");
                     if (guessWord.length < 5) return;
 
-                    // Evaluate colors
+                    let targetChars = targetWord.split('');
+                    let guessChars = guessWord.split('');
+                    let statuses = Array(5).fill('absent');
+
+                    // 1. Check exact matches (greens)
+                    for (let c = 0; c < 5; c++) {
+                        if (guessChars[c] === targetChars[c]) {
+                            statuses[c] = 'correct';
+                            targetChars[c] = null;
+                            guessChars[c] = null;
+                        }
+                    }
+
+                    // 2. Check partial matches (yellows) with frequency tracking
+                    for (let c = 0; c < 5; c++) {
+                        if (guessChars[c] !== null) {
+                            const index = targetChars.indexOf(guessChars[c]);
+                            if (index !== -1) {
+                                statuses[c] = 'present';
+                                targetChars[index] = null;
+                            }
+                        }
+                    }
+
+                    // Apply styles
                     for (let c = 0; c < 5; c++) {
                         const tile = document.getElementById(`tile-${currentRow}-${c}`);
-                        const letter = guessWord[c];
-                        if (targetWord[c] === letter) {
+                        if (statuses[c] === 'correct') {
                             tile.className = "w-12 h-12 rounded-xl bg-emerald-600 border-2 border-emerald-500 flex items-center justify-center text-lg font-black text-white uppercase";
-                        } else if (targetWord.includes(letter)) {
+                        } else if (statuses[c] === 'present') {
                             tile.className = "w-12 h-12 rounded-xl bg-amber-500 border-2 border-amber-400 flex items-center justify-center text-lg font-black text-slate-950 uppercase";
                         } else {
                             tile.className = "w-12 h-12 rounded-xl bg-slate-800 border-2 border-slate-700 flex items-center justify-center text-lg font-black text-slate-400 uppercase";
@@ -176,70 +196,80 @@
             </script>
 
         {% elif current_stage == 4 %}
-            <!-- STAGE 4: Interactive 7-Wire Defusal -->
-            <div class="space-y-5 text-center">
-                <div class="bg-slate-950 p-5 rounded-2xl border border-red-500/40 space-y-2 text-left">
-                    <span class="text-[10px] font-black uppercase text-red-400 bg-red-500/10 px-2.5 py-1 rounded animate-pulse">🚨 Trial #4: 7-Wire Defusal</span>
-                    <h3 class="text-sm font-bold text-white">Cut the 7 colored wires in the exact correct order (Rainbow ROYGBIV sequence)!</h3>
+            <!-- STAGE 4: Bomb Defusal Panel (Immediate Incorrect Check & No Hints) -->
+            <div class="space-y-6 text-center">
+                <div class="bg-slate-950 p-6 rounded-3xl border-2 border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.15)] space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-black uppercase text-red-400 bg-red-500/10 px-3 py-1 rounded-full animate-pulse tracking-wider">⚠️ BOMB DEFUSAL TERMINAL</span>
+                        <span class="text-xs font-mono text-red-500 font-black animate-ping">● LIVE</span>
+                    </div>
+                    <h3 class="text-base font-black text-white uppercase tracking-wide">Cut the 7 wires in the exact correct sequence!</h3>
+                    <p class="text-xs text-slate-400">Warning: Choosing an incorrect wire or wrong position will trigger an immediate system failure.</p>
                 </div>
 
-                <!-- Wire Buttons Grid -->
-                <div id="wireBoard" class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-md mx-auto">
-                    <button type="button" onclick="cutWire('red')" id="w-red" class="wire-btn bg-red-600 hover:bg-red-500 text-white font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🔴 Red</button>
-                    <button type="button" onclick="cutWire('orange')" id="w-orange" class="wire-btn bg-orange-600 hover:bg-orange-500 text-white font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🟠 Orange</button>
-                    <button type="button" onclick="cutWire('yellow')" id="w-yellow" class="wire-btn bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🟡 Yellow</button>
-                    <button type="button" onclick="cutWire('green')" id="w-green" class="wire-btn bg-green-600 hover:bg-green-500 text-white font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🟢 Green</button>
-                    <button type="button" onclick="cutWire('blue')" id="w-blue" class="wire-btn bg-blue-600 hover:bg-blue-500 text-white font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🔵 Blue</button>
-                    <button type="button" onclick="cutWire('indigo')" id="w-indigo" class="wire-btn bg-indigo-600 hover:bg-indigo-500 text-white font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🟣 Indigo</button>
-                    <button type="button" onclick="cutWire('violet')" id="w-violet" class="wire-btn bg-purple-600 hover:bg-purple-500 text-white font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🟪 Violet</button>
+                <!-- Industrial Bomb Terminal Panel -->
+                <div class="bg-slate-950 border-4 border-slate-800 rounded-3xl p-6 shadow-2xl space-y-6">
+                    
+                    <!-- Status Display Screen -->
+                    <div class="bg-black/80 border-2 border-red-500/30 rounded-2xl p-4 shadow-inner">
+                        <span class="text-[10px] text-slate-500 uppercase font-mono block tracking-widest">Active Sequence Log</span>
+                        <span id="wireDisplay" class="text-sm font-black text-red-500 font-mono tracking-widest uppercase">--- WAITING FOR INPUT ---</span>
+                    </div>
+
+                    <!-- 7 Shuffled Wires Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-md mx-auto">
+                        <button type="button" onclick="cutWire('red')" id="w-red" class="wire-btn bg-red-600 hover:bg-red-500 text-white font-black text-xs py-4 rounded-xl shadow-lg transition active:scale-95 border border-red-400">🔴 RED</button>
+                        <button type="button" onclick="cutWire('orange')" id="w-orange" class="wire-btn bg-orange-600 hover:bg-orange-500 text-white font-black text-xs py-4 rounded-xl shadow-lg transition active:scale-95 border border-orange-400">🟠 ORANGE</button>
+                        <button type="button" onclick="cutWire('yellow')" id="w-yellow" class="wire-btn bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs py-4 rounded-xl shadow-lg transition active:scale-95 border border-yellow-300">🟡 YELLOW</button>
+                        <button type="button" onclick="cutWire('green')" id="w-green" class="wire-btn bg-green-600 hover:bg-green-500 text-white font-black text-xs py-4 rounded-xl shadow-lg transition active:scale-95 border border-green-400">🟢 GREEN</button>
+                        <button type="button" onclick="cutWire('blue')" id="w-blue" class="wire-btn bg-blue-600 hover:bg-blue-500 text-white font-black text-xs py-4 rounded-xl shadow-lg transition active:scale-95 border border-blue-400">🔵 BLUE</button>
+                        <button type="button" onclick="cutWire('indigo')" id="w-indigo" class="wire-btn bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs py-4 rounded-xl shadow-lg transition active:scale-95 border border-indigo-400">🟣 INDIGO</button>
+                        <button type="button" onclick="cutWire('violet')" id="w-violet" class="wire-btn bg-purple-600 hover:bg-purple-500 text-white font-black text-xs py-4 rounded-xl shadow-lg transition active:scale-95 border border-purple-400">🟪 VIOLET</button>
+                    </div>
+
+                    <!-- Hidden Form -->
+                    <form id="wireForm" action="/escape-room/submit" method="POST">
+                        <input type="hidden" name="stage" value="4">
+                        <input type="hidden" name="answer" id="wireAnswer" value="">
+                    </form>
+
+                    <div>
+                        <button type="button" onclick="resetWires()" class="text-xs text-rose-400 hover:text-rose-300 font-mono font-black uppercase tracking-wider underline">Force System Reset</button>
+                    </div>
                 </div>
-
-                <div class="bg-slate-950 px-4 py-3 rounded-xl border border-slate-800 max-w-sm mx-auto">
-                    <span class="text-[10px] text-slate-400 uppercase font-mono block">Wires Cut Sequence:</span>
-                    <span id="wireDisplay" class="text-xs font-black text-amber-400 tracking-wider uppercase">None</span>
-                </div>
-
-                <form id="wireForm" action="/escape-room/submit" method="POST">
-                    <input type="hidden" name="stage" value="4">
-                    <input type="hidden" name="answer" id="wireAnswer" value="">
-                </form>
-
-                <button type="button" onclick="resetWires()" class="text-xs text-rose-400 hover:text-rose-300 font-bold underline">Reset Wires</button>
             </div>
 
             <script>
-                const correctWireSequence = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+                // Randomized correct sequence: green -> yellow -> violet -> red -> indigo -> blue -> orange
+                const correctWireSequence = ['green', 'yellow', 'violet', 'red', 'indigo', 'blue', 'orange'];
                 let cutSequence = [];
 
                 function cutWire(color) {
                     if (!cutSequence.includes(color)) {
-                        cutSequence.push(color);
-                        document.getElementById(`w-${color}`).style.opacity = '0.2';
-                        document.getElementById(`w-${color}`).style.pointerEvents = 'none';
+                        const nextIndex = cutSequence.length;
                         
-                        document.getElementById('wireDisplay').innerText = cutSequence.join(' ➔ ');
+                        // Immediate validation check against the correct position
+                        if (color === correctWireSequence[nextIndex]) {
+                            cutSequence.push(color);
+                            document.getElementById(`w-${color}`).style.opacity = '0.2';
+                            document.getElementById(`w-${color}`).style.pointerEvents = 'none';
+                            
+                            document.getElementById('wireDisplay').innerText = cutSequence.join(' ➔ ').toUpperCase();
 
-                        if (cutSequence.length === correctWireSequence.length) {
-                            const match = cutSequence.every((val, idx) => val === correctWireSequence[idx]);
-                            if (match) {
+                            // If all 7 wires are successfully cut in exact order
+                            if (cutSequence.length === correctWireSequence.length) {
                                 document.getElementById('wireAnswer').value = cutSequence.join('-');
-                                setTimeout(() => { document.getElementById('wireForm').submit(); }, 400);
-                            } else {
-                                alert("💥 Incorrect wire order! System reset.");
-                                resetWires();
+                                setTimeout(() => { document.getElementById('wireForm').submit(); }, 600);
                             }
+                        } else {
+                            // Immediate incorrect click triggers error redirect
+                            window.location.href = "/escape-room?error=Wrong+wire+sequence!+System+Failed.";
                         }
                     }
                 }
 
                 function resetWires() {
-                    cutSequence = [];
-                    correctWireSequence.forEach(color => {
-                        const btn = document.getElementById(`w-${color}`);
-                        btn.style.opacity = '1';
-                        btn.style.pointerEvents = 'auto';
-                    });
-                    document.getElementById('wireDisplay').innerText = 'None';
+                    window.location.href = "/escape-room?error=Terminal+Reset!";
                 }
             </script>
 
