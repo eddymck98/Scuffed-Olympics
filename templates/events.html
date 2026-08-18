@@ -1,125 +1,170 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-6xl mx-auto py-6 px-4 space-y-8 relative overflow-hidden">
+<div class="max-w-7xl mx-auto space-y-8 pb-16 relative">
     
-    <!-- Floating Background Accents -->
-    <div class="absolute top-4 left-6 text-3xl opacity-15 select-none pointer-events-none animate-bounce">⚡</div>
-    <div class="absolute top-32 right-8 text-3xl opacity-15 select-none pointer-events-none animate-pulse">🔥</div>
+    <!-- Olympic Ring Color Gradient Accent Bar -->
+    <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
 
-    <!-- Hero Header -->
-    <div class="text-center space-y-4 relative py-4">
-        <div class="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Compact, Sleek Header (Party Vibe) -->
+    <div class="relative py-8 px-6 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 rounded-3xl border border-amber-500/30 shadow-xl text-center space-y-3 overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none text-9xl">⚔️</div>
+        
+        <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1 rounded-full text-amber-400 text-[10px] font-black uppercase tracking-widest shadow-inner">
+            <span>🏆</span> The Gauntlet Awaits <span>🏆</span>
+        </div>
+        
+        <h1 class="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">
+            Events & <span class="bg-gradient-to-r from-blue-400 via-yellow-400 to-red-400 bg-clip-text text-transparent">Battlegrounds</span>
+        </h1>
+        
+        <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto font-medium">
+            Prepare your reflexes, test your questionable coordination, and brace for absolute chaos. Exact rules remain classified until game time!
+        </p>
+    </div>
 
-        <div class="relative z-10 flex flex-col items-center space-y-3">
-            <div class="relative flex items-center justify-center">
-                <span class="absolute -left-12 text-4xl opacity-60 select-none animate-pulse">🌿</span>
-                <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/Adobe%20Express%20-%20file.png?raw=true" alt="Scuffed Olympics Logo" class="h-32 w-32 object-contain drop-shadow-[0_0_25px_rgba(245,158,11,0.7)] relative z-10">
-                <span class="absolute -right-12 text-4xl opacity-60 select-none animate-pulse">🌿</span>
+    <!-- SCORING PROTOCOL & RULES SECTION -->
+    <div class="space-y-4">
+        <div class="flex items-center gap-2.5 border-b border-slate-800 pb-3">
+            <div class="w-2.5 h-6 bg-yellow-400 rounded-full shadow-[0_0_10px_rgba(250,204,21,0.5)]"></div>
+            <h2 class="text-base font-black text-white uppercase tracking-wider">Scoring Protocol & Rules</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Standard Events Card -->
+            <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/40 rounded-2xl p-6 shadow-xl space-y-3 transition">
+                <div class="flex items-center gap-2 text-amber-400 font-black text-xs uppercase tracking-widest">
+                    <span>🎯</span> Standard Events
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Scored by placement: 7th gets 10 points, 1st gets 8 points (with scaling positions in between). DNP means 0 points. May the best athlete survive!
+                </p>
             </div>
 
-            <span class="bg-gradient-to-r from-amber-500 via-yellow-400 to-rose-500 text-slate-950 text-xs font-black px-5 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
-                🏆 The Gauntlet Awaits 🏆
-            </span>
-            <h1 class="text-3xl sm:text-5xl font-black text-slate-100 tracking-tight">EVENTS & BATTLEGROUNDS</h1>
-            <p class="text-xs sm:text-sm text-slate-400 max-w-lg mx-auto leading-relaxed">
-                Prepare your reflexes, test your questionable coordination, and brace for absolute chaos. Here is a glimpse of the trials ahead. Exact rules remain classified until game time!
-            </p>
+            <!-- Duck Hunt Card -->
+            <div class="bg-slate-900/90 border border-slate-800 hover:border-yellow-500/40 rounded-2xl p-6 shadow-xl space-y-3 transition">
+                <div class="flex items-center gap-2 text-yellow-400 font-black text-xs uppercase tracking-widest">
+                    <span>🦆</span> Duck Hunt
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Special scoring: The total number of mini resin ducks you successfully find equals your exact point total! Every duck counts toward glory.
+                </p>
+            </div>
+
+            <!-- City Treasure Hunt Card -->
+            <div class="bg-slate-900/90 border border-slate-800 hover:border-blue-500/40 rounded-2xl p-6 shadow-xl space-y-3 transition">
+                <div class="flex items-center gap-2 text-blue-400 font-black text-xs uppercase tracking-widest">
+                    <span>🗺️</span> City Treasure Hunt
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Custom pods: 1st team gets 10 points, 2nd gets 7 points, 3rd gets 4 points, and last gets 1 point. Capture proofs and conquer the checklist!
+                </p>
+            </div>
+
         </div>
     </div>
 
-    <!-- General Scoring & Hype Banner -->
-    <div class="bg-slate-900 border border-amber-500/30 rounded-3xl p-6 shadow-xl space-y-4 max-w-3xl mx-auto">
-        <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest text-center">
-            ⚖️ Scoring Protocol & Rules
-        </h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
-            <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
-                <strong class="text-amber-400 block font-black">Standard Events</strong>
-                <p class="text-[11px] text-slate-400 leading-relaxed">Scored by placement: 7th gets 10 points, 1st gets 8 points (with scaling positions in between). DNP means 0 points.</p>
-            </div>
-
-            <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
-                <strong class="text-amber-400 block font-black">Duck Hunt</strong>
-                <p class="text-[11px] text-slate-400 leading-relaxed">Special scoring: The total number of mini resin ducks you successfully find equals your exact point total!</p>
-            </div>
-
-            <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
-                <strong class="text-amber-400 block font-black">City Treasure Hunt</strong>
-                <p class="text-[11px] text-slate-400 leading-relaxed">Custom pods: 1st team gets 10 points, 2nd gets 7 points, 3rd gets 4 points, and last gets 1 point.</p>
-            </div>
+    <!-- EVENTS & TRIALS GRID -->
+    <div class="space-y-4 pt-4">
+        <div class="flex items-center gap-2.5 border-b border-slate-800 pb-3">
+            <div class="w-2.5 h-6 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+            <h2 class="text-base font-black text-white uppercase tracking-wider">The Trials Index</h2>
         </div>
-    </div>
 
-    <!-- Event Showcase Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
-        
-        {% set events_list = [
-            ("Duck Hunt", "🦆", "Keep your eyes sharp. Hidden treasures are lurking where you least expect them..."),
-            ("City Selfies", "📸", "Hit the streets, check off the target list, and sprint back before time runs out."),
-            ("Crack the Code", "🔓", "Digital puzzles meet sudden physical panic sprints. Expect the unexpected."),
-            ("Golf Putting", "⛳", "Precision under pressure. Can you hold your nerve on the green?"),
-            ("Padel Pong", "🏓", "Unorthodox racket skills and target execution at its finest."),
-            ("Sticky Bounce", "🎾", "Angles, velocity, and a bit of luck will determine who sticks the landing."),
-            ("Ring Toss", "💍", "Classic arcade mechanics, high-stakes scoring."),
-            ("Bean Bag Toss", "🛍️", "Toss with accuracy, secure the bag, and leave opponents in the dust."),
-            ("The Entrance", "✨", "First impressions matter. Bring your absolute best swagger and performance."),
-            ("Cut the Deck", "🃏", "Pure RNG elimination survival. Survive the draw or go home."),
-            ("Beer Pong", "🍻", "The timeless test of wrist-eye coordination and tactical cup sinking."),
-            ("The Ultimate Relay Race", "🏃", "Multi-stage chaos combining sorting, water hazards, stacking, and Nerf marksmanship.")
-        ] %}
-
-        {% for name, emoji, desc in events_list %}
-            {% set res_list = event_results_map.get(name, []) %}
-            <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between transition">
-                <div class="space-y-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Trial 1: Duck Hunt -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
+                <div class="space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial #{{ loop.index }}</span>
-                        <span class="text-2xl">{{ emoji }}</span>
+                        <span class="text-[10px] font-mono bg-slate-950 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-xl font-bold uppercase">Trial #1</span>
+                        <span class="text-2xl">🦆</span>
                     </div>
-                    <h3 class="text-base font-black text-slate-100">{{ name }}</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">{{ desc }}</p>
+                    <h3 class="text-base font-black text-white uppercase tracking-wide">Duck Hunt</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Keep your eyes sharp. Hidden treasures are lurking where you least expect them...</p>
                 </div>
-
-                <!-- Toggle Button -->
-                {% if res_list %}
-                    <button onclick="toggleStandings('standings-{{ loop.index }}')" class="w-full py-2 bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-300 font-black text-[10px] uppercase rounded-xl transition">
-                        Click here to view standings
-                    </button>
-                {% else %}
-                    <button disabled class="w-full py-2 bg-slate-950 text-slate-600 font-bold text-[10px] uppercase rounded-xl cursor-not-allowed border border-slate-800">
-                        Results Pending
-                    </button>
-                {% endif %}
-
-                <!-- Collapsible Standings -->
-                <div id="standings-{{ loop.index }}" class="hidden pt-3 border-t border-slate-800/80 space-y-2">
-                    <span class="text-[10px] font-black uppercase text-amber-400">Final Results:</span>
-                    {% for r in res_list %}
-                        <div class="bg-slate-950 border border-slate-800/50 px-3 py-2 rounded-xl flex items-center justify-between text-xs">
-                            <span class="font-bold text-slate-200 flex items-center gap-2">
-                                <span>{{ r.teams.flag_emoji }}</span>
-                                <span>{{ r.teams.nation_name }}</span>
-                            </span>
-                            <span class="font-mono font-bold text-slate-400">
-                                {% if r.medal_type == 'gold' %}🥇{% elif r.medal_type == 'silver' %}🥈{% elif r.medal_type == 'bronze' %}🥉{% endif %}
-                                {{ r.points }} pts
-                            </span>
-                        </div>
-                    {% endfor %}
+                <div class="pt-2 border-t border-slate-800/80 text-center">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 block py-2 bg-slate-950/60 rounded-xl border border-slate-800">Results Pending</span>
                 </div>
             </div>
-        {% endfor %}
 
+            <!-- Trial 2: City Selfies -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-mono bg-slate-950 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-xl font-bold uppercase">Trial #2</span>
+                        <span class="text-2xl">📸</span>
+                    </div>
+                    <h3 class="text-base font-black text-white uppercase tracking-wide">City Selfies</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Hit the streets, check off the target list, and sprint back before time runs out.</p>
+                </div>
+                <div class="pt-2 border-t border-slate-800/80 text-center">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 block py-2 bg-slate-950/60 rounded-xl border border-slate-800">Results Pending</span>
+                </div>
+            </div>
+
+            <!-- Trial 3: Crack the Code -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-mono bg-slate-950 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-xl font-bold uppercase">Trial #3</span>
+                        <span class="text-2xl">🔓</span>
+                    </div>
+                    <h3 class="text-base font-black text-white uppercase tracking-wide">Crack the Code</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Digital puzzles meet sudden physical panic sprints. Expect the unexpected.</p>
+                </div>
+                <div class="pt-2 border-t border-slate-800/80 text-center">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 block py-2 bg-slate-950/60 rounded-xl border border-slate-800">Results Pending</span>
+                </div>
+            </div>
+
+            <!-- Trial 4: Golf Putting -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-mono bg-slate-950 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-xl font-bold uppercase">Trial #4</span>
+                        <span class="text-2xl">⛳</span>
+                    </div>
+                    <h3 class="text-base font-black text-white uppercase tracking-wide">Golf Putting</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Precision under pressure. Can you hold your nerve on the green?</p>
+                </div>
+                <div class="pt-2 border-t border-slate-800/80 text-center">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 block py-2 bg-slate-950/60 rounded-xl border border-slate-800">Results Pending</span>
+                </div>
+            </div>
+
+            <!-- Trial 5: Padel Pong -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-mono bg-slate-950 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-xl font-bold uppercase">Trial #5</span>
+                        <span class="text-2xl">🏓</span>
+                    </div>
+                    <h3 class="text-base font-black text-white uppercase tracking-wide">Padel Pong</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Unorthodox racket skills and target execution at its finest.</p>
+                </div>
+                <div class="pt-2 border-t border-slate-800/80 text-center">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 block py-2 bg-slate-950/60 rounded-xl border border-slate-800">Results Pending</span>
+                </div>
+            </div>
+
+            <!-- Trial 6: Sticky Bounce -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-mono bg-slate-950 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-xl font-bold uppercase">Trial #6</span>
+                        <span class="text-2xl">🎾</span>
+                    </div>
+                    <h3 class="text-base font-black text-white uppercase tracking-wide">Sticky Bounce</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Angles, velocity, and a bit of luck will determine who sticks the landing.</p>
+                </div>
+                <div class="pt-2 border-t border-slate-800/80 text-center">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 block py-2 bg-slate-950/60 rounded-xl border border-slate-800">Results Pending</span>
+                </div>
+            </div>
+
+        </div>
     </div>
 
 </div>
-
-<!-- Toggle Logic -->
-<script>
-    function toggleStandings(id) {
-        const el = document.getElementById(id);
-        el.classList.toggle('hidden');
-    }
-</script>
 {% endblock %}
