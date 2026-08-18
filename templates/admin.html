@@ -149,18 +149,67 @@
 
     <!-- TAB 2: TREASURE VERIFICATION -->
     <div class="space-y-6 {% if active_tab != 'verification' %}hidden{% endif %}">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-            <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">Pending Treasure Hunt Submissions</h2>
-            {% if pending_submissions %}
-                <div class="space-y-3">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">Pending Treasure Hunt Submissions</h2>
+                <span class="text-xs font-mono px-3 py-1 rounded-lg bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">{{ pending_submissions | length }} Pending Review</span>
+            </div>
+
+            {% if not pending_submissions %}
+                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-12 text-center text-slate-500 italic text-xs">
+                    No pending treasure hunt submissions to review right now!
+                </div>
+            {% else %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {% for sub in pending_submissions %}
-                        <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex items-center justify-between gap-4">
-                            <div><span class="text-xs font-bold text-amber-400">{{ sub.teams.flag_emoji }} {{ sub.teams.nation_name }}</span><p class="text-xs text-slate-200">{{ sub.treasure_hunt_items.title }}</p><a href="{{ sub.image_url }}" target="_blank" class="text-[10px] text-sky-400 underline">View Photo</a></div>
-                            <form action="/admin/treasure/verify" method="POST" class="flex gap-2"><input type="hidden" name="submission_id" value="{{ sub.id }}"><button type="submit" name="action" value="approve" class="bg-emerald-500 text-slate-950 font-bold px-3 py-1 rounded-lg text-xs">Approve</button><button type="submit" name="action" value="reject" class="bg-rose-500 text-slate-950 font-bold px-3 py-1 rounded-lg text-xs">Reject</button></form>
+                        <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+                            
+                            <!-- Team & Item Info -->
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="text-2xl">{{ sub.teams.flag_emoji }}</span>
+                                    <div>
+                                        <h3 class="font-black text-white text-xs uppercase tracking-wide">{{ sub.teams.nation_name }}</h3>
+                                        <p class="text-[10px] text-slate-400 font-mono">Submitted: {{ sub.submitted_at }}</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-mono font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/20">
+                                    {{ sub.treasure_hunt_items.title }} (+{{ sub.treasure_hunt_items.points }} pts)
+                                </span>
+                            </div>
+
+                            <!-- Submitted Image Proof -->
+                            <div class="relative w-full h-56 rounded-2xl overflow-hidden border border-slate-800 bg-slate-900">
+                                <a href="{{ sub.image_url }}" target="_blank">
+                                    <img src="{{ sub.image_url }}" alt="Proof Image" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                                </a>
+                            </div>
+
+                            <!-- Review Actions Form -->
+                            <form action="/admin/treasure/verify" method="POST" class="space-y-3 pt-2">
+                                <input type="hidden" name="submission_id" value="{{ sub.id }}">
+                                
+                                <!-- Rejection Reason Text Box -->
+                                <div>
+                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1">Rejection Reason (Required if rejecting)</label>
+                                    <input type="text" name="rejection_reason" placeholder="e.g., Blurry photo, wrong location, etc." class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 outline-none focus:border-red-500 transition">
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="grid grid-cols-2 gap-3 pt-1">
+                                    <button type="submit" name="action" value="reject" class="w-full bg-rose-950/40 border border-rose-500/40 text-rose-400 font-black text-xs uppercase tracking-widest py-3 rounded-xl hover:bg-rose-900/40 transition">
+                                        Reject ❌
+                                    </button>
+                                    <button type="submit" name="action" value="approve" class="w-full bg-emerald-500 text-slate-950 font-black text-xs uppercase tracking-widest py-3 rounded-xl hover:bg-emerald-400 transition shadow-lg">
+                                        Approve ✅
+                                    </button>
+                                </div>
+                            </form>
+
                         </div>
                     {% endfor %}
                 </div>
-            {% else %}<p class="text-xs text-slate-500 italic text-center py-8">No pending photo submissions to review.</p>{% endif %}
+            {% endif %}
         </div>
     </div>
 
