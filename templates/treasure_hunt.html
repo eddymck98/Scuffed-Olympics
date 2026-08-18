@@ -1,100 +1,136 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-4xl mx-auto space-y-8 pb-16 px-4">
-    
-    <!-- Hero Header -->
-    <div class="relative py-8 px-6 text-center space-y-3 bg-gradient-to-b from-slate-900/60 to-transparent rounded-[2.5rem] border border-slate-800 shadow-xl">
-        <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight uppercase">🗺️ City Treasure Hunt</h1>
-        <p class="text-xs text-slate-400">Capture the memories, complete the checklist, and claim victory.</p>
+<div class="max-w-4xl mx-auto space-y-12 pb-20 px-4 relative">
+
+    <!-- Olympic Ring Color Gradient Accent Bar -->
+    <div class="h-2.5 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_25px_rgba(255,255,255,0.4)]"></div>
+
+    <!-- Hero Header with Olympic Ring Glows -->
+    <div class="relative py-10 px-6 text-center space-y-4 overflow-hidden bg-gradient-to-b from-slate-900/80 to-slate-900/40 rounded-[3rem] border border-slate-800 shadow-2xl">
+        <div class="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-blue-500/10 rounded-full blur-[90px] pointer-events-none"></div>
+        <div class="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-red-500/10 rounded-full blur-[90px] pointer-events-none"></div>
+
+        <div class="relative z-10 space-y-2">
+            <div class="flex items-center justify-center gap-2 text-xs font-black tracking-widest uppercase">
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.8)]"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
+                <span class="text-slate-300 ml-1">Scuffed Games 2026</span>
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase bg-gradient-to-r from-blue-400 via-yellow-300 to-red-400 bg-clip-text text-transparent drop-shadow-sm">
+                🗺️ City Treasure Hunt
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-400 font-medium">Capture the memories, complete the checklist items, and conquer the leaderboard.</p>
+        </div>
     </div>
 
-    <!-- Mini Rules Section Placeholder -->
-    <div class="bg-slate-900/90 border-2 border-yellow-500/30 rounded-3xl p-6 shadow-xl space-y-3">
-        <div class="flex items-center gap-2 text-yellow-400 font-black text-xs uppercase tracking-widest">
-            <span>📜</span> Treasure Hunt Rules & Guidelines
+    <!-- Mini Rules Section Banner -->
+    <div class="bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 border-2 border-yellow-500/40 rounded-3xl p-6 shadow-2xl relative overflow-hidden space-y-3">
+        <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-yellow-500/5 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="flex items-center gap-2.5 text-yellow-400 font-black text-xs uppercase tracking-widest">
+            <span class="p-1.5 bg-yellow-400/10 rounded-xl border border-yellow-500/20">📜</span> Treasure Hunt Rules & Guidelines
         </div>
-        <div class="text-xs text-slate-300 space-y-2 border-t border-slate-800 pt-3">
-            <p><em>[Rules will be populated here soon. Stay tuned for instructions, time limits, and bonus point opportunities!]</em></p>
+        <div class="text-xs text-slate-300 space-y-2 border-t border-slate-800/80 pt-3 leading-relaxed">
+            <p>1. Teams of two must work together to locate and photograph checklist items out in the field.</p>
+            <p>2. Upload your photo proof directly on this page under the matching challenge.</p>
+            <p>3. The Commissioner will review and approve (or reject with feedback) your submissions live. May the sharpest eyes win!</p>
         </div>
     </div>
 
     <!-- Active Status Check -->
     {% if not is_active %}
-        <div class="bg-red-950/40 border-2 border-red-500/40 rounded-3xl p-8 text-center space-y-2">
-            <h2 class="text-red-400 font-black uppercase text-sm tracking-widest">Hunt Is Currently Locked</h2>
-            <p class="text-xs text-slate-400">The Commish has not unlocked the treasure hunt yet. Stand by!</p>
+        <div class="bg-gradient-to-b from-rose-950/40 to-slate-900 border-2 border-rose-500/40 rounded-3xl p-10 text-center space-y-3 shadow-2xl">
+            <span class="text-3xl">🔒</span>
+            <h2 class="text-rose-400 font-black uppercase text-sm tracking-widest">Hunt Is Currently Locked</h2>
+            <p class="text-xs text-slate-400">The Commissioner has not unlocked the treasure hunt yet. Stand by for the starting whistle!</p>
         </div>
     {% else %}
 
-        <!-- Checklist & Submission Grid -->
+        <!-- Checklist Section -->
         <div class="space-y-6">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-                <h2 class="text-base font-black text-white uppercase tracking-wider">Hunt Checklist</h2>
-                <span class="text-xs font-mono text-slate-400">Upload proofs below</span>
+                <div class="flex items-center gap-2.5">
+                    <div class="w-2.5 h-6 bg-green-500 rounded-full shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+                    <h2 class="text-base font-black text-white uppercase tracking-wider">Hunt Checklist</h2>
+                </div>
+                <span class="text-xs font-mono px-3 py-1 rounded-lg bg-green-500/10 text-green-400 border border-green-500/20">Upload Proofs Below</span>
             </div>
 
-            <div class="grid grid-cols-1 gap-4">
-                {% for item in items %}
-                    {% set prog = progress_map.get(item.id) %}
-                    <div class="bg-slate-900/80 border {% if prog and prog.status == 'approved' %}border-green-500/50 bg-green-950/10{% elif prog and prog.status == 'pending' %}border-yellow-500/50 bg-yellow-950/10{% elif prog and prog.status == 'rejected' %}border-red-500/50 bg-red-950/10{% else %}border-slate-800{% endif %} rounded-2xl p-5 shadow-lg space-y-4 transition-all">
-                        
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                            <div class="space-y-1">
-                                <div class="flex items-center gap-2">
-                                    <span class="font-black text-white text-sm uppercase tracking-wide">{{ item.title }}</span>
-                                    <span class="text-xs font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">+{{ item.points }} pts</span>
+            {% if not items %}
+                <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-12 text-center text-slate-500 italic text-xs">
+                    No checklist items available yet. Check back soon!
+                </div>
+            {% else %}
+                <div class="grid grid-cols-1 gap-5">
+                    {% for item in items %}
+                        {% set prog = progress_map.get(item.id) %}
+                        <div class="bg-slate-900/90 border {% if prog and prog.status == 'approved' %}border-emerald-500/50 bg-emerald-950/10{% elif prog and prog.status == 'pending' %}border-amber-500/50 bg-amber-950/10{% elif prog and prog.status == 'rejected' %}border-rose-500/50 bg-rose-950/10{% else %}border-slate-800 hover:border-slate-700{% endif %} rounded-3xl p-6 shadow-xl space-y-4 transition-all">
+                            
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div class="space-y-1">
+                                    <div class="flex items-center gap-2.5 flex-wrap">
+                                        <span class="font-black text-white text-base tracking-wide">{{ item.title }}</span>
+                                        <span class="text-xs font-mono font-black text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-lg border border-amber-500/20">+{{ item.points }} Pts</span>
+                                    </div>
+                                    <p class="text-xs text-slate-300">{{ item.description }}</p>
                                 </div>
-                                <p class="text-xs text-slate-400">{{ item.description }}</p>
+
+                                <!-- Status Badge -->
+                                <div>
+                                    {% if not prog %}
+                                        <span class="bg-slate-800 text-slate-400 text-[10px] font-black px-3.5 py-1.5 rounded-xl uppercase tracking-widest border border-slate-700 shadow-inner">Not Started</span>
+                                    {% elif prog.status == 'pending' %}
+                                        <span class="bg-amber-500/20 text-amber-400 text-[10px] font-black px-3.5 py-1.5 rounded-xl uppercase tracking-widest border border-amber-500/30 animate-pulse shadow-md">⏳ Pending Review</span>
+                                    {% elif prog.status == 'approved' %}
+                                        <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-black px-3.5 py-1.5 rounded-xl uppercase tracking-widest border border-emerald-500/30 shadow-md">✅ Approved</span>
+                                    {% elif prog.status == 'rejected' %}
+                                        <span class="bg-rose-500/20 text-rose-400 text-[10px] font-black px-3.5 py-1.5 rounded-xl uppercase tracking-widest border border-rose-500/30 shadow-md">❌ Rejected</span>
+                                    {% endif %}
+                                </div>
                             </div>
 
-                            <!-- Status Badge -->
-                            <div>
-                                {% if not prog %}
-                                    <span class="bg-slate-800 text-slate-400 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-slate-700">Not Started</span>
-                                {% elif prog.status == 'pending' %}
-                                    <span class="bg-yellow-500/20 text-yellow-400 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-yellow-500/30 animate-pulse">⏳ Pending Review</span>
-                                {% elif prog.status == 'approved' %}
-                                    <span class="bg-green-500/20 text-green-400 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-green-500/30">✅ Approved</span>
-                                {% elif prog.status == 'rejected' %}
-                                    <span class="bg-red-500/20 text-red-400 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-red-500/30">❌ Rejected</span>
-                                {% endif %}
-                            </div>
+                            <!-- Rejection Feedback Alert -->
+                            {% if prog and prog.status == 'rejected' and prog.rejection_reason %}
+                                <div class="bg-rose-950/60 border border-rose-500/40 p-3.5 rounded-2xl text-xs text-rose-300 flex items-start gap-2.5">
+                                    <span class="text-base">⚠️</span>
+                                    <div>
+                                        <strong class="font-black uppercase tracking-wide block text-[10px] text-rose-400">Commissioner Rejection Reason:</strong>
+                                        <span>{{ prog.rejection_reason }}</span>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <!-- Uploaded Photo Proof Display -->
+                            {% if prog and prog.image_url %}
+                                <div class="flex items-center gap-4 pt-3 border-t border-slate-800/80">
+                                    <div class="relative w-20 h-20 rounded-2xl overflow-hidden border border-slate-700 shrink-0 shadow-md bg-slate-950">
+                                        <img src="{{ prog.image_url }}" alt="Submission Proof" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="text-xs text-slate-300 space-y-1">
+                                        <p class="font-bold text-white uppercase tracking-wider text-[10px] text-amber-400">Your Submitted Photo</p>
+                                        <a href="{{ prog.image_url }}" target="_blank" class="text-blue-400 hover:underline inline-flex items-center gap-1 font-bold text-xs">
+                                            <span>Open Full Resolution Image</span> &rarr;
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <!-- Upload Form -->
+                            {% if not prog or prog.status == 'rejected' or prog.status == 'pending' %}
+                                <form action="/treasure-hunt/submit" method="POST" enctype="multipart/form-data" class="pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-center gap-3">
+                                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                                    <input type="file" name="photo" accept="image/*" required class="w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer bg-slate-950 border border-slate-800 rounded-2xl p-2.5 shadow-inner">
+                                    <button type="submit" class="w-full sm:w-auto shrink-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 text-white font-black text-xs uppercase tracking-widest px-6 py-3.5 rounded-2xl hover:brightness-110 transition shadow-lg shadow-blue-600/30">
+                                        {% if prog and prog.status == 'rejected' %}Re-submit Photo{% else %}Upload Proof{% endif %}
+                                    </button>
+                                </form>
+                            {% endif %}
+
                         </div>
-
-                        <!-- Rejection Feedback if applicable -->
-                        {% if prog and prog.status == 'rejected' and prog.rejection_reason %}
-                            <div class="bg-red-950/60 border border-red-500/30 p-3 rounded-xl text-xs text-red-300">
-                                <strong>Reason for rejection:</strong> {{ prog.rejection_reason }}
-                            </div>
-                        {% endif %}
-
-                        <!-- Display Uploaded Photo if Exists -->
-                        {% if prog and prog.image_url %}
-                            <div class="flex items-center gap-4 pt-2 border-t border-slate-800/80">
-                                <div class="relative w-20 h-20 rounded-xl overflow-hidden border border-slate-700 shrink-0">
-                                    <img src="{{ prog.image_url }}" alt="Submission Proof" class="w-full h-full object-cover">
-                                </div>
-                                <div class="text-xs text-slate-300 space-y-1">
-                                    <p class="font-bold text-white">Submitted Photo Proof</p>
-                                    <a href="{{ prog.image_url }}" target="_blank" class="text-blue-400 hover:underline inline-block text-[11px]">View Full Image &rarr;</a>
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        <!-- Upload Form (Enabled if not yet approved or if rejected) -->
-                        {% if not prog or prog.status == 'rejected' or prog.status == 'pending' %}
-                            <form action="/treasure-hunt/submit" method="POST" enctype="multipart/form-data" class="pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-center gap-3">
-                                <input type="hidden" name="item_id" value="{{ item.id }}">
-                                <input type="file" name="photo" accept="image/*" required class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer bg-slate-950 border border-slate-800 rounded-xl p-2">
-                                <button type="submit" class="w-full sm:w-auto shrink-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-xs uppercase tracking-widest px-5 py-3 rounded-xl hover:brightness-110 transition shadow-lg">
-                                    {% if prog and prog.status == 'rejected' %}Re-submit{% else %}Upload Proof{% endif %}
-                                </button>
-                            </form>
-                        {% endif %}
-
-                    </div>
-                {% endfor %}
-            </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     {% endif %}
 
