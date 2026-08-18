@@ -1,81 +1,100 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="space-y-8 max-w-4xl mx-auto">
+<div class="max-w-4xl mx-auto space-y-8 pb-16 px-4">
     
-    <!-- Header -->
-    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center shadow-xl">
-        <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-            City Mission
-        </span>
-        <h1 class="text-3xl font-black text-slate-100 mt-3 tracking-tight">CITY TREASURE HUNT</h1>
-        <p class="text-slate-400 text-sm mt-1 max-w-lg mx-auto">
-            Roam the city, find the objects or complete the photo challenges, and snap proof straight from your phone camera.
-        </p>
+    <!-- Hero Header -->
+    <div class="relative py-8 px-6 text-center space-y-3 bg-gradient-to-b from-slate-900/60 to-transparent rounded-[2.5rem] border border-slate-800 shadow-xl">
+        <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight uppercase">🗺️ City Treasure Hunt</h1>
+        <p class="text-xs text-slate-400">Capture the memories, complete the checklist, and claim victory.</p>
     </div>
 
+    <!-- Mini Rules Section Placeholder -->
+    <div class="bg-slate-900/90 border-2 border-yellow-500/30 rounded-3xl p-6 shadow-xl space-y-3">
+        <div class="flex items-center gap-2 text-yellow-400 font-black text-xs uppercase tracking-widest">
+            <span>📜</span> Treasure Hunt Rules & Guidelines
+        </div>
+        <div class="text-xs text-slate-300 space-y-2 border-t border-slate-800 pt-3">
+            <p><em>[Rules will be populated here soon. Stay tuned for instructions, time limits, and bonus point opportunities!]</em></p>
+        </div>
+    </div>
+
+    <!-- Active Status Check -->
     {% if not is_active %}
-        <!-- Locked State -->
-        <div class="bg-slate-900/50 border border-slate-800/80 rounded-3xl p-12 text-center">
-            <div class="text-4xl mb-3">🔒</div>
-            <h2 class="text-xl font-bold text-slate-300">Treasure Hunt is Locked</h2>
-            <p class="text-xs text-slate-500 mt-1">The Commissioner has not unleashed the hunt yet. Stand by for instructions.</p>
+        <div class="bg-red-950/40 border-2 border-red-500/40 rounded-3xl p-8 text-center space-y-2">
+            <h2 class="text-red-400 font-black uppercase text-sm tracking-widest">Hunt Is Currently Locked</h2>
+            <p class="text-xs text-slate-400">The Commish has not unlocked the treasure hunt yet. Stand by!</p>
         </div>
     {% else %}
-        <!-- Active State: Checklist of Items -->
-        <div class="grid grid-cols-1 gap-6">
-            {% for item in items %}
-                {% set prog = progress_map.get(item.id) %}
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-lg">
-                    
-                    <!-- Item Info -->
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-3">
-                            <h3 class="font-bold text-lg text-slate-100">{{ item.title }}</h3>
-                            <span class="text-xs font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
-                                +{{ item.points }} pts
-                            </span>
-                        </div>
-                        <p class="text-xs text-slate-400 leading-relaxed">{{ item.description }}</p>
-                    </div>
 
-                    <!-- Status / Submission Action -->
-                    <div class="w-full md:w-auto flex flex-col items-end gap-2">
-                        {% if prog %}
-                            {% if prog.status == 'approved' %}
-                                <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-xl text-emerald-400 text-xs font-bold">
-                                    <span>✅ Approved & Credited</span>
+        <!-- Checklist & Submission Grid -->
+        <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <h2 class="text-base font-black text-white uppercase tracking-wider">Hunt Checklist</h2>
+                <span class="text-xs font-mono text-slate-400">Upload proofs below</span>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4">
+                {% for item in items %}
+                    {% set prog = progress_map.get(item.id) %}
+                    <div class="bg-slate-900/80 border {% if prog and prog.status == 'approved' %}border-green-500/50 bg-green-950/10{% elif prog and prog.status == 'pending' %}border-yellow-500/50 bg-yellow-950/10{% elif prog and prog.status == 'rejected' %}border-red-500/50 bg-red-950/10{% else %}border-slate-800{% endif %} rounded-2xl p-5 shadow-lg space-y-4 transition-all">
+                        
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-black text-white text-sm uppercase tracking-wide">{{ item.title }}</span>
+                                    <span class="text-xs font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">+{{ item.points }} pts</span>
                                 </div>
-                            {% elif prog.status == 'pending' %}
-                                <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded-xl text-amber-400 text-xs font-bold">
-                                    <span>⏳ Pending Commissioner Review</span>
+                                <p class="text-xs text-slate-400">{{ item.description }}</p>
+                            </div>
+
+                            <!-- Status Badge -->
+                            <div>
+                                {% if not prog %}
+                                    <span class="bg-slate-800 text-slate-400 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-slate-700">Not Started</span>
+                                {% elif prog.status == 'pending' %}
+                                    <span class="bg-yellow-500/20 text-yellow-400 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-yellow-500/30 animate-pulse">⏳ Pending Review</span>
+                                {% elif prog.status == 'approved' %}
+                                    <span class="bg-green-500/20 text-green-400 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-green-500/30">✅ Approved</span>
+                                {% elif prog.status == 'rejected' %}
+                                    <span class="bg-red-500/20 text-red-400 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-red-500/30">❌ Rejected</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Rejection Feedback if applicable -->
+                        {% if prog and prog.status == 'rejected' and prog.rejection_reason %}
+                            <div class="bg-red-950/60 border border-red-500/30 p-3 rounded-xl text-xs text-red-300">
+                                <strong>Reason for rejection:</strong> {{ prog.rejection_reason }}
+                            </div>
+                        {% endif %}
+
+                        <!-- Display Uploaded Photo if Exists -->
+                        {% if prog and prog.image_url %}
+                            <div class="flex items-center gap-4 pt-2 border-t border-slate-800/80">
+                                <div class="relative w-20 h-20 rounded-xl overflow-hidden border border-slate-700 shrink-0">
+                                    <img src="{{ prog.image_url }}" alt="Submission Proof" class="w-full h-full object-cover">
                                 </div>
-                            {% elif prog.status == 'rejected' %}
-                                <div class="flex items-center gap-2 bg-rose-500/10 border border-rose-500/20 px-4 py-2 rounded-xl text-rose-400 text-xs font-bold">
-                                    <span>❌ Rejected - Try Again</span>
+                                <div class="text-xs text-slate-300 space-y-1">
+                                    <p class="font-bold text-white">Submitted Photo Proof</p>
+                                    <a href="{{ prog.image_url }}" target="_blank" class="text-blue-400 hover:underline inline-block text-[11px]">View Full Image &rarr;</a>
                                 </div>
-                                <!-- Resubmit form if rejected -->
-                                <form action="/treasure-hunt/submit" method="POST" enctype="multipart/form-data" class="flex items-center gap-2 mt-2">
-                                    <input type="hidden" name="item_id" value="{{ item.id }}">
-                                    <input type="file" name="photo" accept="image/*" required class="text-xs text-slate-400 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700">
-                                    <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs transition">
-                                        Re-submit
-                                    </button>
-                                </form>
-                            {% endif %}
-                        {% else %}
-                            <!-- Fresh Submission Form -->
-                            <form action="/treasure-hunt/submit" method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row items-end sm:items-center gap-3 w-full md:w-auto">
+                            </div>
+                        {% endif %}
+
+                        <!-- Upload Form (Enabled if not yet approved or if rejected) -->
+                        {% if not prog or prog.status == 'rejected' or prog.status == 'pending' %}
+                            <form action="/treasure-hunt/submit" method="POST" enctype="multipart/form-data" class="pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-center gap-3">
                                 <input type="hidden" name="item_id" value="{{ item.id }}">
-                                <input type="file" name="photo" accept="image/*" required class="text-xs text-slate-400 file:mr-2 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 w-full sm:w-auto">
-                                <button type="submit" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-4 py-2 rounded-xl text-xs transition shadow-md">
-                                    Upload Proof
+                                <input type="file" name="photo" accept="image/*" required class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer bg-slate-950 border border-slate-800 rounded-xl p-2">
+                                <button type="submit" class="w-full sm:w-auto shrink-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-xs uppercase tracking-widest px-5 py-3 rounded-xl hover:brightness-110 transition shadow-lg">
+                                    {% if prog and prog.status == 'rejected' %}Re-submit{% else %}Upload Proof{% endif %}
                                 </button>
                             </form>
                         {% endif %}
-                    </div>
 
-                </div>
-            {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     {% endif %}
 
