@@ -219,6 +219,32 @@
                 </div>
             </div>
 
+            <!-- Security & Code Reset Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                    <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
+                        <span>🔑</span> Change Access PIN
+                    </h3>
+                    <span class="text-[10px] text-slate-500 font-mono">Security</span>
+                </div>
+
+                <form action="/profile/reset-code" method="POST" class="space-y-3">
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1">Current PIN Code</label>
+                        <input type="password" name="current_code" required placeholder="Enter current PIN..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 outline-none focus:border-amber-400 transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1">New PIN Code</label>
+                        <input type="password" name="new_code" required placeholder="Enter new PIN (min 3 chars)..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 outline-none focus:border-amber-400 transition">
+                    </div>
+
+                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-widest py-3 rounded-xl transition shadow-lg">
+                        Update PIN Code &rarr;
+                    </button>
+                </form>
+            </div>
+
             <!-- Scuffed VAR Form -->
             <div class="bg-gradient-to-b from-red-950/40 via-slate-900 to-slate-950 border border-red-500/30 rounded-2xl p-6 shadow-xl relative space-y-4">
                 <div class="flex items-center justify-between border-b border-red-500/20 pb-2.5">
