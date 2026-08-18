@@ -21,6 +21,7 @@ async def treasure_hunt_page(request: Request, team: dict = Depends(require_team
     items_res = supabase.table("treasure_hunt_items").select("*").execute()
     items = items_res.data if items_res.data else []
 
+    # Use the shared group UUID if set, otherwise fallback to the user's own UUID
     group_id = team.get("treasure_group_id") or team["id"]
 
     progress_res = supabase.table("team_treasure_progress").select("*").eq("team_id", group_id).execute()
