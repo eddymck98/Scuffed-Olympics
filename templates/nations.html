@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-7xl mx-auto py-6 px-4 space-y-8 relative overflow-hidden">
+<div class="max-w-7xl mx-auto py-4 px-4 space-y-6 relative overflow-hidden pt-2">
     
     <!-- Olympic Ring Color Gradient Accent Bar -->
     <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
 
     <!-- Hero Header -->
-    <div class="relative py-8 px-6 text-center space-y-3 overflow-hidden bg-gradient-to-b from-slate-900/60 to-transparent rounded-[2.5rem] border border-slate-800 shadow-xl">
+    <div class="relative py-6 px-6 text-center space-y-3 overflow-hidden bg-gradient-to-b from-indigo-950/90 to-purple-950/60 rounded-[2.5rem] border border-indigo-800/60 shadow-xl backdrop-blur-md">
         <div class="relative z-10 flex flex-col items-center space-y-3">
-            <span class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 text-slate-950 text-[10px] font-black px-5 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
+            <span class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-400 via-yellow-400 to-red-400 text-slate-950 text-[10px] font-black px-5 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
                 🏛️ Participating Delegations & Player Cards 🏛️
             </span>
             <h1 class="text-2xl sm:text-4xl font-black text-white tracking-tight uppercase">THE NATIONS</h1>
@@ -42,10 +42,10 @@
                 {% set flag_url = 'https://flagcdn.com/w640/gb.png' %}
             {% endif %}
             
-            <div class="relative overflow-hidden bg-slate-900/85 border-2 {% if t.nation_name == team.nation_name %}border-yellow-500 shadow-yellow-500/10{% else %}border-slate-800 hover:border-blue-500/50{% endif %} rounded-2xl p-4 shadow-xl transition-all group">
+            <div class="relative overflow-hidden bg-indigo-950/70 border-2 {% if t.nation_name == team.nation_name %}border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.2)]{% else %}border-indigo-800/60 hover:border-blue-400/50{% endif %} rounded-2xl p-4 shadow-xl transition-all group backdrop-blur-md">
                 
-                <!-- Transparent Waving Flag Watermark Background -->
-                <div class="absolute inset-0 opacity-[0.12] bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" 
+                <!-- Transparent Waving Flag Watermark Background (opacity-25) -->
+                <div class="absolute inset-0 opacity-25 bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" 
                      style="background-image: url('{{ flag_url }}');">
                 </div>
 
@@ -53,30 +53,30 @@
                     <!-- Top Bar: Flag & Status Badge -->
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2.5">
-                            <span class="text-3xl p-1.5 bg-slate-950/80 rounded-xl border border-slate-800 shadow-inner group-hover:scale-105 transition-transform inline-block">
+                            <span class="text-3xl p-1.5 bg-indigo-950/90 rounded-xl border border-indigo-800 shadow-inner group-hover:scale-105 transition-transform inline-block">
                                 {{ t.flag_emoji }}
                             </span>
                             <div>
-                                <h3 class="font-black text-base text-white group-hover:text-yellow-400 transition-colors uppercase tracking-wide leading-tight">
+                                <h3 class="font-black text-base text-white group-hover:text-yellow-300 transition-colors uppercase tracking-wide leading-tight drop-shadow">
                                     {{ t.nation_name }}
                                 </h3>
-                                <p class="text-[11px] font-mono text-slate-300">
-                                    Athlete: <span class="text-amber-400 font-bold uppercase">{{ t.participant_name | default("Competitor") }}</span>
+                                <p class="text-[11px] font-mono text-indigo-200">
+                                    Athlete: <span class="text-amber-300 font-bold uppercase">{{ t.participant_name | default("Competitor") }}</span>
                                 </p>
                             </div>
                         </div>
 
                         <div>
                             {% if t.is_admin %}
-                                <span class="bg-yellow-500/20 text-yellow-400 text-[9px] font-black px-2.5 py-0.5 rounded-full border border-yellow-500/30 tracking-widest">
+                                <span class="bg-yellow-500/20 text-yellow-300 text-[9px] font-black px-2.5 py-0.5 rounded-full border border-yellow-500/40 tracking-widest shadow">
                                     👑 COMMISH
                                 </span>
                             {% elif t.nation_name == team.nation_name %}
-                                <span class="bg-blue-500/20 text-blue-400 text-[9px] font-black px-2.5 py-0.5 rounded-full border border-blue-500/30 tracking-widest">
+                                <span class="bg-blue-500/20 text-blue-300 text-[9px] font-black px-2.5 py-0.5 rounded-full border border-blue-500/40 tracking-widest shadow">
                                     ⭐ YOU
                                 </span>
                             {% else %}
-                                <span class="bg-green-500/20 text-green-400 text-[9px] font-black px-2.5 py-0.5 rounded-full border border-green-500/30 tracking-widest">
+                                <span class="bg-green-500/20 text-green-300 text-[9px] font-black px-2.5 py-0.5 rounded-full border border-green-500/40 tracking-widest shadow">
                                     ACTIVE
                                 </span>
                             {% endif %}
@@ -84,14 +84,14 @@
                     </div>
 
                     <!-- Player Card Stat Badges -->
-                    <div class="grid grid-cols-2 gap-2 text-xs font-mono pt-1 border-t border-slate-800/80">
-                        <div class="bg-slate-950/80 border border-slate-800/60 p-2 rounded-xl text-center">
-                            <span class="block text-[8px] text-slate-400 uppercase font-sans font-bold">Olympics Attended</span>
-                            <span class="font-black text-yellow-400 text-xs mt-0.5 block truncate">{{ t.olympics_attended | default("1 (2026)") }}</span>
+                    <div class="grid grid-cols-2 gap-2 text-xs font-mono pt-1 border-t border-indigo-800/60">
+                        <div class="bg-purple-950/70 border border-indigo-800/60 p-2 rounded-xl text-center shadow-inner">
+                            <span class="block text-[8px] text-indigo-200 uppercase font-sans font-bold">Olympics Attended</span>
+                            <span class="font-black text-yellow-300 text-xs mt-0.5 block truncate">{{ t.olympics_attended | default("1 (2026)") }}</span>
                         </div>
-                        <div class="bg-slate-950/80 border border-slate-800/60 p-2 rounded-xl text-center">
-                            <span class="block text-[8px] text-slate-400 uppercase font-sans font-bold">Status</span>
-                            <span class="font-black text-green-400 text-xs mt-0.5 block">Ready for Chaos</span>
+                        <div class="bg-purple-950/70 border border-indigo-800/60 p-2 rounded-xl text-center shadow-inner">
+                            <span class="block text-[8px] text-indigo-200 uppercase font-sans font-bold">Status</span>
+                            <span class="font-black text-green-300 text-xs mt-0.5 block">Ready for Chaos</span>
                         </div>
                     </div>
                 </div>
@@ -100,8 +100,8 @@
         {% endfor %}
 
         {% if not teams %}
-            <div class="col-span-full text-center py-12 bg-slate-900 border border-slate-800 rounded-3xl">
-                <p class="text-xs text-slate-400">No nations registered yet.</p>
+            <div class="col-span-full text-center py-12 bg-indigo-950/80 border border-indigo-800/60 rounded-3xl shadow-xl">
+                <p class="text-xs text-indigo-200">No nations registered yet.</p>
             </div>
         {% endif %}
     </div>
