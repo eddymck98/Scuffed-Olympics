@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-7xl mx-auto space-y-8 pb-16 relative">
+<div class="max-w-7xl mx-auto space-y-6 pb-16 relative pt-2">
     
     <!-- Olympic Ring Color Gradient Accent Bar -->
     <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
 
     <!-- Compact, Sleek Header (Party Vibe) -->
-    <div class="relative py-8 px-6 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 rounded-3xl border border-amber-500/30 shadow-xl text-center space-y-3 overflow-hidden">
+    <div class="relative py-6 px-6 bg-gradient-to-r from-indigo-950/90 via-purple-950/80 to-indigo-950/90 rounded-3xl border border-amber-500/30 shadow-xl text-center space-y-3 overflow-hidden">
         <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none text-9xl">⚔️</div>
         
         <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1 rounded-full text-amber-400 text-[10px] font-black uppercase tracking-widest shadow-inner">
@@ -14,34 +14,34 @@
         </div>
         
         <h1 class="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">
-            EVENTS & <span class="bg-gradient-to-r from-blue-400 via-yellow-400 to-red-400 bg-clip-text text-transparent">BATTLEGROUNDS</span>
+            EVENTS & <span class="bg-gradient-to-r from-blue-300 via-yellow-300 to-red-300 bg-clip-text text-transparent">BATTLEGROUNDS</span>
         </h1>
         
-        <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto font-medium">
+        <p class="text-xs sm:text-sm text-indigo-200 max-w-xl mx-auto font-medium">
             Prepare your reflexes, test your questionable coordination, and brace for absolute chaos. Here is a glimpse of the trials ahead. Exact rules remain classified until game time!
         </p>
     </div>
 
     <!-- General Scoring & Hype Banner -->
-    <div class="bg-slate-900/90 border border-amber-500/30 rounded-3xl p-6 shadow-xl space-y-4 max-w-4xl mx-auto">
-        <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest text-center flex items-center justify-center gap-2">
+    <div class="bg-indigo-950/90 border border-amber-500/30 rounded-3xl p-6 shadow-xl space-y-4 max-w-4xl mx-auto backdrop-blur-md">
+        <h2 class="text-xs font-black text-amber-400 uppercase tracking-widest text-center flex items-center justify-center gap-2">
             <span>⚖️</span> Scoring Protocol & Rules
         </h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
-            <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-indigo-100">
+            <div class="bg-purple-950/60 p-4 rounded-2xl border border-indigo-800/60 space-y-1 shadow-inner">
                 <strong class="text-amber-400 block font-black">Standard Events</strong>
-                <p class="text-[11px] text-slate-400 leading-relaxed">Scored by placement: 7th gets 10 points, 1st gets 8 points (with scaling positions in between). DNP means 0 points.</p>
+                <p class="text-[11px] text-indigo-200 leading-relaxed">Scored by placement: 7th gets 10 points, 1st gets 8 points (with scaling positions in between). DNP means 0 points.</p>
             </div>
 
-            <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
+            <div class="bg-purple-950/60 p-4 rounded-2xl border border-indigo-800/60 space-y-1 shadow-inner">
                 <strong class="text-amber-400 block font-black">Duck Hunt</strong>
-                <p class="text-[11px] text-slate-400 leading-relaxed">Special scoring: The total number of mini resin ducks you successfully find equals your exact point total!</p>
+                <p class="text-[11px] text-indigo-200 leading-relaxed">Special scoring: The total number of mini resin ducks you successfully find equals your exact point total!</p>
             </div>
 
-            <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
+            <div class="bg-purple-950/60 p-4 rounded-2xl border border-indigo-800/60 space-y-1 shadow-inner">
                 <strong class="text-amber-400 block font-black">City Treasure Hunt</strong>
-                <p class="text-[11px] text-slate-400 leading-relaxed">Custom pods: 1st team gets 10 points, 2nd gets 7 points, 3rd gets 4 points, and last gets 1 point.</p>
+                <p class="text-[11px] text-indigo-200 leading-relaxed">Custom pods: 1st team gets 10 points, 2nd gets 7 points, 3rd gets 4 points, and last gets 1 point.</p>
             </div>
         </div>
     </div>
@@ -66,42 +66,42 @@
 
         {% for name, emoji, desc in events_list %}
             {% set res_list = event_results_map.get(name, []) %}
-            <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/40 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between transition">
+            <div class="bg-indigo-950/90 border border-indigo-800/60 hover:border-amber-400/60 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between transition backdrop-blur-md">
                 <div class="space-y-2">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-mono font-bold text-amber-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Trial #{{ loop.index }}</span>
+                        <span class="text-xs font-mono font-bold text-amber-300 bg-purple-950/80 px-3 py-1 rounded-xl border border-indigo-800 shadow-inner">Trial #{{ loop.index }}</span>
                         <span class="text-2xl">{{ emoji }}</span>
                     </div>
-                    <h3 class="text-base font-black text-slate-100 uppercase tracking-wide">{{ name }}</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">{{ desc }}</p>
+                    <h3 class="text-base font-black text-white uppercase tracking-wide drop-shadow">{{ name }}</h3>
+                    <p class="text-xs text-indigo-200 leading-relaxed">{{ desc }}</p>
                 </div>
 
                 <!-- Toggle Button -->
                 <div class="pt-2">
                     {% if res_list %}
-                        <button onclick="toggleStandings('standings-{{ loop.index }}')" class="w-full py-2.5 bg-slate-800 hover:bg-amber-400 hover:text-slate-950 text-slate-200 font-black text-[10px] uppercase tracking-widest rounded-xl transition shadow">
+                        <button onclick="toggleStandings('standings-{{ loop.index }}')" class="w-full py-2.5 bg-indigo-900/80 hover:bg-amber-400 hover:text-slate-950 text-indigo-100 font-black text-[10px] uppercase tracking-widest rounded-xl transition shadow border border-indigo-700/60">
                             Click here to view standings
                         </button>
                     {% else %}
-                        <button disabled class="w-full py-2.5 bg-slate-950 text-slate-600 font-bold text-[10px] uppercase tracking-widest rounded-xl cursor-not-allowed border border-slate-800">
+                        <button disabled class="w-full py-2.5 bg-indigo-950/50 text-indigo-400/50 font-bold text-[10px] uppercase tracking-widest rounded-xl cursor-not-allowed border border-indigo-900/60">
                             Results Pending
                         </button>
                     {% endif %}
                 </div>
 
                 <!-- Collapsible Standings -->
-                <div id="standings-{{ loop.index }}" class="hidden pt-3 border-t border-slate-800/80 space-y-2">
+                <div id="standings-{{ loop.index }}" class="hidden pt-3 border-t border-indigo-800/60 space-y-2">
                     <span class="text-[10px] font-black uppercase tracking-wider text-amber-400 block">Final Results:</span>
                     <div class="space-y-1.5 max-h-40 overflow-y-auto pr-1">
                         {% for r in res_list %}
-                            <div class="bg-slate-950 border border-slate-800/50 px-3 py-2 rounded-xl flex items-center justify-between text-xs">
-                                <span class="font-bold text-slate-200 flex items-center gap-2">
+                            <div class="bg-purple-950/80 border border-indigo-800/60 px-3 py-2 rounded-xl flex items-center justify-between text-xs shadow-inner">
+                                <span class="font-bold text-slate-100 flex items-center gap-2">
                                     <span>{{ r.teams.flag_emoji }}</span>
                                     <span>{{ r.teams.nation_name }}</span>
                                 </span>
-                                <span class="font-mono font-bold text-slate-400 flex items-center gap-1.5">
+                                <span class="font-mono font-bold text-indigo-200 flex items-center gap-1.5">
                                     {% if r.medal_type == 'gold' %}🥇{% elif r.medal_type == 'silver' %}🥈{% elif r.medal_type == 'bronze' %}🥉{% endif %}
-                                    <span>{{ r.points }} pts</span>
+                                    <span class="text-white">{{ r.points }} pts</span>
                                 </span>
                             </div>
                         {% endfor %}
