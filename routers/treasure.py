@@ -22,7 +22,11 @@ async def treasure_hunt_page(request: Request, team: dict = Depends(require_team
     items_res = supabase.table("treasure_hunt_items").select("*").execute()
     items = items_res.data if items_res.data else []
 
-    progress_res = supabase.table("team_treasure_progress").select("*").eq("team_id", team["id"]).execute()
+    # Determine the lookup key: use treasure_group_id if available, fallback to team['id']
+    group_id = team.get("treasure_group_id") or team["id"]
+
+    # Fetch progress for the shared group so both teammates see the same checklist status
+    progress_res = supabase.table("team_treasure_progress").select("*").eq("team_id", group_id).execute()
     progress_map = {p["item_id"]: p for p in progress_res.data} if progress_res.data else {}
 
     return templates.TemplateResponse(
@@ -41,8 +45,10 @@ async def treasure_hunt_page(request: Request, team: dict = Depends(require_team
 
 @router.post("/submit")
 async def submit_treasure_item(request: Request, item_id: str = Form(...), photo: UploadFile = File(...), team: dict = Depends(require_team)):
+    group_id = team.get("treasure_group_id") or team["id"]
+    
     file_bytes = await photo.read()
-    file_path = f"{team['id']}/{item_id}_{photo.filename}"
+    file_path = f"{group_id}/{item_id}_{photo.filename}"
     
     supabase.storage.from_("treasure-hunt-uploads").upload(
         path=file_path,
@@ -53,8 +59,9 @@ async def submit_treasure_item(request: Request, item_id: str = Form(...), photo
     public_url_res = supabase.storage.from_("treasure-hunt-uploads").get_public_url(file_path)
     image_url = public_url_res if isinstance(public_url_res, str) else public_url_res.get("publicURL", "")
 
+    # Upsert using the group_id so both partners share the submission record
     supabase.table("team_treasure_progress").upsert({
-        "team_id": team["id"],
+        "team_id": group_id,
         "item_id": item_id,
         "image_url": image_url,
         "status": "pending"
