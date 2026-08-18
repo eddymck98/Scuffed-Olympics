@@ -55,14 +55,38 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
         reverse=True
     )
 
-    # Fetch ONLY medal winners for the recent activity feed
+    # Fetch medal results for the rolling news ticker
     activity_res = supabase.table("event_results") \
         .select("event_name, medal_type, recorded_at, teams(nation_name, flag_emoji)") \
         .neq("medal_type", "none") \
         .order("recorded_at", desc=True) \
         .limit(6) \
         .execute()
-    activities = activity_res.data if activity_res.data else []
+    
+    # Fetch recent shot forfeits for the rolling news ticker
+    shots_res = supabase.table("shots_log") \
+        .select("amount, reason, recorded_at, teams(nation_name, flag_emoji)") \
+        .order("recorded_at", desc=True) \
+        .limit(6) \
+        .execute()
+
+    # Combine and format news ticker items
+    news_items = []
+    for act in (activity_res.data or []):
+        news_items.append({
+            "type": "medal",
+            "text": f"{act['teams']['flag_emoji']} {act['teams']['nation_name']} won {act['medal_type'].upper()} in {act['event_name']}!",
+            "recorded_at": act["recorded_at"]
+        })
+    for shot in (shots_res.data or []):
+        news_items.append({
+            "type": "shot",
+            "text": f"🍻 {shot['teams']['flag_emoji']} {shot['teams']['nation_name']} penalized +{shot['amount']} shots! Reason: {shot['reason']}",
+            "recorded_at": shot["recorded_at"]
+        })
+    
+    # Sort combined feed by timestamp descending
+    news_items = sorted(news_items, key=lambda x: x["recorded_at"], reverse=True)[:10]
 
     template = templates.get_template("index.html")
     html_content = template.render({
@@ -70,7 +94,7 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
         "team": team, 
         "teams": teams,
         "standings": sorted_standings,
-        "activities": activities,
+        "activities": news_items,
         "shots_history": shots_history,
         "treasure_visible": treasure_visible,
         "escape_visible": escape_visible
