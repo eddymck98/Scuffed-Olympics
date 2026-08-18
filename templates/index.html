@@ -78,7 +78,6 @@
             <!-- Custom Watermarked Row Cards -->
             <div class="space-y-3">
                 {% for row in standings %}
-                    <!-- Exact duplicate of the working nations.html flag mapping logic -->
                     {% set n = row.nation_name|lower|trim %}
                     
                     {% if n == 'wales' %}
