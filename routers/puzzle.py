@@ -17,9 +17,12 @@ STAGE_ANSWERS = {
 
 @router.get("", response_class=HTMLResponse)
 async def escape_room_page(request: Request, team: dict = Depends(require_team)):
+    # Fetch all feature flags/settings so the base layout navigation works properly
     settings_res = supabase.table("app_settings").select("key, is_active").execute()
     settings = {s["key"]: s["is_active"] for s in settings_res.data} if settings_res.data else {}
+    
     escape_visible = settings.get("puzzle_room_active", False)
+    treasure_visible = settings.get("treasure_hunt_active", False)
 
     prog_res = supabase.table("puzzle_progress").select("current_stage").eq("team_id", team["id"]).execute()
     current_stage = prog_res.data[0]["current_stage"] if prog_res.data else 1
@@ -31,7 +34,8 @@ async def escape_room_page(request: Request, team: dict = Depends(require_team))
             "request": request,
             "team": team,
             "current_stage": current_stage,
-            "escape_visible": escape_visible
+            "escape_visible": escape_visible,
+            "treasure_visible": treasure_visible
         }
     )
 
