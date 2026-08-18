@@ -1,42 +1,42 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-3xl mx-auto space-y-8 pb-20 px-4 relative">
+<div class="max-w-3xl mx-auto space-y-6 pb-20 px-4 relative pt-2">
 
     <!-- Olympic Ring Color Gradient Accent Bar -->
     <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
 
     <!-- Hero Header with Integrated Official Logo (Matching other pages) -->
-    <div class="relative py-10 px-6 text-center space-y-4 overflow-hidden bg-gradient-to-b from-slate-900/90 to-slate-900/40 rounded-[3rem] border border-slate-800 shadow-2xl">
+    <div class="relative py-8 px-6 text-center space-y-4 overflow-hidden bg-gradient-to-b from-indigo-950/90 to-purple-950/60 rounded-[3rem] border border-indigo-800/60 shadow-2xl backdrop-blur-md">
         <div class="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-blue-500/10 rounded-full blur-[90px] pointer-events-none"></div>
         <div class="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-red-500/10 rounded-full blur-[90px] pointer-events-none"></div>
 
         <div class="relative z-10 flex flex-col items-center space-y-4">
             <!-- Small Games Logo Badge -->
-            <div class="p-2.5 bg-slate-950/80 rounded-2xl border border-yellow-500/30 shadow-lg">
+            <div class="p-2.5 bg-indigo-950 rounded-2xl border border-amber-500/40 shadow-lg">
                 <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/static/image/logo.png?raw=true" alt="Logo" class="h-16 w-16 object-contain drop-shadow-[0_0_12px_rgba(234,179,8,0.6)]">
             </div>
 
             <div class="space-y-1">
                 <div class="flex items-center justify-center gap-2 text-xs font-black tracking-widest uppercase">
-                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-400 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
                     <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.8)]"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
-                    <span class="text-slate-300 ml-1">Scuffed Games 2026</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-400 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
+                    <span class="text-indigo-200 ml-1">Scuffed Games 2026</span>
                 </div>
-                <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase bg-gradient-to-r from-blue-400 via-yellow-300 to-red-400 bg-clip-text text-transparent">
+                <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase bg-gradient-to-r from-blue-300 via-yellow-300 to-red-300 bg-clip-text text-transparent">
                     🧩 Puzzle Chamber
                 </h1>
-                <p class="text-xs sm:text-sm text-slate-400 font-medium">Solve each trial sequentially to unlock the next chamber. Speed and wits will save you!</p>
+                <p class="text-xs sm:text-sm text-indigo-200 font-medium">Solve each trial sequentially to unlock the next chamber. Speed and wits will save you!</p>
             </div>
         </div>
     </div>
 
     <!-- Chamber Container -->
-    <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-8 shadow-xl space-y-6">
+    <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-8 shadow-xl space-y-6 backdrop-blur-md">
         
         <!-- Progress Bar Indicator -->
-        <div class="flex items-center justify-between border-b border-slate-800 pb-4 text-xs font-mono font-bold text-slate-400 uppercase">
+        <div class="flex items-center justify-between border-b border-indigo-800/60 pb-4 text-xs font-mono font-bold text-indigo-200 uppercase">
             <span>Chamber Progress</span>
             <span class="text-amber-400">Stage {{ current_stage }} of 5</span>
         </div>
@@ -44,16 +44,16 @@
         {% if current_stage == 1 %}
             <!-- STAGE 1: The Scuffed Riddle -->
             <div class="space-y-4">
-                <div class="bg-slate-950 p-5 rounded-2xl border border-amber-500/30 space-y-2">
-                    <span class="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded">Trial #1: The Scuffed Riddle</span>
-                    <h3 class="text-sm font-bold text-slate-100 leading-relaxed">
+                <div class="bg-purple-950/80 p-5 rounded-2xl border border-amber-500/40 space-y-2 shadow-inner">
+                    <span class="text-[10px] font-black uppercase text-amber-300 bg-amber-500/20 px-2.5 py-1 rounded border border-amber-500/30">Trial #1: The Scuffed Riddle</span>
+                    <h3 class="text-sm font-bold text-white leading-relaxed drop-shadow">
                         "I have keys but no locks. I have space but no room. You can enter, but can't go outside. What am I?"
                     </h3>
                 </div>
 
                 <form action="/escape-room/submit" method="POST" class="space-y-4">
                     <input type="hidden" name="stage" value="1">
-                    <input type="text" name="answer" required placeholder="Type your answer..." autocomplete="off" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-xs text-slate-200 outline-none focus:border-amber-400 transition shadow-inner">
+                    <input type="text" name="answer" required placeholder="Type your answer..." autocomplete="off" class="w-full bg-purple-950/80 border border-indigo-700/80 rounded-2xl p-3.5 text-xs text-white outline-none focus:border-amber-400 transition shadow-inner">
                     <button type="submit" class="w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-slate-950 font-black text-xs uppercase tracking-widest py-4 rounded-2xl hover:brightness-110 transition shadow-lg shadow-amber-500/20">
                         Unlock Chamber 2 &rarr;
                     </button>
@@ -63,16 +63,16 @@
         {% elif current_stage == 2 %}
             <!-- STAGE 2: Cipher Decode -->
             <div class="space-y-4">
-                <div class="bg-slate-950 p-5 rounded-2xl border border-blue-500/30 space-y-2">
-                    <span class="text-[10px] font-black uppercase text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded">Trial #2: Secret Cipher</span>
-                    <h3 class="text-sm font-bold text-slate-100">Decode this encrypted message:</h3>
-                    <p class="text-xl font-mono font-black text-amber-400 tracking-widest py-2">BUGMFUFT</p>
+                <div class="bg-purple-950/80 p-5 rounded-2xl border border-blue-400/40 space-y-2 shadow-inner">
+                    <span class="text-[10px] font-black uppercase text-blue-300 bg-blue-500/20 px-2.5 py-1 rounded border border-blue-500/30">Trial #2: Secret Cipher</span>
+                    <h3 class="text-sm font-bold text-white drop-shadow">Decode this encrypted message:</h3>
+                    <p class="text-xl font-mono font-black text-amber-300 tracking-widest py-2">BUGMFUFT</p>
                 </div>
 
                 <form action="/escape-room/submit" method="POST" class="space-y-4">
                     <input type="hidden" name="stage" value="2">
-                    <input type="text" name="answer" required placeholder="Decoded word..." autocomplete="off" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-xs text-slate-200 outline-none focus:border-amber-400 transition shadow-inner">
-                    <button type="submit" class="w-full bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl hover:brightness-110 transition shadow-lg shadow-blue-500/20">
+                    <input type="text" name="answer" required placeholder="Decoded word..." autocomplete="off" class="w-full bg-purple-950/80 border border-indigo-700/80 rounded-2xl p-3.5 text-xs text-white outline-none focus:border-amber-400 transition shadow-inner">
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-500 via-indigo-600 to-blue-600 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl hover:brightness-110 transition shadow-lg shadow-blue-500/20">
                         Unlock Chamber 3 &rarr;
                     </button>
                 </form>
@@ -81,9 +81,9 @@
         {% elif current_stage == 3 %}
             <!-- STAGE 3: Interactive Wordle Grid -->
             <div class="space-y-4 text-center">
-                <div class="bg-slate-950 p-5 rounded-2xl border border-emerald-500/30 space-y-2 text-left">
-                    <span class="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded">Trial #3: Wordle Challenge</span>
-                    <h3 class="text-sm font-bold text-slate-100">Guess the 5-letter party secret word (What is everyone's favorite post-event activity?):</h3>
+                <div class="bg-purple-950/80 p-5 rounded-2xl border border-emerald-500/40 space-y-2 text-left shadow-inner">
+                    <span class="text-[10px] font-black uppercase text-emerald-300 bg-emerald-500/20 px-2.5 py-1 rounded border border-emerald-500/30">Trial #3: Wordle Challenge</span>
+                    <h3 class="text-sm font-bold text-white drop-shadow">Guess the 5-letter party secret word (What is everyone's favorite post-event activity?):</h3>
                 </div>
 
                 <!-- Wordle Grid Board -->
@@ -94,7 +94,7 @@
                     <input type="hidden" name="answer" id="wordleInputVal" value="">
                 </form>
                 
-                <p class="text-[11px] text-slate-400">Type letters on your keyboard and press Enter to submit a guess!</p>
+                <p class="text-[11px] text-indigo-200">Type letters on your keyboard and press Enter to submit a guess!</p>
             </div>
 
             <script>
@@ -110,7 +110,7 @@
                     for (let c = 0; c < 5; c++) {
                         const tile = document.createElement("div");
                         tile.id = `tile-${r}-${c}`;
-                        tile.className = "w-12 h-12 rounded-xl bg-slate-950 border-2 border-slate-800 flex items-center justify-center text-lg font-black text-white uppercase transition-all";
+                        tile.className = "w-12 h-12 rounded-xl bg-purple-950/80 border-2 border-indigo-800/80 flex items-center justify-center text-lg font-black text-white uppercase transition-all shadow-inner";
                         rowDiv.appendChild(tile);
                     }
                     grid.appendChild(rowDiv);
@@ -176,11 +176,11 @@
                     for (let c = 0; c < 5; c++) {
                         const tile = document.getElementById(`tile-${currentRow}-${c}`);
                         if (statuses[c] === 'correct') {
-                            tile.className = "w-12 h-12 rounded-xl bg-emerald-600 border-2 border-emerald-500 flex items-center justify-center text-lg font-black text-white uppercase";
+                            tile.className = "w-12 h-12 rounded-xl bg-emerald-600 border-2 border-emerald-500 flex items-center justify-center text-lg font-black text-white uppercase shadow-inner";
                         } else if (statuses[c] === 'present') {
-                            tile.className = "w-12 h-12 rounded-xl bg-amber-500 border-2 border-amber-400 flex items-center justify-center text-lg font-black text-slate-950 uppercase";
+                            tile.className = "w-12 h-12 rounded-xl bg-amber-500 border-2 border-amber-400 flex items-center justify-center text-lg font-black text-slate-950 uppercase shadow-inner";
                         } else {
-                            tile.className = "w-12 h-12 rounded-xl bg-slate-800 border-2 border-slate-700 flex items-center justify-center text-lg font-black text-slate-400 uppercase";
+                            tile.className = "w-12 h-12 rounded-xl bg-indigo-950 border-2 border-indigo-800 flex items-center justify-center text-lg font-black text-indigo-300 uppercase shadow-inner";
                         }
                     }
 
@@ -209,19 +209,19 @@
         {% elif current_stage == 4 %}
             <!-- STAGE 4: Bomb Defusal Panel -->
             <div class="space-y-6 text-center">
-                <div class="bg-slate-950 p-6 rounded-3xl border-2 border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.15)] space-y-3">
+                <div class="bg-purple-950/80 p-6 rounded-3xl border-2 border-red-500/40 shadow-[0_0_30px_rgba(239,68,68,0.15)] space-y-3 shadow-inner">
                     <div class="flex items-center justify-between">
-                        <span class="text-[10px] font-black uppercase text-red-400 bg-red-500/10 px-3 py-1 rounded-full animate-pulse tracking-wider">⚠️ BOMB DEFUSAL TERMINAL</span>
-                        <span class="text-xs font-mono text-red-500 font-black animate-ping">● LIVE</span>
+                        <span class="text-[10px] font-black uppercase text-red-300 bg-red-500/20 px-3 py-1 rounded-full animate-ping tracking-wider border border-red-500/30">⚠️ BOMB DEFUSAL TERMINAL</span>
+                        <span class="text-xs font-mono text-red-400 font-black animate-pulse">● LIVE</span>
                     </div>
-                    <h3 class="text-base font-black text-white uppercase tracking-wide">Cut the 7 wires in the exact correct sequence!</h3>
-                    <p class="text-xs text-slate-400">Warning: Choosing an incorrect wire or wrong position will trigger an immediate system failure.</p>
+                    <h3 class="text-base font-black text-white uppercase tracking-wide drop-shadow">Cut the 7 wires in the exact correct sequence!</h3>
+                    <p class="text-xs text-indigo-200">Warning: Choosing an incorrect wire or wrong position will trigger an immediate system failure.</p>
                 </div>
 
-                <div class="bg-slate-950 border-4 border-slate-800 rounded-3xl p-6 shadow-2xl space-y-6">
-                    <div class="bg-black/80 border-2 border-red-500/30 rounded-2xl p-4 shadow-inner">
-                        <span class="text-[10px] text-slate-500 uppercase font-mono block tracking-widest">Active Sequence Log</span>
-                        <span id="wireDisplay" class="text-sm font-black text-red-500 font-mono tracking-widest uppercase">--- WAITING FOR INPUT ---</span>
+                <div class="bg-indigo-950 border-4 border-indigo-800/80 rounded-3xl p-6 shadow-2xl space-y-6">
+                    <div class="bg-black/90 border-2 border-red-500/30 rounded-2xl p-4 shadow-inner">
+                        <span class="text-[10px] text-indigo-300 uppercase font-mono block tracking-widest">Active Sequence Log</span>
+                        <span id="wireDisplay" class="text-sm font-black text-red-400 font-mono tracking-widest uppercase">--- WAITING FOR INPUT ---</span>
                     </div>
 
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-md mx-auto">
@@ -240,7 +240,7 @@
                     </form>
 
                     <div>
-                        <button type="button" onclick="resetWires()" class="text-xs text-rose-400 hover:text-rose-300 font-mono font-black uppercase tracking-wider underline">Force System Reset</button>
+                        <button type="button" onclick="resetWires()" class="text-xs text-rose-300 hover:text-rose-200 font-mono font-black uppercase tracking-wider underline">Force System Reset</button>
                     </div>
                 </div>
             </div>
@@ -280,15 +280,15 @@
 
         {% else %}
             <!-- STAGE 5: Final Prompt for Ed's Table -->
-            <div class="bg-gradient-to-br from-amber-500/20 via-slate-950 to-rose-500/20 border-2 border-amber-400 rounded-3xl p-8 text-center space-y-6 shadow-2xl animate-pulse">
+            <div class="bg-gradient-to-br from-amber-500/20 via-purple-950/90 to-rose-500/20 border-2 border-amber-400 rounded-3xl p-8 text-center space-y-6 shadow-2xl animate-pulse backdrop-blur-md">
                 <span class="text-5xl">🏆</span>
                 <div class="space-y-3">
-                    <h2 class="text-amber-400 font-black uppercase text-lg tracking-widest">All Puzzles Conquered!</h2>
-                    <p class="text-sm sm:text-base font-black text-white uppercase tracking-wider leading-relaxed">
-                        FINAL INSTRUCTION: Place an item on the table in front of Ed beginning with the letter <span class="text-yellow-400 text-2xl underline">P</span>!
+                    <h2 class="text-amber-300 font-black uppercase text-lg tracking-widest drop-shadow">All Puzzles Conquered!</h2>
+                    <p class="text-sm sm:text-base font-black text-white uppercase tracking-wider leading-relaxed drop-shadow">
+                        FINAL INSTRUCTION: Place an item on the table in front of Ed beginning with the letter <span class="text-yellow-300 text-2xl underline">P</span>!
                     </p>
                 </div>
-                <p class="text-xs text-slate-400 italic">Bring your item immediately to claim ultimate escape room victory!</p>
+                <p class="text-xs text-indigo-200 italic">Bring your item immediately to claim ultimate escape room victory!</p>
             </div>
         {% endif %}
 
