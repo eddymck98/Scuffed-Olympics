@@ -17,72 +17,85 @@
 
     {% if request.url.path not in ['/login', '/admin/login'] %}
     <!-- Top Navigation Bar -->
-    <header class="bg-slate-900/90 backdrop-blur-md border-b border-amber-500/30 sticky top-0 z-50 shadow-2xl shadow-amber-500/5">
+    <header class="bg-slate-900/95 backdrop-blur-md border-b border-amber-500/30 sticky top-0 z-50 shadow-2xl">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 
-                <!-- Fixed Logo & Title with Olympic Rings -->
+                <!-- Logo & Title -->
                 <a href="/" class="flex items-center space-x-3 group">
-                    <div class="p-2 bg-slate-950/60 rounded-2xl border border-amber-500/30 group-hover:border-amber-400 transition shadow-inner">
-                        <img src="https://www.freepnglogos.com/uploads/olympic-rings-png/olympic-rings-nbc-universal-pay-billion-keep-olympics-17.png" 
-                             alt="Olympic Rings" 
-                             class="h-7 w-auto object-contain transform group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]">
+                    <div class="p-1.5 bg-slate-950 rounded-2xl border border-amber-500/40 group-hover:border-amber-400 transition shadow-inner">
+                        <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/static/image/logo.png?raw=true" 
+                             alt="Logo" 
+                             class="h-10 w-10 object-contain transform group-hover:scale-105 transition-transform duration-300">
                     </div>
                     <div class="flex flex-col">
-                        <span class="font-black text-lg sm:text-xl tracking-wider bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-500 bg-clip-text text-transparent drop-shadow-sm">
+                        <span class="font-black text-base sm:text-lg tracking-wider bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-500 bg-clip-text text-transparent">
                             SCUFFED OLYMPICS
                         </span>
                         <span class="text-[10px] font-extrabold uppercase tracking-widest text-amber-400/80">
-                            ✨ Paris 2024 Vibe • 2026 Edition
+                            ⚡ 2026 Edition
                         </span>
                     </div>
                 </a>
 
-                <!-- Nav Links (Desktop) -->
-                <nav class="hidden md:flex space-x-3 text-xs font-bold uppercase tracking-wider items-center">
-                    <a href="/" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition border border-transparent hover:border-amber-500/20">📊 Dashboard</a>
-                    <a href="/events" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition border border-transparent hover:border-amber-500/20">🎯 Events & Rules</a>
-                    <a href="/nations" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition border border-transparent hover:border-amber-500/20">🌍 Nations</a>
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden lg:flex space-x-2 text-xs font-bold uppercase tracking-wider items-center">
+                    <a href="/" class="px-3 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition">Dashboard</a>
+                    <a href="/events" class="px-3 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition">Events</a>
+                    <a href="/nations" class="px-3 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition">Nations</a>
                     
                     {% if treasure_visible %}
-                        <a href="/treasure-hunt" class="px-3.5 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/40 shadow-sm">🏴‍☠️ Treasure Hunt</a>
+                        <a href="/treasure-hunt" class="px-3 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/30">🏴‍☠️ Hunt</a>
                     {% endif %}
                     {% if escape_visible %}
-                        <a href="/escape-room" class="px-3.5 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/40 shadow-sm">🧩 Escape Room</a>
+                        <a href="/escape-room" class="px-3 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/30">🧩 Escape</a>
                     {% endif %}
                     
                     {% if request.cookies.get("is_admin") == "true" %}
-                        <a href="/admin" class="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 px-4 py-2 rounded-xl font-black hover:brightness-110 transition shadow-lg shadow-amber-500/30 transform hover:-translate-y-0.5">
-                            👑 Commissioner Panel
+                        <a href="/admin" class="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 px-3.5 py-2 rounded-xl font-black hover:brightness-110 transition shadow-md shadow-amber-500/20">
+                            👑 Admin
                         </a>
                     {% endif %}
                 </nav>
 
-                <!-- Logged In User & Logout -->
+                <!-- User Info & Logout (Desktop) & Mobile Toggle Button -->
                 <div class="flex items-center space-x-3">
                     {% if request.cookies.get("nation_name") %}
-                        <span class="hidden sm:inline-block text-[11px] bg-slate-950 text-amber-300 border border-amber-500/40 px-3.5 py-2 rounded-xl font-extrabold shadow-inner tracking-wide">
-                            ⚡ Rep: {{ request.cookies.get("nation_name") }}
+                        <span class="hidden sm:inline-block text-[11px] bg-slate-950 text-amber-300 border border-amber-500/40 px-3 py-2 rounded-xl font-extrabold shadow-inner">
+                            ⚡ {{ request.cookies.get("nation_name") }}
                         </span>
-                        <a href="/logout" class="text-xs text-slate-400 hover:text-rose-400 transition font-bold px-3.5 py-2 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-rose-500/30">Logout</a>
+                        <a href="/logout" class="hidden sm:inline-block text-xs text-slate-400 hover:text-rose-400 transition font-bold px-3 py-2 rounded-xl bg-slate-950/60 border border-slate-800">Logout</a>
                     {% endif %}
+
+                    <!-- Mobile Menu Button -->
+                    <button type="button" onclick="toggleMobileMenu()" class="lg:hidden p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-amber-400 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Nav Bar -->
-        <div class="md:hidden flex justify-around bg-slate-950/90 border-t border-amber-500/20 py-2.5 text-[11px] font-bold uppercase tracking-wider items-center flex-wrap gap-y-1.5 px-2">
-            <a href="/" class="text-slate-300 hover:text-amber-400">Dashboard</a>
-            <a href="/events" class="text-slate-300 hover:text-amber-400">Events</a>
-            <a href="/nations" class="text-slate-300 hover:text-amber-400">Nations</a>
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-slate-950 border-t border-slate-800 px-4 py-4 space-y-3 text-xs font-bold uppercase tracking-wider">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-900 text-amber-400">
+                <span>⚡ {{ request.cookies.get("nation_name") or 'Competitor' }}</span>
+                <a href="/logout" class="text-rose-400 underline">Logout</a>
+            </div>
+            <a href="/" class="block px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-900">Dashboard</a>
+            <a href="/events" class="block px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-900">Events & Rules</a>
+            <a href="/nations" class="block px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-900">Nations</a>
+            
             {% if treasure_visible %}
-                <a href="/treasure-hunt" class="text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">Hunt</a>
+                <a href="/treasure-hunt" class="block px-3 py-2 rounded-xl text-amber-300 bg-amber-500/10 border border-amber-500/30">🏴‍☠️ Treasure Hunt</a>
             {% endif %}
             {% if escape_visible %}
-                <a href="/escape-room" class="text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">Escape</a>
+                <a href="/escape-room" class="block px-3 py-2 rounded-xl text-amber-300 bg-amber-500/10 border border-amber-500/30">🧩 Escape Room</a>
             {% endif %}
+            
             {% if request.cookies.get("is_admin") == "true" %}
-                <a href="/admin" class="text-amber-300 bg-amber-500/20 px-2 py-1 rounded-lg border border-amber-500/40 font-black">👑 Admin</a>
+                <a href="/admin" class="block px-3 py-2 rounded-xl text-slate-950 bg-amber-400 font-black text-center">👑 Commissioner Panel</a>
             {% endif %}
         </div>
     </header>
@@ -97,14 +110,19 @@
     <!-- Footer -->
     <footer class="bg-slate-900/80 border-t border-slate-800 py-6 text-center text-xs text-slate-400">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <span>Scuffed Olympics &copy; 2026 &bull; Authorized Personnel & Competitors Only</span>
+            <span>Scuffed Olympics &copy; 2026 &bull; Authorized Personnel Only</span>
             <span class="text-amber-400/80 font-bold">🏆 Let the games begin!</span>
         </div>
     </footer>
     {% endif %}
 
-    <!-- Global Toast Script -->
+    <!-- Scripts -->
     <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
         function showToast(msg) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
