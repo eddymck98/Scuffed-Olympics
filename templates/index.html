@@ -78,25 +78,26 @@
             <!-- Custom Watermarked Row Cards -->
             <div class="space-y-3">
                 {% for row in standings %}
+                    <!-- Exact duplicate of the working nations.html flag mapping logic -->
                     {% set n = row.nation_name|lower|trim %}
                     
-                    {% if 'wales' in n or 'wls' in n %}
+                    {% if n == 'wales' %}
                         {% set flag_url = 'https://flagcdn.com/w640/gb-wls.png' %}
-                    {% elif 'austria' in n or 'at' in n %}
+                    {% elif n == 'austria' %}
                         {% set flag_url = 'https://flagcdn.com/w640/at.png' %}
-                    {% elif 'china' in n or 'cn' in n or 'ch' in n %}
+                    {% elif n == 'china' %}
                         {% set flag_url = 'https://flagcdn.com/w640/cn.png' %}
-                    {% elif 'ireland' in n or 'ie' in n %}
+                    {% elif n == 'ireland' %}
                         {% set flag_url = 'https://flagcdn.com/w640/ie.png' %}
-                    {% elif 'united states' in n or 'usa' in n or 'us' in n %}
+                    {% elif n == 'united states' or n == 'usa' %}
                         {% set flag_url = 'https://flagcdn.com/w640/us.png' %}
-                    {% elif 'japan' in n or 'jp' in n %}
+                    {% elif n == 'japan' %}
                         {% set flag_url = 'https://flagcdn.com/w640/jp.png' %}
-                    {% elif 'germany' in n or 'de' in n %}
+                    {% elif n == 'germany' %}
                         {% set flag_url = 'https://flagcdn.com/w640/de.png' %}
-                    {% elif 'canada' in n or 'ca' in n %}
+                    {% elif n == 'canada' %}
                         {% set flag_url = 'https://flagcdn.com/w640/ca.png' %}
-                    {% elif 'brazil' in n or 'br' in n %}
+                    {% elif n == 'brazil' %}
                         {% set flag_url = 'https://flagcdn.com/w640/br.png' %}
                     {% else %}
                         {% set flag_url = 'https://flagcdn.com/w640/gb.png' %}
