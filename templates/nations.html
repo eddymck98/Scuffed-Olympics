@@ -1,67 +1,109 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-7xl mx-auto space-y-8 pb-16 relative">
+<div class="max-w-7xl mx-auto py-6 px-4 space-y-8 relative overflow-hidden">
     
     <!-- Olympic Ring Color Gradient Accent Bar -->
     <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
 
-    <!-- Compact, Sleek Header (No Broken Logo, High Energy Party Vibe) -->
-    <div class="relative py-8 px-6 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 rounded-3xl border border-amber-500/30 shadow-xl text-center space-y-3 overflow-hidden">
-        <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none text-9xl">⚔️</div>
-        
-        <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1 rounded-full text-amber-400 text-[10px] font-black uppercase tracking-widest shadow-inner">
-            <span>🏆</span> The Gauntlet Awaits <span>🏆</span>
+    <!-- Hero Header -->
+    <div class="relative py-8 px-6 text-center space-y-3 overflow-hidden bg-gradient-to-b from-slate-900/60 to-transparent rounded-[2.5rem] border border-slate-800 shadow-xl">
+        <div class="relative z-10 flex flex-col items-center space-y-3">
+            <span class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 text-slate-950 text-[10px] font-black px-5 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
+                🏛️ Participating Delegations & Player Cards 🏛️
+            </span>
+            <h1 class="text-2xl sm:text-4xl font-black text-white tracking-tight uppercase">THE NATIONS</h1>
         </div>
-        
-        <h1 class="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">
-            Events & <span class="bg-gradient-to-r from-blue-400 via-yellow-400 to-red-400 bg-clip-text text-transparent">Battlegrounds</span>
-        </h1>
-        
-        <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto font-medium">
-            Prepare your reflexes, test your questionable coordination, and brace for absolute chaos. Exact rules remain classified until game time!
-        </p>
     </div>
 
-    <!-- SCORING PROTOCOL & RULES SECTION -->
-    <div class="space-y-4">
-        <div class="flex items-center gap-2.5 border-b border-slate-800 pb-3">
-            <div class="w-2.5 h-6 bg-yellow-400 rounded-full shadow-[0_0_10px_rgba(250,204,21,0.5)]"></div>
-            <h2 class="text-base font-black text-white uppercase tracking-wider">Scoring Protocol & Rules</h2>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Nations Player Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pt-1">
+        {% for t in teams %}
+            <!-- Pure Nation Name Mapping -->
+            {% set n = t.nation_name|lower|trim %}
+            {% if n == 'wales' %}
+                {% set flag_url = 'https://flagcdn.com/w640/gb-wls.png' %}
+            {% elif n == 'austria' %}
+                {% set flag_url = 'https://flagcdn.com/w640/at.png' %}
+            {% elif n == 'china' %}
+                {% set flag_url = 'https://flagcdn.com/w640/cn.png' %}
+            {% elif n == 'ireland' %}
+                {% set flag_url = 'https://flagcdn.com/w640/ie.png' %}
+            {% elif n == 'united states' or n == 'usa' %}
+                {% set flag_url = 'https://flagcdn.com/w640/us.png' %}
+            {% elif n == 'japan' %}
+                {% set flag_url = 'https://flagcdn.com/w640/jp.png' %}
+            {% elif n == 'germany' %}
+                {% set flag_url = 'https://flagcdn.com/w640/de.png' %}
+            {% elif n == 'canada' %}
+                {% set flag_url = 'https://flagcdn.com/w640/ca.png' %}
+            {% elif n == 'brazil' %}
+                {% set flag_url = 'https://flagcdn.com/w640/br.png' %}
+            {% else %}
+                {% set flag_url = 'https://flagcdn.com/w640/gb.png' %}
+            {% endif %}
             
-            <!-- Standard Events Card -->
-            <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/40 rounded-2xl p-6 shadow-xl space-y-3 transition">
-                <div class="flex items-center gap-2 text-amber-400 font-black text-xs uppercase tracking-widest">
-                    <span>🎯</span> Standard Events
+            <div class="relative overflow-hidden bg-slate-900/85 border-2 {% if t.nation_name == team.nation_name %}border-yellow-500 shadow-yellow-500/10{% else %}border-slate-800 hover:border-blue-500/50{% endif %} rounded-2xl p-4 shadow-xl transition-all group">
+                
+                <!-- Transparent Waving Flag Watermark Background -->
+                <div class="absolute inset-0 opacity-[0.12] bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" 
+                     style="background-image: url('{{ flag_url }}');">
                 </div>
-                <p class="text-xs text-slate-300 leading-relaxed">
-                    Scored by placement: 7th gets 10 points, 1st gets 8 points (with scaling positions in between). DNP means 0 points. May the best athlete survive!
-                </p>
-            </div>
 
-            <!-- Duck Hunt Card -->
-            <div class="bg-slate-900/90 border border-slate-800 hover:border-yellow-500/40 rounded-2xl p-6 shadow-xl space-y-3 transition">
-                <div class="flex items-center gap-2 text-yellow-400 font-black text-xs uppercase tracking-widest">
-                    <span>🦆</span> Duck Hunt
+                <div class="relative z-10 space-y-3">
+                    <!-- Top Bar: Flag & Status Badge -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-3xl p-1.5 bg-slate-950/80 rounded-xl border border-slate-800 shadow-inner group-hover:scale-105 transition-transform inline-block">
+                                {{ t.flag_emoji }}
+                            </span>
+                            <div>
+                                <h3 class="font-black text-base text-white group-hover:text-yellow-400 transition-colors uppercase tracking-wide leading-tight">
+                                    {{ t.nation_name }}
+                                </h3>
+                                <p class="text-[11px] font-mono text-slate-300">
+                                    Athlete: <span class="text-amber-400 font-bold uppercase">{{ t.participant_name | default("Competitor") }}</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div>
+                            {% if t.is_admin %}
+                                <span class="bg-yellow-500/20 text-yellow-400 text-[9px] font-black px-2.5 py-0.5 rounded-full border border-yellow-500/30 tracking-widest">
+                                    👑 COMMISH
+                                </span>
+                            {% elif t.nation_name == team.nation_name %}
+                                <span class="bg-blue-500/20 text-blue-400 text-[9px] font-black px-2.5 py-0.5 rounded-full border border-blue-500/30 tracking-widest">
+                                    ⭐ YOU
+                                </span>
+                            {% else %}
+                                <span class="bg-green-500/20 text-green-400 text-[9px] font-black px-2.5 py-0.5 rounded-full border border-green-500/30 tracking-widest">
+                                    ACTIVE
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Player Card Stat Badges -->
+                    <div class="grid grid-cols-2 gap-2 text-xs font-mono pt-1 border-t border-slate-800/80">
+                        <div class="bg-slate-950/80 border border-slate-800/60 p-2 rounded-xl text-center">
+                            <span class="block text-[8px] text-slate-400 uppercase font-sans font-bold">Olympics Attended</span>
+                            <span class="font-black text-yellow-400 text-xs mt-0.5 block truncate">{{ t.olympics_attended | default("1 (2026)") }}</span>
+                        </div>
+                        <div class="bg-slate-950/80 border border-slate-800/60 p-2 rounded-xl text-center">
+                            <span class="block text-[8px] text-slate-400 uppercase font-sans font-bold">Status</span>
+                            <span class="font-black text-green-400 text-xs mt-0.5 block">Ready for Chaos</span>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-xs text-slate-300 leading-relaxed">
-                    Special scoring: The total number of mini resin ducks you successfully find equals your exact point total! Every duck counts toward glory.
-                </p>
-            </div>
 
-            <!-- City Treasure Hunt Card -->
-            <div class="bg-slate-900/90 border border-slate-800 hover:border-blue-500/40 rounded-2xl p-6 shadow-xl space-y-3 transition">
-                <div class="flex items-center gap-2 text-blue-400 font-black text-xs uppercase tracking-widest">
-                    <span>🗺️</span> City Treasure Hunt
-                </div>
-                <p class="text-xs text-slate-300 leading-relaxed">
-                    Custom pods: 1st team gets 10 points, 2nd gets 7 points, 3rd gets 4 points, and last gets 1 point. Capture proofs and conquer the checklist!
-                </p>
             </div>
+        {% endfor %}
 
-        </div>
+        {% if not teams %}
+            <div class="col-span-full text-center py-12 bg-slate-900 border border-slate-800 rounded-3xl">
+                <p class="text-xs text-slate-400">No nations registered yet.</p>
+            </div>
+        {% endif %}
     </div>
 
 </div>
