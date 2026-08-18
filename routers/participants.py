@@ -26,9 +26,35 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
     
     standings = {}
     for t in teams:
+        # Determine correct flag URL directly in Python to prevent template lookup mismatches
+        code = (t.get("flag_emoji") or "").lower().strip()
+        name = (t.get("nation_name") or "").lower().strip()
+        
+        if 'wales' in name or code == 'wls' or code == 'gb-wls':
+            flag_url = 'https://flagcdn.com/w640/gb-wls.png'
+        elif 'austria' in name or code == 'at':
+            flag_url = 'https://flagcdn.com/w640/at.png'
+        elif 'ireland' in name or code == 'ie':
+            flag_url = 'https://flagcdn.com/w640/ie.png'
+        elif 'united states' in name or 'usa' in name or code == 'us':
+            flag_url = 'https://flagcdn.com/w640/us.png'
+        elif 'china' in name or code == 'cn' or code == 'ch':
+            flag_url = 'https://flagcdn.com/w640/cn.png'
+        elif 'japan' in name or code == 'jp':
+            flag_url = 'https://flagcdn.com/w640/jp.png'
+        elif 'germany' in name or code == 'de':
+            flag_url = 'https://flagcdn.com/w640/de.png'
+        elif 'canada' in name or code == 'ca':
+            flag_url = 'https://flagcdn.com/w640/ca.png'
+        elif 'brazil' in name or code == 'br':
+            flag_url = 'https://flagcdn.com/w640/br.png'
+        else:
+            flag_url = 'https://flagcdn.com/w640/gb.png'
+
         standings[t["id"]] = {
             "nation_name": t["nation_name"],
             "flag_emoji": t["flag_emoji"],
+            "flag_url": flag_url,
             "gold": 0,
             "silver": 0,
             "bronze": 0,
@@ -147,7 +173,7 @@ async def events_page(request: Request, team: dict = Depends(require_team)):
 
 @router.get("/nations", response_class=HTMLResponse)
 async def nations_page(request: Request, team: dict = Depends(require_team)):
-    # FIX: Explicitly select participant_name and olympics_attended alongside team details
+    # Explicitly select participant_name and olympics_attended alongside team details
     teams_res = supabase.table("teams").select("id, nation_name, participant_name, flag_emoji, is_admin, olympics_attended").execute()
     teams = teams_res.data if teams_res.data else []
 
