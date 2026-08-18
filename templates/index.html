@@ -15,21 +15,21 @@
         </div>
         
         <div id="countdownTimer" class="grid grid-cols-4 gap-2 max-w-sm mx-auto font-mono">
-            <div class="bg-indigo-950/90 border border-indigo-800/60 p-2.5 rounded-2xl shadow-inner">
+            <div class="bg-indigo-950/90 border border-indigo-700/60 p-2.5 rounded-2xl shadow-inner">
                 <span id="days" class="text-xl sm:text-2xl font-black text-white block">00</span>
-                <span class="text-[9px] uppercase font-bold text-slate-400">Days</span>
+                <span class="text-[9px] uppercase font-bold text-indigo-200">Days</span>
             </div>
-            <div class="bg-indigo-950/90 border border-indigo-800/60 p-2.5 rounded-2xl shadow-inner">
+            <div class="bg-indigo-950/90 border border-indigo-700/60 p-2.5 rounded-2xl shadow-inner">
                 <span id="hours" class="text-xl sm:text-2xl font-black text-white block">00</span>
-                <span class="text-[9px] uppercase font-bold text-slate-400">Hours</span>
+                <span class="text-[9px] uppercase font-bold text-indigo-200">Hours</span>
             </div>
-            <div class="bg-indigo-950/90 border border-indigo-800/60 p-2.5 rounded-2xl shadow-inner">
+            <div class="bg-indigo-950/90 border border-indigo-700/60 p-2.5 rounded-2xl shadow-inner">
                 <span id="minutes" class="text-xl sm:text-2xl font-black text-white block">00</span>
-                <span class="text-[9px] uppercase font-bold text-slate-400">Mins</span>
+                <span class="text-[9px] uppercase font-bold text-indigo-200">Mins</span>
             </div>
-            <div class="bg-indigo-950/90 border border-indigo-800/60 p-2.5 rounded-2xl shadow-inner">
+            <div class="bg-indigo-950/90 border border-indigo-700/60 p-2.5 rounded-2xl shadow-inner">
                 <span id="seconds" class="text-xl sm:text-2xl font-black text-amber-400 block">00</span>
-                <span class="text-[9px] uppercase font-bold text-slate-400">Secs</span>
+                <span class="text-[9px] uppercase font-bold text-indigo-200">Secs</span>
             </div>
         </div>
     </div>
@@ -60,39 +60,39 @@
         
         <div class="space-y-1 text-center sm:text-left z-10">
             <div class="flex items-center justify-center sm:justify-start gap-2 text-[10px] font-black tracking-widest uppercase text-amber-400">
-                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                <span class="w-2 h-2 rounded-full bg-blue-400"></span>
                 <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
-                <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                <span class="w-2 h-2 rounded-full bg-green-400"></span>
+                <span class="w-2 h-2 rounded-full bg-red-400"></span>
                 <span>Home Games 2026 🍻</span>
             </div>
             <h1 class="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white">
-                {{ team.greeting | default("WELCOME") }}, <span class="bg-gradient-to-r from-blue-400 via-yellow-400 to-red-400 bg-clip-text text-transparent">{{ team.participant_name }}</span>!
+                {{ team.greeting | default("WELCOME") }}, <span class="bg-gradient-to-r from-blue-300 via-yellow-300 to-red-300 bg-clip-text text-transparent">{{ team.participant_name }}</span>!
             </h1>
         </div>
 
         <!-- Nation Badge -->
-        <div class="inline-flex items-center gap-2.5 bg-indigo-950/80 border border-green-500/40 px-4 py-2 rounded-xl shadow-inner z-10">
-            <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
-            <span class="text-[11px] font-mono font-bold text-slate-400 uppercase">Nation:</span>
-            <strong class="text-green-400 font-black tracking-wider uppercase text-xs">{{ team.nation_name }}</strong>
+        <div class="inline-flex items-center gap-2.5 bg-indigo-950/90 border border-green-500/50 px-4 py-2 rounded-xl shadow-inner z-10">
+            <span class="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></span>
+            <span class="text-[11px] font-mono font-bold text-indigo-200 uppercase">Nation:</span>
+            <strong class="text-green-300 font-black tracking-wider uppercase text-xs">{{ team.nation_name }}</strong>
         </div>
     </div>
 
     <!-- MAIN NEWS TICKER BANNER -->
-    <div class="bg-indigo-950/80 border-y border-yellow-500/30 py-2 px-4 overflow-hidden relative shadow-inner flex items-center rounded-xl">
+    <div class="bg-indigo-950/90 border-y border-yellow-500/30 py-2 px-4 overflow-hidden relative shadow-inner flex items-center rounded-xl">
         <div class="bg-yellow-400 text-slate-950 font-black text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded z-10 shrink-0 mr-3 shadow flex items-center gap-1">
             <span>📢</span> WIRE
         </div>
         <div class="overflow-hidden whitespace-nowrap relative w-full flex">
-            <div class="inline-flex animate-[marquee_25s_linear_infinite] items-center space-x-12 text-xs font-bold text-slate-300">
+            <div class="inline-flex animate-[marquee_25s_linear_infinite] items-center space-x-12 text-xs font-bold text-indigo-100">
                 {% if activities %}
                     {% for act in activities %}
                         <span class="inline-flex items-center gap-2">
                             {% if act.type == 'medal' %}
-                                <span class="text-yellow-400">🏆 MEDAL:</span> {{ act.text }}
+                                <span class="text-yellow-300">🏆 MEDAL:</span> {{ act.text }}
                             {% else %}
-                                <span class="text-red-400">🚨 FORFEIT:</span> {{ act.text }}
+                                <span class="text-red-300">🚨 FORFEIT:</span> {{ act.text }}
                             {% endif %}
                         </span>
                     {% endfor %}
@@ -108,12 +108,12 @@
         
         <!-- Live Medal Standings -->
         <div class="lg:col-span-7 space-y-4">
-            <div class="flex items-center justify-between border-b border-indigo-900/50 pb-3">
+            <div class="flex items-center justify-between border-b border-indigo-800/60 pb-3">
                 <div class="flex items-center gap-2.5">
                     <div class="w-2.5 h-6 bg-yellow-400 rounded-full shadow-[0_0_10px_rgba(250,204,21,0.5)]"></div>
                     <h2 class="text-base font-black text-white uppercase tracking-wider">Live Medal Standings</h2>
                 </div>
-                <span class="text-[11px] font-mono px-2.5 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">Rankings</span>
+                <span class="text-[11px] font-mono px-2.5 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Rankings</span>
             </div>
 
             <!-- Standings Cards -->
@@ -143,31 +143,32 @@
                         {% set flag_url = 'https://flagcdn.com/w640/gb.png' %}
                     {% endif %}
 
-                    <div class="relative overflow-hidden group bg-indigo-950/70 border border-indigo-900/60 rounded-2xl hover:border-yellow-500/40 transition-all shadow-md">
-                        <div class="absolute inset-0 opacity-[0.12] bg-cover bg-center pointer-events-none" style="background-image: url('{{ flag_url }}');"></div>
+                    <!-- Country Card with Increased Flag Opacity (opacity-25) -->
+                    <div class="relative overflow-hidden group bg-indigo-950/60 border border-indigo-800/60 rounded-2xl hover:border-yellow-500/50 transition-all shadow-md">
+                        <div class="absolute inset-0 opacity-25 bg-cover bg-center pointer-events-none" style="background-image: url('{{ flag_url }}');"></div>
 
                         <div class="relative z-10 flex items-center justify-between px-4 py-3.5">
                             <div class="flex items-center gap-3">
                                 <span class="text-2xl">{{ row.flag_emoji }}</span>
-                                <span class="font-black text-white text-sm tracking-wide group-hover:text-yellow-400 transition-colors">{{ row.nation_name }}</span>
+                                <span class="font-black text-white text-sm tracking-wide group-hover:text-yellow-300 transition-colors drop-shadow">{{ row.nation_name }}</span>
                             </div>
 
                             <div class="flex items-center space-x-5 text-xs font-mono">
                                 <div class="text-center">
-                                    <span class="block text-[9px] text-slate-400 font-sans uppercase">Gold</span>
-                                    <span class="font-bold text-yellow-400">🥇 {{ row.gold }}</span>
+                                    <span class="block text-[9px] text-indigo-200 font-sans uppercase">Gold</span>
+                                    <span class="font-bold text-yellow-300">🥇 {{ row.gold }}</span>
                                 </div>
                                 <div class="text-center">
-                                    <span class="block text-[9px] text-slate-400 font-sans uppercase">Silver</span>
-                                    <span class="font-bold text-slate-300">🥈 {{ row.silver }}</span>
+                                    <span class="block text-[9px] text-indigo-200 font-sans uppercase">Silver</span>
+                                    <span class="font-bold text-slate-200">🥈 {{ row.silver }}</span>
                                 </div>
                                 <div class="text-center">
-                                    <span class="block text-[9px] text-slate-400 font-sans uppercase">Bronze</span>
-                                    <span class="font-bold text-amber-600">🥉 {{ row.bronze }}</span>
+                                    <span class="block text-[9px] text-indigo-200 font-sans uppercase">Bronze</span>
+                                    <span class="font-bold text-amber-400">🥉 {{ row.bronze }}</span>
                                 </div>
-                                <div class="text-center pl-2 border-l border-indigo-900/80">
-                                    <span class="block text-[9px] text-red-400 font-sans font-black uppercase">Pts</span>
-                                    <span class="font-black text-red-400 text-base">{{ row.total_points }}</span>
+                                <div class="text-center pl-2 border-l border-indigo-700/80">
+                                    <span class="block text-[9px] text-red-300 font-sans font-black uppercase">Pts</span>
+                                    <span class="font-black text-red-400 text-base drop-shadow">{{ row.total_points }}</span>
                                 </div>
                             </div>
                         </div>
@@ -180,36 +181,36 @@
         <div class="lg:col-span-5 space-y-6">
             
             <!-- Compact Personal Shots Card -->
-            <div class="bg-gradient-to-r from-indigo-950/90 via-purple-950/80 to-indigo-950/90 border border-blue-500/30 p-5 rounded-2xl shadow-xl flex items-center justify-between">
+            <div class="bg-gradient-to-r from-indigo-950/90 via-purple-950/80 to-indigo-950/90 border border-blue-400/40 p-5 rounded-2xl shadow-xl flex items-center justify-between">
                 <div>
                     <h3 class="text-[11px] font-black uppercase tracking-wider text-blue-300 flex items-center gap-1.5">
                         <span>🍻</span> Your Shots Owed
                     </h3>
-                    <p class="text-[10px] text-slate-400 italic">"The penalty box awaits..."</p>
+                    <p class="text-[10px] text-indigo-200 italic">"The penalty box awaits..."</p>
                 </div>
                 <div class="text-right">
                     <span class="text-4xl font-black text-white tracking-tighter drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">{{ team.shots_owed }}</span>
-                    <span class="text-xs text-slate-400 font-bold ml-1">shots</span>
+                    <span class="text-xs text-indigo-200 font-bold ml-1">shots</span>
                 </div>
             </div>
 
             <!-- Unified Nation Shot Board -->
-            <div class="bg-indigo-950/80 border border-indigo-900/60 rounded-2xl p-5 shadow-xl space-y-3">
-                <div class="flex items-center justify-between border-b border-indigo-900/50 pb-2.5">
+            <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-2xl p-5 shadow-xl space-y-3">
+                <div class="flex items-center justify-between border-b border-indigo-800/60 pb-2.5">
                     <h3 class="text-xs font-black text-green-400 uppercase tracking-widest flex items-center gap-2">
                         <span>📋</span> Global Shot Board (All Nations)
                     </h3>
-                    <span class="text-[10px] text-slate-500 font-mono">Penalties</span>
+                    <span class="text-[10px] text-indigo-300 font-mono">Penalties</span>
                 </div>
                 
                 <div class="grid grid-cols-1 gap-2">
                     {% for t in teams %}
-                        <div class="bg-purple-950/40 border border-indigo-950 px-3.5 py-2.5 rounded-xl flex items-center justify-between text-xs">
-                            <span class="font-bold text-slate-200 flex items-center gap-2">
+                        <div class="bg-purple-950/60 border border-indigo-800/50 px-3.5 py-2.5 rounded-xl flex items-center justify-between text-xs">
+                            <span class="font-bold text-slate-100 flex items-center gap-2">
                                 <span class="text-sm">{{ t.flag_emoji }}</span>
                                 <span>{{ t.nation_name }}</span>
                             </span>
-                            <span class="font-mono font-black {% if t.shots_owed > 0 %}text-red-400 bg-red-500/10 px-2.5 py-0.5 rounded border border-red-500/20{% else %}text-slate-500{% endif %}">
+                            <span class="font-mono font-black {% if t.shots_owed > 0 %}text-red-300 bg-red-500/20 px-2.5 py-0.5 rounded border border-red-500/30{% else %}text-indigo-300{% endif %}">
                                 {{ t.shots_owed }} shots
                             </span>
                         </div>
@@ -218,23 +219,23 @@
             </div>
 
             <!-- Security & Code Reset Card -->
-            <div class="bg-indigo-950/80 border border-indigo-900/60 rounded-2xl p-5 shadow-xl space-y-4">
-                <div class="flex items-center justify-between border-b border-indigo-900/50 pb-2.5">
+            <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-2xl p-5 shadow-xl space-y-4">
+                <div class="flex items-center justify-between border-b border-indigo-800/60 pb-2.5">
                     <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
                         <span>🔑</span> Change Access PIN
                     </h3>
-                    <span class="text-[10px] text-slate-500 font-mono">Security</span>
+                    <span class="text-[10px] text-indigo-300 font-mono">Security</span>
                 </div>
 
                 <form action="/profile/reset-code" method="POST" class="space-y-3">
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1">Current PIN Code</label>
-                        <input type="password" name="current_code" required placeholder="Enter current PIN..." class="w-full bg-purple-950/50 border border-indigo-900/80 rounded-xl p-2.5 text-xs text-slate-200 outline-none focus:border-amber-400 transition">
+                        <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider mb-1">Current PIN Code</label>
+                        <input type="password" name="current_code" required placeholder="Enter current PIN..." class="w-full bg-purple-950/80 border border-indigo-700/80 rounded-xl p-2.5 text-xs text-white outline-none focus:border-amber-400 transition">
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1">New PIN Code</label>
-                        <input type="password" name="new_code" required placeholder="Enter new PIN (min 3 chars)..." class="w-full bg-purple-950/50 border border-indigo-900/80 rounded-xl p-2.5 text-xs text-slate-200 outline-none focus:border-amber-400 transition">
+                        <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider mb-1">New PIN Code</label>
+                        <input type="password" name="new_code" required placeholder="Enter new PIN (min 3 chars)..." class="w-full bg-purple-950/80 border border-indigo-700/80 rounded-xl p-2.5 text-xs text-white outline-none focus:border-amber-400 transition">
                     </div>
 
                     <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-widest py-3 rounded-xl transition shadow-lg">
@@ -244,8 +245,8 @@
             </div>
 
             <!-- Scuffed VAR Form -->
-            <div class="bg-gradient-to-b from-red-950/40 via-indigo-950/90 to-purple-950/90 border border-red-500/30 rounded-2xl p-6 shadow-xl relative space-y-4">
-                <div class="flex items-center justify-between border-b border-red-500/20 pb-2.5">
+            <div class="bg-gradient-to-b from-red-950/50 via-indigo-950/90 to-purple-950/90 border border-red-500/40 rounded-2xl p-6 shadow-xl relative space-y-4">
+                <div class="flex items-center justify-between border-b border-red-500/30 pb-2.5">
                     <h2 class="text-red-400 font-black uppercase text-xs tracking-widest flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span> Scuffed VAR (Dob Someone In)
                     </h2>
@@ -254,8 +255,8 @@
 
                 <form action="/var/submit" method="POST" class="space-y-3">
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Target Nation / Athlete</label>
-                        <select name="target_team_id" required class="w-full bg-purple-950/50 border border-indigo-900/80 rounded-xl p-3 text-xs text-slate-200 outline-none focus:border-red-500 transition shadow-inner">
+                        <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider mb-1.5">Target Nation / Athlete</label>
+                        <select name="target_team_id" required class="w-full bg-purple-950/80 border border-indigo-700/80 rounded-xl p-3 text-xs text-white outline-none focus:border-red-400 transition shadow-inner">
                             <option value="">-- Choose Target --</option>
                             {% for t in teams %}
                                 <option value="{{ t.id }}">{{ t.flag_emoji }} {{ t.nation_name }} ({{ t.participant_name }})</option>
@@ -264,8 +265,8 @@
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Incident Description</label>
-                        <textarea name="incident" required rows="2" class="w-full bg-purple-950/50 border border-indigo-900/80 rounded-xl p-3 text-xs text-slate-200 outline-none focus:border-red-500 transition shadow-inner resize-none" placeholder="What rule violation or absolute disaster occurred?"></textarea>
+                        <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider mb-1.5">Incident Description</label>
+                        <textarea name="incident" required rows="2" class="w-full bg-purple-950/80 border border-indigo-700/80 rounded-xl p-3 text-xs text-white outline-none focus:border-red-400 transition shadow-inner resize-none" placeholder="What rule violation or absolute disaster occurred?"></textarea>
                     </div>
 
                     <button type="submit" class="w-full bg-gradient-to-r from-red-600 via-rose-600 to-red-500 text-white font-black text-xs uppercase tracking-widest py-3.5 rounded-xl hover:brightness-110 transition shadow-lg shadow-red-600/30">
