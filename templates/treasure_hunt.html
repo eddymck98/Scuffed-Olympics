@@ -5,23 +5,30 @@
     <!-- Olympic Ring Color Gradient Accent Bar -->
     <div class="h-2.5 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_25px_rgba(255,255,255,0.4)]"></div>
 
-    <!-- Hero Header -->
-    <div class="relative py-10 px-6 text-center space-y-3 overflow-hidden bg-gradient-to-b from-slate-900/80 to-slate-900/40 rounded-[3rem] border border-slate-800 shadow-2xl">
+    <!-- Hero Header with Integrated Official Logo -->
+    <div class="relative py-10 px-6 text-center space-y-4 overflow-hidden bg-gradient-to-b from-slate-900/90 to-slate-900/40 rounded-[3rem] border border-slate-800 shadow-2xl">
         <div class="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-blue-500/10 rounded-full blur-[90px] pointer-events-none"></div>
         <div class="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-red-500/10 rounded-full blur-[90px] pointer-events-none"></div>
 
-        <div class="relative z-10 space-y-2">
-            <div class="flex items-center justify-center gap-2 text-xs font-black tracking-widest uppercase">
-                <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.8)]"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
-                <span class="text-slate-300 ml-1">Scuffed Games 2026</span>
+        <div class="relative z-10 flex flex-col items-center space-y-4">
+            <!-- Small Games Logo Badge -->
+            <div class="p-2.5 bg-slate-950/80 rounded-2xl border border-yellow-500/30 shadow-lg">
+                <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/static/image/logo.png?raw=true" alt="Logo" class="h-16 w-16 object-contain drop-shadow-[0_0_12px_rgba(234,179,8,0.6)]">
             </div>
-            <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase bg-gradient-to-r from-blue-400 via-yellow-300 to-red-400 bg-clip-text text-transparent">
-                🗺️ City Treasure Hunt
-            </h1>
-            <p class="text-xs sm:text-sm text-slate-400 font-medium">Work together to conquer the checklist and capture your memories.</p>
+
+            <div class="space-y-1">
+                <div class="flex items-center justify-center gap-2 text-xs font-black tracking-widest uppercase">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.8)]"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
+                    <span class="text-slate-300 ml-1">Scuffed Games 2026</span>
+                </div>
+                <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase bg-gradient-to-r from-blue-400 via-yellow-300 to-red-400 bg-clip-text text-transparent">
+                    🗺️ City Treasure Hunt
+                </h1>
+                <p class="text-xs sm:text-sm text-slate-400 font-medium">Work together to conquer the checklist and capture your memories.</p>
+            </div>
         </div>
     </div>
 
@@ -57,7 +64,6 @@
                 </div>
 
                 <div class="space-y-3">
-                    {% set active_items = [] %}
                     {% for item in items %}
                         {% set prog = progress_map.get(item.id) %}
                         {% if not prog or prog.status != 'approved' %}
@@ -68,9 +74,9 @@
                                         {% if not prog %}
                                             <span class="bg-slate-800 text-slate-400 text-[9px] font-black px-2.5 py-1 rounded-md uppercase">To Do</span>
                                         {% elif prog.status == 'pending' %}
-                                            <span class="bg-amber-500/20 text-amber-400 text-[9px] font-black px-2.5 py-1 rounded-md uppercase animate-pulse">Pending Review</span>
+                                            <span class="bg-amber-500/20 text-amber-400 text-[9px] font-black px-2.5 py-1 rounded-md uppercase animate-pulse">⏳ Pending Review</span>
                                         {% elif prog.status == 'rejected' %}
-                                            <span class="bg-rose-500/20 text-rose-400 text-[9px] font-black px-2.5 py-1 rounded-md uppercase">Rejected</span>
+                                            <span class="bg-rose-500/20 text-rose-400 text-[9px] font-black px-2.5 py-1 rounded-md uppercase">❌ Rejected</span>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -106,7 +112,7 @@
                                     <span class="font-bold text-emerald-300 text-xs uppercase tracking-wide block">✓ {{ item.title }}</span>
                                     <span class="text-[10px] text-slate-400">{{ item.description }}</span>
                                 </div>
-                                <span class="bg-emerald-500/20 text-emerald-400 text-[9px] font-black px-2.5 py-1 rounded-md uppercase">Done</span>
+                                <span class="bg-emerald-500/20 text-emerald-400 text-[9px] font-black px-2.5 py-1 rounded-md uppercase">✨ Done</span>
                             </div>
                         {% endif %}
                     {% endfor %}
@@ -205,11 +211,11 @@
                                     {% endif %}
                                     <div class="pt-1">
                                         {% if prog.status == 'approved' %}
-                                            <span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-0.5 rounded uppercase">Approved</span>
+                                            <span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-0.5 rounded uppercase">✨ Approved</span>
                                         {% elif prog.status == 'pending' %}
-                                            <span class="text-[9px] bg-amber-500/20 text-amber-400 font-bold px-2 py-0.5 rounded uppercase">Pending</span>
+                                            <span class="text-[9px] bg-amber-500/20 text-amber-400 font-bold px-2 py-0.5 rounded uppercase">⏳ Pending</span>
                                         {% elif prog.status == 'rejected' %}
-                                            <span class="text-[9px] bg-rose-500/20 text-rose-400 font-bold px-2 py-0.5 rounded uppercase">Rejected</span>
+                                            <span class="text-[9px] bg-rose-500/20 text-rose-400 font-bold px-2 py-0.5 rounded uppercase">❌ Rejected</span>
                                         {% endif %}
                                     </div>
                                 </div>
