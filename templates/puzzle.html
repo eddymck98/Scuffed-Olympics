@@ -1,1 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-8 pb-20 px-4 relative">
 
+    <!-- Olympic Ring Color Gradient Accent Bar -->
+    <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
+
+    <!-- Sleek Header -->
+    <div class="relative py-8 px-6 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 rounded-3xl border border-amber-500/30 shadow-xl text-center space-y-3 overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none text-9xl">🧩</div>
+        
+        <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1 rounded-full text-amber-400 text-[10px] font-black uppercase tracking-widest shadow-inner">
+            <span>🧩</span> Escape Room Trials <span>🔓</span>
+        </div>
+        
+        <h1 class="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">
+            Puzzle <span class="bg-gradient-to-r from-blue-400 via-yellow-400 to-red-400 bg-clip-text text-transparent">Chamber</span>
+        </h1>
+        
+        <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto font-medium">
+            Solve each trial sequentially to unlock the next chamber. Speed and wits will save you!
+        </p>
+    </div>
+
+    <!-- Puzzle Stages -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-8 shadow-xl space-y-6">
+        
+        <!-- Progress Bar Indicator -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4 text-xs font-mono font-bold text-slate-400 uppercase">
+            <span>Chamber Progress</span>
+            <span class="text-amber-400">Stage {{ current_stage }} of 5</span>
+        </div>
+
+        {% if current_stage <= 4 %}
+            <!-- Active Puzzle Form -->
+            <div class="space-y-4">
+                <div class="bg-slate-950 p-5 rounded-2xl border border-amber-500/30 space-y-2">
+                    <span class="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded">Trial #{{ current_stage }}</span>
+                    <h3 class="text-sm font-bold text-slate-100">
+                        {% if current_stage == 1 %}Decode the first scrambled cipher to proceed.
+                        {% elif current_stage == 2 %}Solve the riddle of the second chamber.
+                        {% elif current_stage == 3 %}Crack the third lock mechanism.
+                        {% elif current_stage == 4 %}The final puzzle stands in your way!{% endif %}
+                    </h3>
+                </div>
+
+                <form action="/escape-room/submit" method="POST" class="space-y-4">
+                    <input type="hidden" name="stage" value="{{ current_stage }}">
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Your Answer / Solution</label>
+                        <input type="text" name="answer" required placeholder="Type your answer here..." autocomplete="off" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-xs text-slate-200 outline-none focus:border-amber-400 transition shadow-inner">
+                    </div>
+
+                    <button type="submit" class="w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-slate-950 font-black text-xs uppercase tracking-widest py-4 rounded-2xl hover:brightness-110 transition shadow-lg shadow-amber-500/20">
+                        Unlock Next Chamber &rarr;
+                    </button>
+                </form>
+            </div>
+
+        {% else %}
+            <!-- Stage 5: Final Prompt -->
+            <div class="bg-gradient-to-br from-amber-500/20 via-slate-950 to-rose-500/20 border-2 border-amber-400 rounded-3xl p-8 text-center space-y-6 shadow-2xl animate-pulse">
+                <span class="text-5xl">🏆</span>
+                <div class="space-y-2">
+                    <h2 class="text-amber-400 font-black uppercase text-lg tracking-widest">All Puzzles Conquered!</h2>
+                    <p class="text-sm font-bold text-white uppercase tracking-wider">
+                        FINAL INSTRUCTION: Place an item on the table in front of Ed beginning with the letter <span class="text-yellow-400 text-xl underline">P</span>!
+                    </p>
+                </div>
+                <p class="text-xs text-slate-400 italic">Bring your item immediately to claim ultimate escape room victory!</p>
+            </div>
+        {% endif %}
+
+    </div>
+
+</div>
+{% endblock %}
