@@ -11,9 +11,10 @@
         <div class="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-red-500/10 rounded-full blur-[100px] pointer-events-none"></div>
 
         <div class="relative z-10 flex flex-col items-center space-y-5">
-            <!-- Logo with Olympic Ring Border -->
-            <div class="relative flex items-center justify-center p-4 rounded-3xl bg-slate-950/60 border-2 border-yellow-500/30 shadow-2xl">
-                <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/static/image/logo.png?raw=true" alt="Logo" class="h-32 w-32 object-contain drop-shadow-[0_0_25px_rgba(234,179,8,0.7)]">
+            <!-- Official Games Logo with Custom Border & Glow -->
+            <div class="relative flex items-center justify-center p-4 rounded-3xl bg-slate-950/80 border-2 border-yellow-500/40 shadow-2xl group">
+                <div class="absolute inset-0 bg-amber-500/10 rounded-3xl blur-xl group-hover:bg-amber-500/20 transition"></div>
+                <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/static/image/logo.png?raw=true" alt="Scuffed Olympics Logo" class="relative z-10 h-28 w-28 sm:h-32 sm:w-32 object-contain drop-shadow-[0_0_20px_rgba(234,179,8,0.7)]">
             </div>
 
             <div class="space-y-2">
@@ -118,15 +119,15 @@
                             <div class="flex items-center space-x-6 sm:space-x-8 text-sm font-mono">
                                 <div class="text-center">
                                     <span class="block text-[10px] text-slate-400 font-sans font-bold uppercase">Gold</span>
-                                    <span class="font-bold text-yellow-400 text-base">{{ row.gold }}</span>
+                                    <span class="font-bold text-yellow-400 text-base">🥇 {{ row.gold }}</span>
                                 </div>
                                 <div class="text-center">
                                     <span class="block text-[10px] text-slate-400 font-sans font-bold uppercase">Silver</span>
-                                    <span class="font-bold text-slate-300 text-base">{{ row.silver }}</span>
+                                    <span class="font-bold text-slate-300 text-base">🥈 {{ row.silver }}</span>
                                 </div>
                                 <div class="text-center">
                                     <span class="block text-[10px] text-slate-400 font-sans font-bold uppercase">Bronze</span>
-                                    <span class="font-bold text-amber-600 text-base">{{ row.bronze }}</span>
+                                    <span class="font-bold text-amber-600 text-base">🥉 {{ row.bronze }}</span>
                                 </div>
                                 <div class="text-center pl-2 border-l border-slate-800">
                                     <span class="block text-[10px] text-red-400 font-sans font-black uppercase">Pts</span>
