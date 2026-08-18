@@ -78,12 +78,35 @@
             <!-- Custom Watermarked Row Cards -->
             <div class="space-y-3">
                 {% for row in standings %}
-                    {% set code = {'australia': 'au', 'brazil': 'br', 'canada': 'ca', 'france': 'fr', 'china': 'cn', 'germany': 'de', 'japan': 'jp', 'united kingdom': 'gb', 'united states': 'us', 'ireland': 'ie'}.get(row.nation_name|lower, 'gb') %}
+                    {% set nation_lower = row.nation_name|lower|trim %}
+                    
+                    {% if 'wales' in nation_lower or 'gb-wls' in nation_lower %}
+                        {% set flag_url = 'https://upload.wikimedia.org/wikipedia/commons/5/59/Flag_of_Wales_%281959%E2%80%93present%29.svg' %}
+                    {% elif 'austria' in nation_lower %}
+                        {% set flag_url = 'https://flagcdn.com/w640/at.png' %}
+                    {% elif 'ireland' in nation_lower %}
+                        {% set flag_url = 'https://flagcdn.com/w640/ie.png' %}
+                    {% elif 'united states' in nation_lower or 'usa' in nation_lower %}
+                        {% set flag_url = 'https://flagcdn.com/w640/us.png' %}
+                    {% elif 'china' in nation_lower %}
+                        {% set flag_url = 'https://flagcdn.com/w640/cn.png' %}
+                    {% elif 'japan' in nation_lower %}
+                        {% set flag_url = 'https://flagcdn.com/w640/jp.png' %}
+                    {% elif 'germany' in nation_lower %}
+                        {% set flag_url = 'https://flagcdn.com/w640/de.png' %}
+                    {% elif 'canada' in nation_lower %}
+                        {% set flag_url = 'https://flagcdn.com/w640/ca.png' %}
+                    {% elif 'brazil' in nation_lower %}
+                        {% set flag_url = 'https://flagcdn.com/w640/br.png' %}
+                    {% else %}
+                        {% set flag_url = 'https://flagcdn.com/w640/gb.png' %}
+                    {% endif %}
+
                     <div class="relative overflow-hidden group bg-slate-900/70 border border-slate-800 rounded-2xl hover:border-yellow-500/50 transition-all shadow-lg">
                         
                         <!-- Transparent Waving Flag Watermark Background -->
                         <div class="absolute inset-0 opacity-[0.12] bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" 
-                             style="background-image: url('https://flagcdn.com/w640/{{ code }}.png');">
+                             style="background-image: url('{{ flag_url }}');">
                         </div>
 
                         <!-- Row Content -->
