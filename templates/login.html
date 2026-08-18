@@ -1,64 +1,69 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-xl mx-auto py-8 px-4 relative overflow-hidden">
+<div class="max-w-2xl mx-auto py-10 px-4 relative overflow-hidden">
     
-    <!-- Floating Olympic Clipart Background Accents -->
-    <div class="absolute top-4 left-2 text-3xl opacity-20 select-none pointer-events-none animate-bounce">🥇</div>
-    <div class="absolute top-20 right-4 text-3xl opacity-20 select-none pointer-events-none animate-pulse">🍻</div>
-    <div class="absolute bottom-40 -left-6 text-4xl opacity-15 select-none pointer-events-none">🔥</div>
-    <div class="absolute bottom-10 right-2 text-3xl opacity-20 select-none pointer-events-none animate-bounce">🏆</div>
+    <!-- Olympic Ring Color Gradient Accent Bar Top -->
+    <div class="h-2.5 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_25px_rgba(255,255,255,0.4)] mb-8"></div>
 
-    <!-- Hero Banner with Larger Logo & Olympic Styling (Borderless / Open Layout) -->
-    <div class="text-center space-y-4 relative py-6">
-        <div class="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Floating Background Glow Orbs -->
+    <div class="absolute top-20 left-0 w-72 h-72 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-10 right-0 w-72 h-72 bg-red-600/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-        <div class="relative z-10 flex flex-col items-center space-y-3">
-            <!-- Olympic Laurel & Bigger Logo -->
-            <div class="relative flex items-center justify-center">
-                <span class="absolute -left-10 text-4xl opacity-60 select-none animate-pulse">🌿</span>
-                <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/Adobe%20Express%20-%20file.png?raw=true" alt="Scuffed Olympics Logo" class="h-36 w-36 object-contain drop-shadow-[0_0_25px_rgba(245,158,11,0.7)] relative z-10">
-                <span class="absolute -right-10 text-4xl opacity-60 select-none animate-pulse">🌿</span>
+    <!-- Hero Banner with Logo & Olympic Styling -->
+    <div class="text-center space-y-4 relative py-6 bg-gradient-to-b from-slate-900/80 to-slate-950/40 rounded-[3rem] border border-slate-800/80 shadow-2xl p-6 sm:p-10 mb-8 backdrop-blur-md">
+        
+        <div class="relative z-10 flex flex-col items-center space-y-4">
+            <!-- Laurel & Logo Frame -->
+            <div class="relative flex items-center justify-center p-3 bg-slate-950 rounded-3xl border-2 border-amber-500/40 shadow-[0_0_30px_rgba(245,158,11,0.2)]">
+                <span class="absolute -left-8 text-2xl select-none animate-pulse">🌿</span>
+                <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/Adobe%20Express%20-%20file.png?raw=true" alt="Scuffed Olympics Logo" class="h-28 w-28 sm:h-32 sm:w-32 object-contain drop-shadow-[0_0_20px_rgba(245,158,11,0.8)] relative z-10">
+                <span class="absolute -right-8 text-2xl select-none animate-pulse">🌿</span>
             </div>
 
-            <span class="bg-gradient-to-r from-amber-500 via-yellow-400 to-rose-500 text-slate-950 text-xs font-black px-5 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
-                🥇 Official Panic & Party Portal 🥇
-            </span>
-            <h1 class="text-3xl sm:text-4xl font-black text-slate-100 tracking-tight">THE SCUFFED OLYMPICS</h1>
-            <p class="text-xs text-slate-400 max-w-sm mx-auto">Select your nation, enter your 4-digit PIN, and prepare for glory, poor coordination, and questionable tactical decisions.</p>
+            <div class="space-y-1">
+                <span class="bg-gradient-to-r from-blue-400 via-yellow-400 to-red-500 text-slate-950 text-[11px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg inline-block">
+                    🥇 Official Panic & Party Portal 🥇
+                </span>
+                <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase pt-2">
+                    THE SCUFFED OLYMPICS
+                </h1>
+                <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto pt-1 font-medium">
+                    Select your nation, enter your secret 4-digit PIN, and prepare for glory, poor coordination, and questionable tactical decisions.
+                </p>
+            </div>
         </div>
     </div>
 
     {% if request.query_params.get('error') %}
-        <div class="mt-4 mb-6 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-black p-4 rounded-2xl text-center uppercase tracking-wide animate-bounce shadow-lg">
-            ⚠️ {{ request.query_params.get('error') }} — Drink a penalty shot and try again! 🍻
+        <div class="mt-4 mb-6 bg-rose-950/80 border-2 border-rose-500 text-rose-300 text-xs font-black p-4 rounded-2xl text-center uppercase tracking-wide animate-bounce shadow-2xl flex items-center justify-center gap-2">
+            <span>⚠️</span> {{ request.query_params.get('error') }} — Drink a penalty shot and try again! 🍻
         </div>
     {% endif %}
 
-    <!-- Main Form Container (Open layout, no heavy wrapping boxes) -->
-    <div class="mt-4">
+    <!-- Main Form Container -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md">
         <form action="/login" method="POST" id="loginForm" class="space-y-6">
             
             <input type="hidden" name="team_id" id="selectedTeamId" required>
             <input type="hidden" name="pin_code" id="pinInput" required>
 
-            <!-- Step 1: Nation Selection (Clean grid, open background, no inner box) -->
+            <!-- Step 1: Nation Selection Grid -->
             <div id="nationStep" class="space-y-4">
-                <div class="flex items-center justify-between px-1 border-b border-slate-800 pb-2">
-                    <label class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-1.5">
+                <div class="flex items-center justify-between px-1 border-b border-slate-800 pb-3">
+                    <label class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
                         <span>⚔️</span> Step 1: Declare Your Allegiance
                     </label>
-                    <span class="text-[10px] text-slate-400 font-mono">Tap your country</span>
+                    <span class="text-[10px] font-mono text-slate-400">Tap your nation</span>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                     {% for team in teams %}
                         <button type="button" onclick="selectNation('{{ team.id }}', '{{ team.nation_name }} {{ team.flag_emoji }}')" 
-                            class="nation-btn bg-slate-900/80 hover:bg-slate-800 border-2 border-slate-800 hover:border-amber-500 p-4 rounded-2xl flex items-center gap-4 transition text-left group shadow-lg hover:shadow-amber-500/20 active:scale-95"
-                            style="touch-action: manipulation;">
-                            <span class="text-3xl p-2 bg-slate-950 rounded-xl border border-slate-800 group-hover:scale-110 transition">{{ team.flag_emoji }}</span>
+                            class="nation-btn bg-slate-950 hover:bg-slate-800/80 border-2 border-slate-800/80 hover:border-amber-500/80 p-4 rounded-2xl flex items-center gap-4 transition-all text-left group shadow-lg hover:shadow-amber-500/10 active:scale-95">
+                            <span class="text-3xl p-2.5 bg-slate-900 rounded-xl border border-slate-800 group-hover:scale-110 group-hover:border-amber-500/40 transition shadow-inner">{{ team.flag_emoji }}</span>
                             <div>
-                                <span class="font-extrabold text-sm block text-slate-200 group-hover:text-amber-400 transition">{{ team.nation_name }}</span>
-                                <span class="text-[10px] text-amber-500/80 font-mono uppercase font-bold">Ready for chaos</span>
+                                <span class="font-black text-sm block text-slate-100 group-hover:text-amber-400 transition tracking-wide">{{ team.nation_name }}</span>
+                                <span class="text-[10px] text-amber-500/80 font-mono uppercase font-bold tracking-wider">Ready for chaos ✨</span>
                             </div>
                         </button>
                     {% endfor %}
@@ -67,35 +72,38 @@
 
             <!-- Step 2: Keypad Entry (Hidden until nation is picked) -->
             <div id="keypadStep" class="hidden space-y-6 animate-fadeIn">
-                <div class="flex items-center justify-between bg-slate-900 px-4 py-3 rounded-2xl border border-amber-500/40 shadow-md">
-                    <span id="chosenNationDisplay" class="text-xs font-extrabold text-amber-400"></span>
-                    <button type="button" onclick="resetSelection()" class="text-xs text-rose-400 hover:text-rose-300 font-bold underline" style="touch-action: manipulation;">Switch Nation</button>
+                <div class="flex items-center justify-between bg-slate-950 px-5 py-3.5 rounded-2xl border border-amber-500/40 shadow-inner">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-slate-400 font-bold uppercase">Allegiance:</span>
+                        <span id="chosenNationDisplay" class="text-xs font-black text-amber-400 uppercase tracking-wider"></span>
+                    </div>
+                    <button type="button" onclick="resetSelection()" class="text-xs text-rose-400 hover:text-rose-300 font-black underline uppercase tracking-wider transition">Switch Nation</button>
                 </div>
 
-                <div class="space-y-3 text-center">
+                <div class="space-y-4 text-center py-2">
                     <label class="block text-xs font-black text-amber-400 uppercase tracking-widest">Step 2: Enter Secret 4-Digit PIN</label>
-                    <div class="flex justify-center gap-4 py-2">
-                        <div class="pin-dot w-5 h-5 rounded-full border-2 border-slate-700 bg-slate-950 transition"></div>
-                        <div class="pin-dot w-5 h-5 rounded-full border-2 border-slate-700 bg-slate-950 transition"></div>
-                        <div class="pin-dot w-5 h-5 rounded-full border-2 border-slate-700 bg-slate-950 transition"></div>
-                        <div class="pin-dot w-5 h-5 rounded-full border-2 border-slate-700 bg-slate-950 transition"></div>
+                    <div class="flex justify-center gap-4 py-3">
+                        <div class="pin-dot w-6 h-6 rounded-full border-2 border-slate-700 bg-slate-950 transition-all shadow-inner"></div>
+                        <div class="pin-dot w-6 h-6 rounded-full border-2 border-slate-700 bg-slate-950 transition-all shadow-inner"></div>
+                        <div class="pin-dot w-6 h-6 rounded-full border-2 border-slate-700 bg-slate-950 transition-all shadow-inner"></div>
+                        <div class="pin-dot w-6 h-6 rounded-full border-2 border-slate-700 bg-slate-950 transition-all shadow-inner"></div>
                     </div>
                 </div>
 
-                <!-- Arcade / iOS Keypad with touch-action: manipulation to block mobile double-tap zoom -->
+                <!-- Sleek Arcade / iOS Keypad -->
                 <div class="grid grid-cols-3 gap-3 max-w-xs mx-auto">
-                    <button type="button" onclick="pressKey('1')" class="keypad-btn bg-slate-900 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">1</button>
-                    <button type="button" onclick="pressKey('2')" class="keypad-btn bg-slate-900 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">2</button>
-                    <button type="button" onclick="pressKey('3')" class="keypad-btn bg-slate-900 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">3</button>
-                    <button type="button" onclick="pressKey('4')" class="keypad-btn bg-slate-900 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">4</button>
-                    <button type="button" onclick="pressKey('5')" class="keypad-btn bg-slate-900 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">5</button>
-                    <button type="button" onclick="pressKey('6')" class="keypad-btn bg-slate-900 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">6</button>
-                    <button type="button" onclick="pressKey('7')" class="keypad-btn bg-slate-900 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">7</button>
-                    <button type="button" onclick="pressKey('8')" class="keypad-btn bg-slate-900 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">8</button>
-                    <button type="button" onclick="pressKey('9')" class="keypad-btn bg-slate-900 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">9</button>
+                    <button type="button" onclick="pressKey('1')" class="keypad-btn bg-slate-950 hover:bg-amber-400 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">1</button>
+                    <button type="button" onclick="pressKey('2')" class="keypad-btn bg-slate-950 hover:bg-amber-400 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">2</button>
+                    <button type="button" onclick="pressKey('3')" class="keypad-btn bg-slate-950 hover:bg-amber-400 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">3</button>
+                    <button type="button" onclick="pressKey('4')" class="keypad-btn bg-slate-950 hover:bg-amber-400 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">4</button>
+                    <button type="button" onclick="pressKey('5')" class="keypad-btn bg-slate-950 hover:bg-amber-400 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">5</button>
+                    <button type="button" onclick="pressKey('6')" class="keypad-btn bg-slate-950 hover:bg-amber-400 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">6</button>
+                    <button type="button" onclick="pressKey('7')" class="keypad-btn bg-slate-950 hover:bg-amber-400 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">7</button>
+                    <button type="button" onclick="pressKey('8')" class="keypad-btn bg-slate-950 hover:bg-amber-400 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">8</button>
+                    <button type="button" onclick="pressKey('9')" class="keypad-btn bg-slate-950 hover:bg-amber-400 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">9</button>
                     <div></div>
-                    <button type="button" onclick="pressKey('0')" class="keypad-btn bg-slate-900 hover:bg-amber-500 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">0</button>
-                    <button type="button" onclick="deleteKey()" class="keypad-btn bg-slate-900 hover:bg-rose-500 hover:text-slate-950 border border-slate-800 text-slate-400 hover:text-slate-950 text-sm font-black py-4 rounded-2xl transition flex items-center justify-center shadow-lg active:scale-95">⌫</button>
+                    <button type="button" onclick="pressKey('0')" class="keypad-btn bg-slate-950 hover:bg-amber-400 hover:text-slate-950 border border-slate-800 text-slate-100 text-xl font-black py-4 rounded-2xl transition shadow-lg active:scale-95">0</button>
+                    <button type="button" onclick="deleteKey()" class="keypad-btn bg-slate-950 hover:bg-rose-500 hover:text-slate-950 border border-slate-800 text-slate-400 hover:text-slate-950 text-base font-black py-4 rounded-2xl transition flex items-center justify-center shadow-lg active:scale-95">⌫</button>
                 </div>
             </div>
 
@@ -105,7 +113,6 @@
 </div>
 
 <style>
-    /* Completely blocks mobile double-tap zoom behavior on all keypad and nation buttons */
     .keypad-btn, .nation-btn {
         touch-action: manipulation;
     }
@@ -116,7 +123,7 @@
 
     function selectNation(id, name) {
         document.getElementById("selectedTeamId").value = id;
-        document.getElementById("chosenNationDisplay").innerText = "Selected: " + name;
+        document.getElementById("chosenNationDisplay").innerText = name;
         document.getElementById("nationStep").classList.add("hidden");
         document.getElementById("keypadStep").classList.remove("hidden");
     }
@@ -151,10 +158,10 @@
         const dots = document.querySelectorAll(".pin-dot");
         dots.forEach((dot, index) => {
             if (index < currentPin.length) {
-                dot.classList.add("bg-amber-400", "border-amber-400", "shadow-[0_0_10px_rgba(251,191,36,0.8)]");
+                dot.classList.add("bg-amber-400", "border-amber-400", "shadow-[0_0_12px_rgba(251,191,36,0.9)]");
                 dot.classList.remove("bg-slate-950", "border-slate-700");
             } else {
-                dot.classList.remove("bg-amber-400", "border-amber-400", "shadow-[0_0_10px_rgba(251,191,36,0.8)]");
+                dot.classList.remove("bg-amber-400", "border-amber-400", "shadow-[0_0_12px_rgba(251,191,36,0.9)]");
                 dot.classList.add("bg-slate-950", "border-slate-700");
             }
         });
