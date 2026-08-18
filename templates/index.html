@@ -25,7 +25,7 @@
                     <span class="text-slate-300 ml-2 tracking-widest">Home Games 2026</span>
                 </div>
                 <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white">
-                    WELCOME, <span class="bg-gradient-to-r from-blue-400 via-yellow-400 to-red-500 bg-clip-text text-transparent">{{ team.participant_name }}</span>!
+                    {{ team.greeting | default("WELCOME") }}, <span class="bg-gradient-to-r from-blue-400 via-yellow-400 to-red-500 bg-clip-text text-transparent">{{ team.participant_name }}</span>!
                 </h1>
             </div>
 
@@ -65,7 +65,7 @@
     <!-- Main Section: Standings Left, Action Hub Right -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
         
-        <!-- Live Medal Standings -->
+        <!-- Live Medal Standings with Flag Watermarks -->
         <div class="lg:col-span-7 space-y-6">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div class="flex items-center gap-3">
@@ -75,24 +75,23 @@
                 <span class="text-xs font-mono px-3 py-1 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">Official Rankings</span>
             </div>
 
-            <div class="overflow-hidden space-y-2">
+            <!-- Custom Watermarked Row Cards -->
+            <div class="space-y-3">
                 {% for row in standings %}
-                    <div class="relative overflow-hidden group bg-slate-900/60 border border-slate-800/80 rounded-2xl hover:border-yellow-500/50 transition-all">
+                    <div class="relative overflow-hidden group bg-slate-900/70 border border-slate-800 rounded-2xl hover:border-yellow-500/50 transition-all shadow-lg">
                         
-                        <!-- Transparent Waving Flag / Country Watermark Background -->
-                        <div class="absolute inset-0 opacity-[0.07] bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" 
+                        <!-- Transparent Waving Flag Watermark Background -->
+                        <div class="absolute inset-0 opacity-[0.08] bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" 
                              style="background-image: url('https://flagcdn.com/w640/{{ row.nation_name|lower|replace(' ', '-') }}.png');">
                         </div>
 
                         <!-- Row Content -->
                         <div class="relative z-10 flex items-center justify-between px-5 py-4">
-                            <!-- Nation & Flag Emoji -->
                             <div class="flex items-center gap-3.5">
-                                <span class="text-3xl drop-shadow-md">{{ row.flag_emoji }}</span>
+                                <span class="text-3xl drop-shadow">{{ row.flag_emoji }}</span>
                                 <span class="font-black text-white text-base tracking-wide group-hover:text-yellow-400 transition-colors">{{ row.nation_name }}</span>
                             </div>
 
-                            <!-- Medals & Points Breakdown -->
                             <div class="flex items-center space-x-6 sm:space-x-8 text-sm font-mono">
                                 <div class="text-center">
                                     <span class="block text-[10px] text-slate-400 font-sans font-bold uppercase">Gold</span>
