@@ -18,12 +18,12 @@
     <!-- Nations Player Cards Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pt-1">
         {% for t in teams %}
-            <!-- Flag mapping with custom override for Wales -->
-            {% set nation_lower = t.nation_name|lower %}
-            {% if 'wales' in nation_lower %}
+            <!-- Flag mapping with custom robust override for Wales matching various row inputs -->
+            {% set nation_lower = t.nation_name|lower|trim %}
+            {% if 'wales' in nation_lower or nation_lower == 'gb-wls' %}
                 {% set flag_url = 'https://upload.wikimedia.org/wikipedia/commons/5/59/Flag_of_Wales_%281959%E2%80%93present%29.svg' %}
             {% else %}
-                {% set code = {'austria': 'at', 'ireland': 'ie', 'united states': 'us', 'china': 'cn', 'japan': 'jp', 'germany': 'de', 'canada': 'ca', 'brazil': 'br', 'united kingdom': 'gb'}.get(nation_lower, 'gb') %}
+                {% set code = {'austria': 'at', 'ireland': 'ie', 'united states': 'us', 'china': 'cn', 'japan': 'jp', 'germany': 'de', 'canada': 'ca', 'brazil': 'br', 'united kingdom': 'gb', 'gb': 'gb'}.get(nation_lower, 'gb') %}
                 {% set flag_url = 'https://flagcdn.com/w640/' + code + '.png' %}
             {% endif %}
             
