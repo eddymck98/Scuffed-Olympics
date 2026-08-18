@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-4xl mx-auto space-y-8 pb-20 px-4 relative">
+<div class="max-w-4xl mx-auto space-y-6 pb-20 px-4 relative pt-2">
 
     <!-- Olympic Ring Color Gradient Accent Bar -->
     <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
 
     <!-- Compact, Sleek Header (Party Vibe) -->
-    <div class="relative py-8 px-6 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 rounded-3xl border border-amber-500/30 shadow-xl text-center space-y-3 overflow-hidden">
+    <div class="relative py-6 px-6 bg-gradient-to-r from-indigo-950/90 via-purple-950/80 to-indigo-950/90 rounded-3xl border border-amber-500/30 shadow-xl text-center space-y-3 overflow-hidden backdrop-blur-md">
         <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none text-9xl">🗺️</div>
         
         <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1 rounded-full text-amber-400 text-[10px] font-black uppercase tracking-widest shadow-inner">
@@ -14,20 +14,20 @@
         </div>
         
         <h1 class="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">
-            City <span class="bg-gradient-to-r from-blue-400 via-yellow-400 to-red-400 bg-clip-text text-transparent">Treasure Hunt</span>
+            City <span class="bg-gradient-to-r from-blue-300 via-yellow-300 to-red-300 bg-clip-text text-transparent">Treasure Hunt</span>
         </h1>
         
-        <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto font-medium">
+        <p class="text-xs sm:text-sm text-indigo-200 max-w-xl mx-auto font-medium">
             Work together to conquer the checklist and capture your memories.
         </p>
     </div>
 
     <!-- Rules Banner -->
-    <div class="bg-slate-900/90 border border-yellow-500/30 rounded-3xl p-6 shadow-xl space-y-3">
-        <div class="flex items-center gap-2.5 text-yellow-400 font-black text-xs uppercase tracking-widest">
+    <div class="bg-indigo-950/90 border border-amber-500/30 rounded-3xl p-6 shadow-xl space-y-3 backdrop-blur-md">
+        <div class="flex items-center gap-2.5 text-amber-400 font-black text-xs uppercase tracking-widest">
             <span>📜</span> Rules & Guidelines
         </div>
-        <div class="text-xs text-slate-300 space-y-1.5 border-t border-slate-800 pt-3 leading-relaxed">
+        <div class="text-xs text-indigo-100 space-y-1.5 border-t border-indigo-800/60 pt-3 leading-relaxed">
             <p>1. Teams of two share this checklist and can upload photo proofs using the standalone submission form below.</p>
             <p>2. Select the matching task from the dropdown, add an optional comment, and submit for Commissioner review.</p>
             <p>3. Approved tasks move automatically to your Completed Archive!</p>
@@ -35,10 +35,10 @@
     </div>
 
     {% if not is_active %}
-        <div class="bg-rose-950/40 border border-rose-500/40 rounded-3xl p-10 text-center space-y-3">
+        <div class="bg-rose-950/40 border border-rose-500/40 rounded-3xl p-10 text-center space-y-3 backdrop-blur-md">
             <span class="text-3xl">🔒</span>
             <h2 class="text-rose-400 font-black uppercase text-sm tracking-widest">Hunt Is Currently Locked</h2>
-            <p class="text-xs text-slate-400">The Commissioner has not unlocked the treasure hunt yet.</p>
+            <p class="text-xs text-indigo-200">The Commissioner has not unlocked the treasure hunt yet.</p>
         </div>
     {% else %}
 
@@ -46,8 +46,8 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             <!-- To-Do / Active Tasks -->
-            <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-4 backdrop-blur-md">
+                <div class="flex items-center justify-between border-b border-indigo-800/60 pb-3">
                     <h2 class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
                         <span>📋</span> Active Checklist Tasks
                     </h2>
@@ -57,23 +57,23 @@
                     {% for item in items %}
                         {% set prog = progress_map.get(item.id) %}
                         {% if not prog or prog.status != 'approved' %}
-                            <div class="bg-slate-950 border {% if prog and prog.status == 'pending' %}border-amber-500/40 bg-amber-950/10{% elif prog and prog.status == 'rejected' %}border-rose-500/40 bg-rose-950/10{% else %}border-slate-800{% endif %} rounded-2xl p-4 space-y-2">
+                            <div class="bg-purple-950/60 border {% if prog and prog.status == 'pending' %}border-amber-500/40 bg-amber-950/20{% elif prog and prog.status == 'rejected' %}border-rose-500/40 bg-rose-950/20{% else %}border-indigo-800/50{% endif %} rounded-2xl p-4 space-y-2 shadow-inner">
                                 <div class="flex items-start justify-between gap-2">
-                                    <span class="font-bold text-slate-100 text-xs uppercase tracking-wide">{{ item.title }}</span>
+                                    <span class="font-bold text-white text-xs uppercase tracking-wide drop-shadow">{{ item.title }}</span>
                                     <div>
                                         {% if not prog %}
-                                            <span class="bg-slate-800 text-slate-400 text-[9px] font-black px-2.5 py-1 rounded-md uppercase">To Do</span>
+                                            <span class="bg-indigo-900/80 text-indigo-200 text-[9px] font-black px-2.5 py-1 rounded-md uppercase border border-indigo-700/60">To Do</span>
                                         {% elif prog.status == 'pending' %}
-                                            <span class="bg-amber-500/20 text-amber-400 text-[9px] font-black px-2.5 py-1 rounded-md uppercase animate-pulse">⏳ Pending Review</span>
+                                            <span class="bg-amber-500/20 text-amber-300 text-[9px] font-black px-2.5 py-1 rounded-md uppercase animate-pulse border border-amber-500/30">⏳ Pending Review</span>
                                         {% elif prog.status == 'rejected' %}
-                                            <span class="bg-rose-500/20 text-rose-400 text-[9px] font-black px-2.5 py-1 rounded-md uppercase">❌ Rejected</span>
+                                            <span class="bg-rose-500/20 text-rose-300 text-[9px] font-black px-2.5 py-1 rounded-md uppercase border border-rose-500/30">❌ Rejected</span>
                                         {% endif %}
                                     </div>
                                 </div>
-                                <p class="text-[11px] text-slate-400">{{ item.description }}</p>
+                                <p class="text-[11px] text-indigo-200">{{ item.description }}</p>
 
                                 {% if prog and prog.status == 'rejected' and prog.rejection_reason %}
-                                    <div class="bg-rose-950/50 p-2 rounded-xl text-[10px] text-rose-300">
+                                    <div class="bg-rose-950/60 border border-rose-500/30 p-2.5 rounded-xl text-[10px] text-rose-200">
                                         <strong>Feedback:</strong> {{ prog.rejection_reason }}
                                     </div>
                                 {% endif %}
@@ -84,8 +84,8 @@
             </div>
 
             <!-- Completed / Done Area -->
-            <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-4 backdrop-blur-md">
+                <div class="flex items-center justify-between border-b border-indigo-800/60 pb-3">
                     <h2 class="text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-2">
                         <span>✅</span> Completed & Approved
                     </h2>
@@ -97,18 +97,18 @@
                         {% set prog = progress_map.get(item.id) %}
                         {% if prog and prog.status == 'approved' %}
                             {% set completed_count.value = completed_count.value + 1 %}
-                            <div class="bg-emerald-950/20 border border-emerald-500/40 rounded-2xl p-4 flex items-center justify-between">
+                            <div class="bg-emerald-950/30 border border-emerald-500/40 rounded-2xl p-4 flex items-center justify-between shadow-inner">
                                 <div>
-                                    <span class="font-bold text-emerald-300 text-xs uppercase tracking-wide block">✓ {{ item.title }}</span>
-                                    <span class="text-[10px] text-slate-400">{{ item.description }}</span>
+                                    <span class="font-bold text-emerald-300 text-xs uppercase tracking-wide block drop-shadow">✓ {{ item.title }}</span>
+                                    <span class="text-[10px] text-indigo-200">{{ item.description }}</span>
                                 </div>
-                                <span class="bg-emerald-500/20 text-emerald-400 text-[9px] font-black px-2.5 py-1 rounded-md uppercase">✨ Done</span>
+                                <span class="bg-emerald-500/20 text-emerald-300 text-[9px] font-black px-2.5 py-1 rounded-md uppercase border border-emerald-500/30">✨ Done</span>
                             </div>
                         {% endif %}
                     {% endfor %}
                     
                     {% if completed_count.value == 0 %}
-                        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-8 text-center text-slate-500 italic text-xs">
+                        <div class="bg-purple-950/50 border border-indigo-800/50 rounded-2xl p-8 text-center text-indigo-300 italic text-xs shadow-inner">
                             No approved tasks yet. Get out there!
                         </div>
                     {% endif %}
@@ -118,12 +118,12 @@
         </div>
 
         <!-- SECTION 2: STANDALONE SUBMISSION FORM -->
-        <div class="bg-slate-900/90 border border-blue-500/30 rounded-3xl p-8 shadow-xl space-y-6">
-            <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
-                <span class="p-2 bg-blue-500/10 rounded-xl text-blue-400 border border-blue-500/20">📤</span>
+        <div class="bg-indigo-950/90 border border-blue-400/40 rounded-3xl p-8 shadow-xl space-y-6 backdrop-blur-md">
+            <div class="flex items-center gap-3 border-b border-indigo-800/60 pb-4">
+                <span class="p-2 bg-blue-500/20 rounded-xl text-blue-300 border border-blue-500/30">📤</span>
                 <div>
-                    <h2 class="text-sm font-black text-white uppercase tracking-widest">Submit Photo Proof</h2>
-                    <p class="text-xs text-slate-400">Choose a checklist item, attach your photo, and optionally leave a note for the Commissioner.</p>
+                    <h2 class="text-sm font-black text-white uppercase tracking-widest drop-shadow">Submit Photo Proof</h2>
+                    <p class="text-xs text-indigo-200">Choose a checklist item, attach your photo, and optionally leave a note for the Commissioner.</p>
                 </div>
             </div>
 
@@ -131,8 +131,8 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Dropdown for Checklist Item -->
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Select Checklist Item</label>
-                        <select name="item_id" required class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-xs text-slate-200 outline-none focus:border-blue-500 transition shadow-inner">
+                        <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider mb-2">Select Checklist Item</label>
+                        <select name="item_id" required class="w-full bg-purple-950/80 border border-indigo-700/80 rounded-2xl p-3.5 text-xs text-white outline-none focus:border-blue-400 transition shadow-inner">
                             <option value="">-- Choose Task --</option>
                             {% for item in items %}
                                 {% set prog = progress_map.get(item.id) %}
@@ -145,15 +145,15 @@
 
                     <!-- File Upload -->
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Photo Proof File</label>
-                        <input type="file" name="photo" accept="image/*" required class="w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer bg-slate-950 border border-slate-800 rounded-2xl p-2.5 shadow-inner">
+                        <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider mb-2">Photo Proof File</label>
+                        <input type="file" name="photo" accept="image/*" required class="w-full text-xs text-indigo-200 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer bg-purple-950/80 border border-indigo-700/80 rounded-2xl p-2.5 shadow-inner">
                     </div>
                 </div>
 
                 <!-- Comments Box -->
                 <div>
-                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Commissioner Note / Comment (Optional)</label>
-                    <textarea name="comment" rows="2" placeholder="Any funny story or context to share with your photo?" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-xs text-slate-200 outline-none focus:border-blue-500 transition shadow-inner resize-none"></textarea>
+                    <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider mb-2">Commissioner Note / Comment (Optional)</label>
+                    <textarea name="comment" rows="2" placeholder="Any funny story or context to share with your photo?" class="w-full bg-purple-950/80 border border-indigo-700/80 rounded-2xl p-3.5 text-xs text-white outline-none focus:border-blue-400 transition shadow-inner resize-none"></textarea>
                 </div>
 
                 <button type="submit" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl hover:brightness-110 transition shadow-lg shadow-blue-600/30">
@@ -163,12 +163,12 @@
         </div>
 
         <!-- SECTION 3: PHOTO GALLERY -->
-        <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-                <h2 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-4 backdrop-blur-md">
+            <div class="flex items-center justify-between border-b border-indigo-800/60 pb-4">
+                <h2 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2 drop-shadow">
                     <span>🖼️</span> Team Photo Gallery
                 </h2>
-                <span class="text-xs font-mono text-slate-400">All Submitted Proofs</span>
+                <span class="text-xs font-mono text-indigo-200">All Submitted Proofs</span>
             </div>
 
             {% set gallery_has_photos = namespace(val=false) %}
@@ -180,7 +180,7 @@
             {% endfor %}
 
             {% if not gallery_has_photos.val %}
-                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-10 text-center text-slate-500 italic text-xs">
+                <div class="bg-purple-950/50 border border-indigo-800/50 rounded-2xl p-10 text-center text-indigo-300 italic text-xs shadow-inner">
                     No photos uploaded yet. Your gallery will appear here as you submit proofs!
                 </div>
             {% else %}
@@ -188,24 +188,24 @@
                     {% for item in items %}
                         {% set prog = progress_map.get(item.id) %}
                         {% if prog and prog.image_url %}
-                            <div class="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-lg group space-y-2 pb-3">
-                                <div class="relative w-full h-36 bg-slate-900 overflow-hidden">
+                            <div class="bg-purple-950/80 border border-indigo-800/60 rounded-2xl overflow-hidden shadow-lg group space-y-2 pb-3">
+                                <div class="relative w-full h-36 bg-indigo-950 overflow-hidden">
                                     <a href="{{ prog.image_url }}" target="_blank">
                                         <img src="{{ prog.image_url }}" alt="{{ item.title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                                     </a>
                                 </div>
                                 <div class="px-3 space-y-1">
-                                    <span class="font-bold text-white text-xs block truncate">{{ item.title }}</span>
+                                    <span class="font-bold text-white text-xs block truncate drop-shadow">{{ item.title }}</span>
                                     {% if prog.comment %}
-                                        <p class="text-[10px] text-slate-400 italic truncate">"{{ prog.comment }}"</p>
+                                        <p class="text-[10px] text-indigo-200 italic truncate">"{{ prog.comment }}"</p>
                                     {% endif %}
                                     <div class="pt-1">
                                         {% if prog.status == 'approved' %}
-                                            <span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-0.5 rounded uppercase">✨ Approved</span>
+                                            <span class="text-[9px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded uppercase border border-emerald-500/30">✨ Approved</span>
                                         {% elif prog.status == 'pending' %}
-                                            <span class="text-[9px] bg-amber-500/20 text-amber-400 font-bold px-2 py-0.5 rounded uppercase">⏳ Pending</span>
+                                            <span class="text-[9px] bg-amber-500/20 text-amber-300 font-bold px-2 py-0.5 rounded uppercase border border-amber-500/30">⏳ Pending</span>
                                         {% elif prog.status == 'rejected' %}
-                                            <span class="text-[9px] bg-rose-500/20 text-rose-400 font-bold px-2 py-0.5 rounded uppercase">❌ Rejected</span>
+                                            <span class="text-[9px] bg-rose-500/20 text-rose-300 font-bold px-2 py-0.5 rounded uppercase border border-rose-500/30">❌ Rejected</span>
                                         {% endif %}
                                     </div>
                                 </div>
