@@ -26,27 +26,27 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
     
     standings = {}
     for t in teams:
-        # Determine correct flag URL directly in Python to prevent template lookup mismatches
-        code = (t.get("flag_emoji") or "").lower().strip()
+        # Robust server-side flag URL resolution matching your exact database values
         name = (t.get("nation_name") or "").lower().strip()
+        code = (t.get("flag_emoji") or "").lower().strip()
         
-        if 'wales' in name or code == 'wls' or code == 'gb-wls':
-            flag_url = 'https://flagcdn.com/w640/gb-wls.png'
-        elif 'austria' in name or code == 'at':
+        if code == 'at' or 'austria' in name:
             flag_url = 'https://flagcdn.com/w640/at.png'
-        elif 'ireland' in name or code == 'ie':
+        elif code in ['wls', 'gb-wls'] or 'wales' in name:
+            flag_url = 'https://flagcdn.com/w640/gb-wls.png'
+        elif code == 'ie' or 'ireland' in name:
             flag_url = 'https://flagcdn.com/w640/ie.png'
-        elif 'united states' in name or 'usa' in name or code == 'us':
+        elif code == 'us' or 'united states' in name or 'usa' in name:
             flag_url = 'https://flagcdn.com/w640/us.png'
-        elif 'china' in name or code == 'cn' or code == 'ch':
+        elif code in ['cn', 'ch'] or 'china' in name:
             flag_url = 'https://flagcdn.com/w640/cn.png'
-        elif 'japan' in name or code == 'jp':
+        elif code == 'jp' or 'japan' in name:
             flag_url = 'https://flagcdn.com/w640/jp.png'
-        elif 'germany' in name or code == 'de':
+        elif code == 'de' or 'germany' in name:
             flag_url = 'https://flagcdn.com/w640/de.png'
-        elif 'canada' in name or code == 'ca':
+        elif code == 'ca' or 'canada' in name:
             flag_url = 'https://flagcdn.com/w640/ca.png'
-        elif 'brazil' in name or code == 'br':
+        elif code == 'br' or 'brazil' in name:
             flag_url = 'https://flagcdn.com/w640/br.png'
         else:
             flag_url = 'https://flagcdn.com/w640/gb.png'
