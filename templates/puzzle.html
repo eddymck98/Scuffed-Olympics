@@ -22,7 +22,7 @@
         </p>
     </div>
 
-    <!-- Puzzle Stages -->
+    <!-- Chamber Container -->
     <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-8 shadow-xl space-y-6">
         
         <!-- Progress Bar Indicator -->
@@ -31,40 +31,137 @@
             <span class="text-amber-400">Stage {{ current_stage }} of 5</span>
         </div>
 
-        {% if current_stage <= 4 %}
-            <!-- Active Puzzle Form -->
+        {% if current_stage == 1 %}
+            <!-- STAGE 1: The Scuffed Riddle -->
             <div class="space-y-4">
                 <div class="bg-slate-950 p-5 rounded-2xl border border-amber-500/30 space-y-2">
-                    <span class="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded">Trial #{{ current_stage }}</span>
-                    <h3 class="text-sm font-bold text-slate-100">
-                        {% if current_stage == 1 %}Decode the first scrambled cipher to proceed.
-                        {% elif current_stage == 2 %}Solve the riddle of the second chamber.
-                        {% elif current_stage == 3 %}Crack the third lock mechanism.
-                        {% elif current_stage == 4 %}The final puzzle stands in your way!{% endif %}
+                    <span class="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded">Trial #1: The Scuffed Riddle</span>
+                    <h3 class="text-sm font-bold text-slate-100 leading-relaxed">
+                        "I have keys but no locks. I have space but no room. You can enter, but can't go outside. What am I?"
                     </h3>
                 </div>
 
                 <form action="/escape-room/submit" method="POST" class="space-y-4">
-                    <input type="hidden" name="stage" value="{{ current_stage }}">
-                    <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Your Answer / Solution</label>
-                        <input type="text" name="answer" required placeholder="Type your answer here..." autocomplete="off" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-xs text-slate-200 outline-none focus:border-amber-400 transition shadow-inner">
-                    </div>
-
+                    <input type="hidden" name="stage" value="1">
+                    <input type="text" name="answer" required placeholder="Type your answer..." autocomplete="off" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-xs text-slate-200 outline-none focus:border-amber-400 transition shadow-inner">
                     <button type="submit" class="w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-slate-950 font-black text-xs uppercase tracking-widest py-4 rounded-2xl hover:brightness-110 transition shadow-lg shadow-amber-500/20">
-                        Unlock Next Chamber &rarr;
+                        Unlock Chamber 2 &rarr;
                     </button>
                 </form>
             </div>
 
+        {% elif current_stage == 2 %}
+            <!-- STAGE 2: Cipher Decode -->
+            <div class="space-y-4">
+                <div class="bg-slate-950 p-5 rounded-2xl border border-blue-500/30 space-y-2">
+                    <span class="text-[10px] font-black uppercase text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded">Trial #2: Secret Cipher</span>
+                    <h3 class="text-sm font-bold text-slate-100">Decode this encrypted message (Hint: shift each letter back one in the alphabet):</h3>
+                    <p class="text-lg font-mono font-black text-amber-400 tracking-widest py-2">BUGMFUFT</p>
+                </div>
+
+                <form action="/escape-room/submit" method="POST" class="space-y-4">
+                    <input type="hidden" name="stage" value="2">
+                    <input type="text" name="answer" required placeholder="Decoded word..." autocomplete="off" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-xs text-slate-200 outline-none focus:border-amber-400 transition shadow-inner">
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl hover:brightness-110 transition shadow-lg shadow-blue-500/20">
+                        Unlock Chamber 3 &rarr;
+                    </button>
+                </form>
+            </div>
+
+        {% elif current_stage == 3 %}
+            <!-- STAGE 3: Wordle style / Drink -->
+            <div class="space-y-4">
+                <div class="bg-slate-950 p-5 rounded-2xl border border-emerald-500/30 space-y-2">
+                    <span class="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded">Trial #3: Wordle Challenge</span>
+                    <h3 class="text-sm font-bold text-slate-100">Guess the 5-letter party secret word:</h3>
+                    <p class="text-xs text-slate-400">What is everyone's favorite activity at the end of a long Olympic event?</p>
+                </div>
+
+                <form action="/escape-room/submit" method="POST" class="space-y-4">
+                    <input type="hidden" name="stage" value="3">
+                    <input type="text" name="answer" maxlength="5" required placeholder="5-letter word..." autocomplete="off" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-xs text-slate-200 uppercase tracking-widest text-center outline-none focus:border-emerald-400 transition shadow-inner">
+                    <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 text-slate-950 font-black text-xs uppercase tracking-widest py-4 rounded-2xl hover:brightness-110 transition shadow-lg shadow-emerald-500/20">
+                        Unlock Chamber 4 &rarr;
+                    </button>
+                </form>
+            </div>
+
+        {% elif current_stage == 4 %}
+            <!-- STAGE 4: Interactive 7-Wire Defusal -->
+            <div class="space-y-5 text-center">
+                <div class="bg-slate-950 p-5 rounded-2xl border border-red-500/40 space-y-2 text-left">
+                    <span class="text-[10px] font-black uppercase text-red-400 bg-red-500/10 px-2.5 py-1 rounded animate-pulse">🚨 Trial #4: 7-Wire Defusal</span>
+                    <h3 class="text-sm font-bold text-white">Cut the 7 colored wires in the exact correct order (Rainbow ROYGBIV sequence)!</h3>
+                </div>
+
+                <!-- Wire Buttons Grid -->
+                <div id="wireBoard" class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-md mx-auto">
+                    <button type="button" onclick="cutWire('red')" id="w-red" class="wire-btn bg-red-600 hover:bg-red-500 text-white font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🔴 Red</button>
+                    <button type="button" onclick="cutWire('orange')" id="w-orange" class="wire-btn bg-orange-600 hover:bg-orange-500 text-white font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🟠 Orange</button>
+                    <button type="button" onclick="cutWire('yellow')" id="w-yellow" class="wire-btn bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🟡 Yellow</button>
+                    <button type="button" onclick="cutWire('green')" id="w-green" class="wire-btn bg-green-600 hover:bg-green-500 text-white font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🟢 Green</button>
+                    <button type="button" onclick="cutWire('blue')" id="w-blue" class="wire-btn bg-blue-600 hover:bg-blue-500 text-white font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🔵 Blue</button>
+                    <button type="button" onclick="cutWire('indigo')" id="w-indigo" class="wire-btn bg-indigo-600 hover:bg-indigo-500 text-white font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🟣 Indigo</button>
+                    <button type="button" onclick="cutWire('violet')" id="w-violet" class="wire-btn bg-purple-600 hover:bg-purple-500 text-white font-black text-[11px] py-3 rounded-xl shadow transition active:scale-95">🟪 Violet</button>
+                </div>
+
+                <div class="bg-slate-950 px-4 py-3 rounded-xl border border-slate-800 max-w-sm mx-auto">
+                    <span class="text-[10px] text-slate-400 uppercase font-mono block">Wires Cut Sequence:</span>
+                    <span id="wireDisplay" class="text-xs font-black text-amber-400 tracking-wider uppercase">None</span>
+                </div>
+
+                <form id="wireForm" action="/escape-room/submit" method="POST">
+                    <input type="hidden" name="stage" value="4">
+                    <input type="hidden" name="answer" id="wireAnswer" value="">
+                </form>
+
+                <button type="button" onclick="resetWires()" class="text-xs text-rose-400 hover:text-rose-300 font-bold underline">Reset Wires</button>
+            </div>
+
+            <script>
+                const correctWireSequence = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+                let cutSequence = [];
+
+                function cutWire(color) {
+                    if (!cutSequence.includes(color)) {
+                        cutSequence.push(color);
+                        document.getElementById(`w-${color}`).style.opacity = '0.2';
+                        document.getElementById(`w-${color}`).style.pointerEvents = 'none';
+                        
+                        document.getElementById('wireDisplay').innerText = cutSequence.join(' ➔ ');
+
+                        if (cutSequence.length === correctWireSequence.length) {
+                            const match = cutSequence.every((val, idx) => val === correctWireSequence[idx]);
+                            if (match) {
+                                document.getElementById('wireAnswer').value = cutSequence.join('-');
+                                setTimeout(() => { document.getElementById('wireForm').submit(); }, 400);
+                            } else {
+                                alert("💥 Incorrect wire order! System reset.");
+                                resetWires();
+                            }
+                        }
+                    }
+                }
+
+                function resetWires() {
+                    cutSequence = [];
+                    correctWireSequence.forEach(color => {
+                        const btn = document.getElementById(`w-${color}`);
+                        btn.style.opacity = '1';
+                        btn.style.pointerEvents = 'auto';
+                    });
+                    document.getElementById('wireDisplay').innerText = 'None';
+                }
+            </script>
+
         {% else %}
-            <!-- Stage 5: Final Prompt -->
+            <!-- STAGE 5: Final Prompt for Ed's Table -->
             <div class="bg-gradient-to-br from-amber-500/20 via-slate-950 to-rose-500/20 border-2 border-amber-400 rounded-3xl p-8 text-center space-y-6 shadow-2xl animate-pulse">
                 <span class="text-5xl">🏆</span>
-                <div class="space-y-2">
+                <div class="space-y-3">
                     <h2 class="text-amber-400 font-black uppercase text-lg tracking-widest">All Puzzles Conquered!</h2>
-                    <p class="text-sm font-bold text-white uppercase tracking-wider">
-                        FINAL INSTRUCTION: Place an item on the table in front of Ed beginning with the letter <span class="text-yellow-400 text-xl underline">P</span>!
+                    <p class="text-sm sm:text-base font-black text-white uppercase tracking-wider leading-relaxed">
+                        FINAL INSTRUCTION: Place an item on the table in front of Ed beginning with the letter <span class="text-yellow-400 text-2xl underline">P</span>!
                     </p>
                 </div>
                 <p class="text-xs text-slate-400 italic">Bring your item immediately to claim ultimate escape room victory!</p>
