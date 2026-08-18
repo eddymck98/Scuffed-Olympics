@@ -5,21 +5,31 @@
     <!-- Olympic Ring Color Gradient Accent Bar -->
     <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
 
-    <!-- Sleek Header -->
-    <div class="relative py-8 px-6 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 rounded-3xl border border-amber-500/30 shadow-xl text-center space-y-3 overflow-hidden">
-        <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none text-9xl">🧩</div>
-        
-        <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1 rounded-full text-amber-400 text-[10px] font-black uppercase tracking-widest shadow-inner">
-            <span>🧩</span> Escape Room Trials <span>🔓</span>
+    <!-- Hero Header with Integrated Official Logo (Matching other pages) -->
+    <div class="relative py-10 px-6 text-center space-y-4 overflow-hidden bg-gradient-to-b from-slate-900/90 to-slate-900/40 rounded-[3rem] border border-slate-800 shadow-2xl">
+        <div class="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-blue-500/10 rounded-full blur-[90px] pointer-events-none"></div>
+        <div class="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-red-500/10 rounded-full blur-[90px] pointer-events-none"></div>
+
+        <div class="relative z-10 flex flex-col items-center space-y-4">
+            <!-- Small Games Logo Badge -->
+            <div class="p-2.5 bg-slate-950/80 rounded-2xl border border-yellow-500/30 shadow-lg">
+                <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/static/image/logo.png?raw=true" alt="Logo" class="h-16 w-16 object-contain drop-shadow-[0_0_12px_rgba(234,179,8,0.6)]">
+            </div>
+
+            <div class="space-y-1">
+                <div class="flex items-center justify-center gap-2 text-xs font-black tracking-widest uppercase">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.8)]"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
+                    <span class="text-slate-300 ml-1">Scuffed Games 2026</span>
+                </div>
+                <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase bg-gradient-to-r from-blue-400 via-yellow-300 to-red-400 bg-clip-text text-transparent">
+                    🧩 Puzzle Chamber
+                </h1>
+                <p class="text-xs sm:text-sm text-slate-400 font-medium">Solve each trial sequentially to unlock the next chamber. Speed and wits will save you!</p>
+            </div>
         </div>
-        
-        <h1 class="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">
-            Puzzle <span class="bg-gradient-to-r from-blue-400 via-yellow-400 to-red-400 bg-clip-text text-transparent">Chamber</span>
-        </h1>
-        
-        <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto font-medium">
-            Solve each trial sequentially to unlock the next chamber. Speed and wits will save you!
-        </p>
     </div>
 
     <!-- Chamber Container -->
@@ -51,7 +61,7 @@
             </div>
 
         {% elif current_stage == 2 %}
-            <!-- STAGE 2: Cipher Decode (No Hint) -->
+            <!-- STAGE 2: Cipher Decode -->
             <div class="space-y-4">
                 <div class="bg-slate-950 p-5 rounded-2xl border border-blue-500/30 space-y-2">
                     <span class="text-[10px] font-black uppercase text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded">Trial #2: Secret Cipher</span>
@@ -69,7 +79,7 @@
             </div>
 
         {% elif current_stage == 3 %}
-            <!-- STAGE 3: Interactive Wordle Grid (Fixed duplicate frequency bug) -->
+            <!-- STAGE 3: Interactive Wordle Grid -->
             <div class="space-y-4 text-center">
                 <div class="bg-slate-950 p-5 rounded-2xl border border-emerald-500/30 space-y-2 text-left">
                     <span class="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded">Trial #3: Wordle Challenge</span>
@@ -145,7 +155,6 @@
                     let guessChars = guessWord.split('');
                     let statuses = Array(5).fill('absent');
 
-                    // 1. Check exact matches (greens)
                     for (let c = 0; c < 5; c++) {
                         if (guessChars[c] === targetChars[c]) {
                             statuses[c] = 'correct';
@@ -154,7 +163,6 @@
                         }
                     }
 
-                    // 2. Check partial matches (yellows) with frequency tracking
                     for (let c = 0; c < 5; c++) {
                         if (guessChars[c] !== null) {
                             const index = targetChars.indexOf(guessChars[c]);
@@ -165,7 +173,6 @@
                         }
                     }
 
-                    // Apply styles
                     for (let c = 0; c < 5; c++) {
                         const tile = document.getElementById(`tile-${currentRow}-${c}`);
                         if (statuses[c] === 'correct') {
@@ -186,17 +193,21 @@
                         currentRow++;
                         currentCol = 0;
                         if (currentRow === 6) {
-                            setTimeout(() => {
-                                alert("Out of rows! Resetting board.");
-                                location.reload();
-                            }, 500);
+                            if (typeof showToast === 'function') {
+                                showToast("Incorrect Wordle Guess! Resetting row.");
+                            }
+                            setTimeout(() => { location.reload(); }, 600);
+                        } else {
+                            if (typeof showToast === 'function') {
+                                showToast("Incorrect word guess!");
+                            }
                         }
                     }
                 }
             </script>
 
         {% elif current_stage == 4 %}
-            <!-- STAGE 4: Bomb Defusal Panel (Immediate Incorrect Check & No Hints) -->
+            <!-- STAGE 4: Bomb Defusal Panel -->
             <div class="space-y-6 text-center">
                 <div class="bg-slate-950 p-6 rounded-3xl border-2 border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.15)] space-y-3">
                     <div class="flex items-center justify-between">
@@ -207,16 +218,12 @@
                     <p class="text-xs text-slate-400">Warning: Choosing an incorrect wire or wrong position will trigger an immediate system failure.</p>
                 </div>
 
-                <!-- Industrial Bomb Terminal Panel -->
                 <div class="bg-slate-950 border-4 border-slate-800 rounded-3xl p-6 shadow-2xl space-y-6">
-                    
-                    <!-- Status Display Screen -->
                     <div class="bg-black/80 border-2 border-red-500/30 rounded-2xl p-4 shadow-inner">
                         <span class="text-[10px] text-slate-500 uppercase font-mono block tracking-widest">Active Sequence Log</span>
                         <span id="wireDisplay" class="text-sm font-black text-red-500 font-mono tracking-widest uppercase">--- WAITING FOR INPUT ---</span>
                     </div>
 
-                    <!-- 7 Shuffled Wires Grid -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-md mx-auto">
                         <button type="button" onclick="cutWire('red')" id="w-red" class="wire-btn bg-red-600 hover:bg-red-500 text-white font-black text-xs py-4 rounded-xl shadow-lg transition active:scale-95 border border-red-400">🔴 RED</button>
                         <button type="button" onclick="cutWire('orange')" id="w-orange" class="wire-btn bg-orange-600 hover:bg-orange-500 text-white font-black text-xs py-4 rounded-xl shadow-lg transition active:scale-95 border border-orange-400">🟠 ORANGE</button>
@@ -227,7 +234,6 @@
                         <button type="button" onclick="cutWire('violet')" id="w-violet" class="wire-btn bg-purple-600 hover:bg-purple-500 text-white font-black text-xs py-4 rounded-xl shadow-lg transition active:scale-95 border border-purple-400">🟪 VIOLET</button>
                     </div>
 
-                    <!-- Hidden Form -->
                     <form id="wireForm" action="/escape-room/submit" method="POST">
                         <input type="hidden" name="stage" value="4">
                         <input type="hidden" name="answer" id="wireAnswer" value="">
@@ -240,30 +246,29 @@
             </div>
 
             <script>
-                // Randomized correct sequence: green -> yellow -> violet -> red -> indigo -> blue -> orange
                 const correctWireSequence = ['green', 'yellow', 'violet', 'red', 'indigo', 'blue', 'orange'];
                 let cutSequence = [];
 
                 function cutWire(color) {
                     if (!cutSequence.includes(color)) {
                         const nextIndex = cutSequence.length;
-                        
-                        // Immediate validation check against the correct position
                         if (color === correctWireSequence[nextIndex]) {
                             cutSequence.push(color);
                             document.getElementById(`w-${color}`).style.opacity = '0.2';
                             document.getElementById(`w-${color}`).style.pointerEvents = 'none';
-                            
                             document.getElementById('wireDisplay').innerText = cutSequence.join(' ➔ ').toUpperCase();
 
-                            // If all 7 wires are successfully cut in exact order
                             if (cutSequence.length === correctWireSequence.length) {
                                 document.getElementById('wireAnswer').value = cutSequence.join('-');
                                 setTimeout(() => { document.getElementById('wireForm').submit(); }, 600);
                             }
                         } else {
-                            // Immediate incorrect click triggers error redirect
-                            window.location.href = "/escape-room?error=Wrong+wire+sequence!+System+Failed.";
+                            if (typeof showToast === 'function') {
+                                showToast("Wrong wire sequence! System Failed.");
+                            }
+                            setTimeout(() => {
+                                window.location.href = "/escape-room?error=Wrong+wire+sequence!+System+Failed.";
+                            }, 500);
                         }
                     }
                 }
@@ -295,8 +300,12 @@
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const errorMsg = urlParams.get('error');
-    if (errorMsg && typeof showToast === 'function') {
-        showToast(errorMsg);
+    if (errorMsg) {
+        if (typeof showToast === 'function') {
+            showToast(errorMsg);
+        } else {
+            alert(errorMsg);
+        }
     }
 </script>
 {% endblock %}
