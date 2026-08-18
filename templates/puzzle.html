@@ -171,4 +171,13 @@
     </div>
 
 </div>
+
+<!-- Trigger Toast Pop-up if URL has ?error= -->
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorMsg = urlParams.get('error');
+    if (errorMsg && typeof showToast === 'function') {
+        showToast(errorMsg);
+    }
+</script>
 {% endblock %}
