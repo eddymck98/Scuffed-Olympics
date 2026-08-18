@@ -7,12 +7,11 @@ from routers.auth import require_team
 router = APIRouter(prefix="/escape-room", tags=["Escape Room"])
 templates = Jinja2Templates(directory="templates")
 
-# Exact answers for your 4 stages
 STAGE_ANSWERS = {
     1: "keyboard",
     2: "athletes",
     3: "drink",
-    4: "red-orange-yellow-green-blue-indigo-violet"  # 7 colored wires sequence
+    4: "red-orange-yellow-green-blue-indigo-violet"
 }
 
 @router.get("", response_class=HTMLResponse)
@@ -44,11 +43,8 @@ async def submit_puzzle(
 ):
     clean_answer = answer.strip().lower()
     
-    # Check if the submitted answer is correct for the current stage
     if stage in STAGE_ANSWERS and clean_answer == STAGE_ANSWERS[stage]:
         next_stage = stage + 1
-        
-        # Check if a progress row already exists for this team to bypass strict RLS insert/upsert restrictions
         existing = supabase.table("puzzle_progress").select("team_id").eq("team_id", team["id"]).execute()
         
         if existing.data:
@@ -58,5 +54,4 @@ async def submit_puzzle(
             
         return RedirectResponse(url="/escape-room", status_code=status.HTTP_303_SEE_OTHER)
     
-    # If the answer is incorrect, redirect back with an error toast parameter
     return RedirectResponse(url="/escape-room?error=Incorrect+Answer!", status_code=status.HTTP_303_SEE_OTHER)
