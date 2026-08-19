@@ -1,26 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-2xl mx-auto py-4 px-4 relative overflow-hidden pt-2">
+<div class="max-w-2xl mx-auto py-4 px-3 sm:px-6 relative overflow-hidden pt-2">
     
     <!-- Olympic Ring Color Gradient Accent Bar Top -->
     <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)] mb-5"></div>
 
     <!-- Hero Banner with Logo & Olympic Styling -->
-    <div class="text-center space-y-3 relative py-5 bg-gradient-to-b from-indigo-950/90 to-purple-950/60 rounded-[2.5rem] border border-indigo-800/60 shadow-xl p-6 mb-5 backdrop-blur-md">
+    <div class="text-center space-y-3 relative py-5 bg-gradient-to-b from-indigo-950/90 to-purple-950/60 rounded-[2.5rem] border border-indigo-800/60 shadow-xl p-5 sm:p-6 mb-5 backdrop-blur-md">
         
         <div class="relative z-10 flex flex-col items-center space-y-3">
             <!-- Laurel & Logo Frame -->
             <div class="relative flex items-center justify-center p-2.5 bg-indigo-950 rounded-2xl border-2 border-amber-500/40 shadow-[0_0_25px_rgba(245,158,11,0.2)]">
-                <span class="absolute -left-7 text-xl select-none animate-pulse">🌿</span>
-                <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/static/image/logo.png?raw=true" alt="Scuffed Olympics Logo" class="h-24 w-24 sm:h-28 sm:w-28 object-contain drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] relative z-10">
-                <span class="absolute -right-7 text-xl select-none animate-pulse">🌿</span>
+                <span class="absolute -left-6 sm:-left-7 text-xl select-none animate-pulse">🌿</span>
+                <img src="https://github.com/eddymck98/Scuffed-Olympics/blob/main/static/image/logo.png?raw=true" alt="Scuffed Olympics Logo" class="h-20 w-20 sm:h-28 sm:w-28 object-contain drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] relative z-10">
+                <span class="absolute -right-6 sm:-right-7 text-xl select-none animate-pulse">🌿</span>
             </div>
 
             <div class="space-y-1">
                 <span class="bg-gradient-to-r from-blue-400 via-yellow-400 to-red-500 text-slate-950 text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest shadow-md inline-block">
                     🥇 Official Panic & Party Portal 🥇
                 </span>
-                <h1 class="text-2xl sm:text-4xl font-black text-white tracking-tight uppercase pt-1">
+                <h1 class="text-xl sm:text-4xl font-black text-white tracking-tight uppercase pt-1">
                     THE SCUFFED OLYMPICS
                 </h1>
                 <p class="text-xs text-indigo-200 max-w-sm mx-auto font-medium">
@@ -37,7 +37,7 @@
     {% endif %}
 
     <!-- Main Form Container -->
-    <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-5 sm:p-7 shadow-2xl backdrop-blur-md">
+    <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-4 sm:p-7 shadow-2xl backdrop-blur-md">
         <form action="/login" method="POST" id="loginForm" class="space-y-6">
             
             <input type="hidden" name="team_id" id="selectedTeamId" required>
@@ -101,7 +101,7 @@
                         <span class="text-xs text-indigo-200 font-bold uppercase">Allegiance:</span>
                         <span id="chosenNationDisplay" class="text-xs font-black text-amber-400 uppercase tracking-wider"></span>
                     </div>
-                    <button type="button" onclick="resetSelection()" class="text-xs text-rose-400 hover:text-rose-300 font-black underline uppercase tracking-wider transition">Switch</button>
+                    <button type="button" onclick="resetSelection()" class="text-xs text-rose-400 hover:text-rose-300 font-black underline uppercase tracking-wider transition p-1">Switch</button>
                 </div>
 
                 <div class="space-y-3 text-center py-1">
@@ -115,19 +115,19 @@
                 </div>
 
                 <!-- Sleek Arcade Keypad -->
-                <div class="grid grid-cols-3 gap-2.5 max-w-xs mx-auto">
-                    <button type="button" onclick="pressKey('1')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-3.5 rounded-2xl transition shadow-lg active:scale-95">1</button>
-                    <button type="button" onclick="pressKey('2')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-3.5 rounded-2xl transition shadow-lg active:scale-95">2</button>
-                    <button type="button" onclick="pressKey('3')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-3.5 rounded-2xl transition shadow-lg active:scale-95">3</button>
-                    <button type="button" onclick="pressKey('4')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-3.5 rounded-2xl transition shadow-lg active:scale-95">4</button>
-                    <button type="button" onclick="pressKey('5')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-3.5 rounded-2xl transition shadow-lg active:scale-95">5</button>
-                    <button type="button" onclick="pressKey('6')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-3.5 rounded-2xl transition shadow-lg active:scale-95">6</button>
-                    <button type="button" onclick="pressKey('7')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-3.5 rounded-2xl transition shadow-lg active:scale-95">7</button>
-                    <button type="button" onclick="pressKey('8')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-3.5 rounded-2xl transition shadow-lg active:scale-95">8</button>
-                    <button type="button" onclick="pressKey('9')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-3.5 rounded-2xl transition shadow-lg active:scale-95">9</button>
+                <div class="grid grid-cols-3 gap-3 max-w-xs mx-auto">
+                    <button type="button" onclick="pressKey('1')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-4 rounded-2xl transition shadow-lg active:scale-95">1</button>
+                    <button type="button" onclick="pressKey('2')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-4 rounded-2xl transition shadow-lg active:scale-95">2</button>
+                    <button type="button" onclick="pressKey('3')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-4 rounded-2xl transition shadow-lg active:scale-95">3</button>
+                    <button type="button" onclick="pressKey('4')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-4 rounded-2xl transition shadow-lg active:scale-95">4</button>
+                    <button type="button" onclick="pressKey('5')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-4 rounded-2xl transition shadow-lg active:scale-95">5</button>
+                    <button type="button" onclick="pressKey('6')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-4 rounded-2xl transition shadow-lg active:scale-95">6</button>
+                    <button type="button" onclick="pressKey('7')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-4 rounded-2xl transition shadow-lg active:scale-95">7</button>
+                    <button type="button" onclick="pressKey('8')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-4 rounded-2xl transition shadow-lg active:scale-95">8</button>
+                    <button type="button" onclick="pressKey('9')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-4 rounded-2xl transition shadow-lg active:scale-95">9</button>
                     <div></div>
-                    <button type="button" onclick="pressKey('0')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-3.5 rounded-2xl transition shadow-lg active:scale-95">0</button>
-                    <button type="button" onclick="deleteKey()" class="keypad-btn bg-indigo-950/90 hover:bg-rose-500 hover:text-white border border-indigo-800/80 text-indigo-200 text-sm font-black py-3.5 rounded-2xl transition flex items-center justify-center shadow-lg active:scale-95">⌫</button>
+                    <button type="button" onclick="pressKey('0')" class="keypad-btn bg-indigo-950/90 hover:bg-amber-400 hover:text-slate-950 border border-indigo-800/80 text-white text-lg font-black py-4 rounded-2xl transition shadow-lg active:scale-95">0</button>
+                    <button type="button" onclick="deleteKey()" class="keypad-btn bg-indigo-950/90 hover:bg-rose-500 hover:text-white border border-indigo-800/80 text-indigo-200 text-sm font-black py-4 rounded-2xl transition flex items-center justify-center shadow-lg active:scale-95">⌫</button>
                 </div>
             </div>
 
