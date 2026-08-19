@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 from database import supabase, templates
@@ -7,15 +8,12 @@ router = APIRouter(tags=["Party Mode"])
 
 @router.get("/party", response_class=HTMLResponse)
 async def party_page(request: Request, team: dict = Depends(require_team)):
-    # Fetch all teams/nations
     teams_res = supabase.table("teams").select("id, nation_name, participant_name, flag_emoji").execute()
     teams = teams_res.data if teams_res.data else []
 
-    # Fetch tasks from Supabase
     tasks_res = supabase.table("drinking_tasks").select("*").execute()
     tasks = tasks_res.data if tasks_res.data else []
 
-    # Feature toggles for navbar consistency
     settings_res = supabase.table("app_settings").select("key, is_active").execute()
     settings = {s["key"]: s["is_active"] for s in settings_res.data} if settings_res.data else {}
     
@@ -27,7 +25,7 @@ async def party_page(request: Request, team: dict = Depends(require_team)):
         "request": request,
         "team": team,
         "teams": teams,
-        "tasks": tasks,
+        "tasks_json": json.dumps(tasks), # Safely serialized to JSON string
         "treasure_visible": treasure_visible,
         "escape_visible": escape_visible
     })
