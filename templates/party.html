@@ -11,8 +11,17 @@
         <p class="text-xs text-indigo-300">Spin the slots, face your dare, or take the drink penalty!</p>
     </div>
 
+    <!-- Category Filter Tabs -->
+    <div class="flex flex-wrap items-center justify-center gap-2">
+        <button onclick="setCategory('all')" id="cat-all" class="cat-btn bg-amber-500 text-slate-950 px-4 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">All</button>
+        <button onclick="setCategory('standard')" id="cat-standard" class="cat-btn bg-indigo-950/80 border border-indigo-800 text-slate-300 hover:text-white px-4 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">Standard</button>
+        <button onclick="setCategory('timed')" id="cat-timed" class="cat-btn bg-indigo-950/80 border border-indigo-800 text-slate-300 hover:text-white px-4 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">Timed</button>
+        <button onclick="setCategory('duel')" id="cat-duel" class="cat-btn bg-indigo-950/80 border border-indigo-800 text-slate-300 hover:text-white px-4 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">Duel</button>
+        <button onclick="setCategory('spicy')" id="cat-spicy" class="cat-btn bg-indigo-950/80 border border-indigo-800 text-slate-300 hover:text-white px-4 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">Spicy</button>
+    </div>
+
     <!-- Slots Active Prompt Card -->
-    <div class="bg-gradient-to-br from-indigo-950/95 via-purple-950/90 to-indigo-950/95 border-2 border-amber-500/40 rounded-3xl p-8 shadow-2xl space-y-6 relative overflow-hidden min-h-[320px] flex flex-col items-center justify-center">
+    <div class="bg-gradient-to-br from-indigo-950/95 via-purple-950/90 to-indigo-950/95 border-2 border-amber-500/40 rounded-3xl p-8 shadow-2xl space-y-6 relative overflow-hidden min-h-[280px] flex flex-col items-center justify-center">
         
         <!-- Nation / Competitor Slot Box -->
         <div class="w-full bg-indigo-950/80 border border-indigo-800/80 rounded-2xl p-4 shadow-inner">
@@ -23,13 +32,8 @@
         </div>
 
         <!-- Task / Dare Slot Box -->
-        <div id="slotTask" class="w-full bg-purple-950/80 border border-indigo-800/80 rounded-2xl p-5 text-sm sm:text-base font-bold text-slate-100 shadow-inner min-h-[90px] flex items-center justify-center">
+        <div id="slotTask" class="w-full bg-purple-950/80 border border-indigo-800/80 rounded-2xl p-5 text-sm sm:text-base font-bold text-slate-100 shadow-inner min-h-[90px] flex items-center justify-center leading-relaxed">
             Your chaotic prompt will appear here...
-        </div>
-
-        <!-- Timed Challenge Display (if applicable) -->
-        <div id="timerContainer" class="hidden font-mono text-amber-400 text-xs font-black bg-amber-500/10 border border-amber-500/30 px-4 py-2 rounded-xl animate-pulse">
-            ⏱️ Time Remaining: <span id="countdown">30</span>s
         </div>
     </div>
 
@@ -43,104 +47,95 @@
 </div>
 
 <script>
-    // Data injected from FastAPI / Supabase
     const teams = [
         {% for t in teams %}
         { name: "{{ t.nation_name }}", participant: "{{ t.participant_name }}", flag: "{{ t.flag_emoji }}" },
         {% endfor %}
     ];
 
-    const tasks = [
-        {% for task in tasks %}
-        { 
-            text: "{{ task.task | safe }}", 
-            category: "{{ task.category }}", 
-            min_sips: {{ task.min_sips | default(1) }}, 
-            max_sips: {{ task.max_sips | default(4) }} 
-        },
-        {% endfor %}
-    ];
+    // Safely loaded from Python JSON string to eliminate Jinja recursion errors on complex strings
+    const tasks = {{ tasks_json | safe }};
 
-    let timerInterval = null;
+    let currentCategory = 'all';
+
+    function setCategory(cat) {
+        currentCategory = cat;
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+            btn.classList.remove('bg-amber-500', 'text-slate-950', 'border-amber-400');
+            btn.classList.add('bg-indigo-950/80', 'border-indigo-800', 'text-slate-300');
+        });
+        const activeBtn = document.getElementById(`cat-${cat}`);
+        activeBtn.classList.remove('bg-indigo-950/80', 'border-indigo-800', 'text-slate-300');
+        activeBtn.classList.add('bg-amber-500', 'text-slate-950', 'shadow');
+    }
 
     function getRandomItem(arr) {
         return arr[Math.floor(Math.random() * arr.length)];
     }
 
     function spinSlots() {
+        const filteredTasks = currentCategory === 'all' 
+            ? tasks 
+            : tasks.filter(t => t.category && t.category.toLowerCase() === currentCategory.toLowerCase());
+
         if (teams.length === 0 || tasks.length === 0) {
             alert("Missing teams or tasks database entries!");
+            return;
+        }
+
+        if (filteredTasks.length === 0) {
+            alert(`No tasks found for category: ${currentCategory}`);
             return;
         }
 
         const btn = document.getElementById("spinBtn");
         btn.disabled = true;
 
-        clearInterval(timerInterval);
-        document.getElementById("timerContainer").classList.add("hidden");
-
         let counter = 0;
-        const maxClicks = 15; // Slot roll ticks
+        const maxClicks = 15;
         const rollSpeed = 70;
 
-        // Slot rolling visual effect loop
         const rollInterval = setInterval(() => {
-            // Flash random nations/tasks for slot machine feel
             const tempTeam1 = getRandomItem(teams);
-            const tempTeam2 = getRandomItem(teams);
             document.getElementById("slotNation").innerHTML = `<span>${tempTeam1.flag}</span> ${tempTeam1.name}`;
-            document.getElementById("slotTask").innerText = getRandomItem(tasks).text;
+            document.getElementById("slotTask").innerText = getRandomItem(filteredTasks).task;
 
             counter++;
             if (counter >= maxClicks) {
                 clearInterval(rollInterval);
-                finalizeSelection();
+                finalizeSelection(filteredTasks);
                 btn.disabled = false;
             }
         }, rollSpeed);
     }
 
-    function finalizeSelection() {
-        const selectedTask = getRandomItem(tasks);
-        const randomSips = Math.floor(Math.random() * (selectedTask.max_sips - selectedTask.min_sips + 1)) + selectedTask.min_sips;
-        const randomSeconds = Math.floor(Math.random() * 4) * 15 + 15; // 15, 30, 45, or 60 secs
+    function finalizeSelection(filteredTasks) {
+        const selectedTask = getRandomItem(filteredTasks);
+        const minS = selectedTask.min_sips || 1;
+        const maxS = selectedTask.max_sips || 4;
+        const randomSips = Math.floor(Math.random() * (maxS - minS + 1)) + minS;
+        const randomSeconds = Math.floor(Math.random() * 4) * 15 + 15;
 
         const team1 = getRandomItem(teams);
         let nationHtml = `<span>${team1.flag}</span> ${team1.name} <span class="text-xs text-indigo-300 font-normal">(${team1.participant})</span>`;
 
-        // Check if task involves two nations (e.g., contains {{nation2}} or duel category)
-        let formattedTask = selectedTask.text
-            .replace(/{sips}/g, `<strong class="text-amber-400 font-mono">${randomSips}</strong>`)
-            .replace(/{seconds}/g, `<strong class="text-amber-400 font-mono">${randomSeconds}</strong>`);
+        let taskText = selectedTask.task || "";
+        let formattedTask = taskText
+            .replace(/{sips}/g, `<span class="inline-block mx-1 px-2 py-0.5 bg-amber-500/20 border border-amber-500/40 rounded-lg text-amber-400 font-mono font-black">${randomSips}</span>`)
+            .replace(/{seconds}/g, `<span class="inline-block mx-1 px-2 py-0.5 bg-amber-500/20 border border-amber-500/40 rounded-lg text-amber-400 font-mono font-black">${randomSeconds}</span>`);
 
-        if (selectedTask.category === 'duel' || formattedTask.includes('{{nation2}}')) {
+        const cat = (selectedTask.category || "").toLowerCase();
+        if (cat === 'duel' || formattedTask.includes('{{nation2}}')) {
             let team2 = getRandomItem(teams);
             while (team2.name === team1.name && teams.length > 1) {
                 team2 = getRandomItem(teams);
             }
-            nationHtml = `<span>${team1.flag}</span> ${team1.name} <span class="text-amber-400">vs</span> <span>${team2.flag}</span> ${team2.name}`;
+            nationHtml = `<span>${team1.flag}</span> ${team1.name} <span class="text-amber-400 font-black px-2">VS</span> <span>${team2.flag}</span> ${team2.name}`;
             formattedTask = formattedTask.replace(/\{\{nation1\}\}/g, team1.name).replace(/\{\{nation2\}\}/g, team2.name);
         }
 
         document.getElementById("slotNation").innerHTML = nationHtml;
         document.getElementById("slotTask").innerHTML = formattedTask;
-
-        // Handle timed challenge countdown if applicable
-        if (selectedTask.category === 'timed') {
-            let timeLeft = randomSeconds;
-            const timerEl = document.getElementById("countdown");
-            timerEl.innerText = timeLeft;
-            document.getElementById("timerContainer").classList.remove("hidden");
-
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                timerEl.innerText = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    document.getElementById("timerContainer").classList.add("hidden");
-                }
-            }, 1000);
-        }
     }
 </script>
 {% endblock %}
