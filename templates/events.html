@@ -1,19 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-7xl mx-auto space-y-6 pb-16 relative pt-2">
+<div class="max-w-7xl mx-auto space-y-6 pb-16 relative pt-2 px-3 sm:px-6 lg:px-8">
     
     <!-- Olympic Ring Color Gradient Accent Bar -->
     <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
 
     <!-- Compact, Sleek Header (Party Vibe) -->
-    <div class="relative py-6 px-6 bg-gradient-to-r from-indigo-950/90 via-purple-950/80 to-indigo-950/90 rounded-3xl border border-amber-500/30 shadow-xl text-center space-y-3 overflow-hidden">
+    <div class="relative py-6 px-4 sm:px-6 bg-gradient-to-r from-indigo-950/90 via-purple-950/80 to-indigo-950/90 rounded-3xl border border-amber-500/30 shadow-xl text-center space-y-3 overflow-hidden">
         <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none text-9xl">⚔️</div>
         
         <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1 rounded-full text-amber-400 text-[10px] font-black uppercase tracking-widest shadow-inner">
             <span>🏆</span> The Gauntlet Awaits <span>🏆</span>
         </div>
         
-        <h1 class="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">
+        <h1 class="text-2xl sm:text-4xl font-black uppercase tracking-tight text-white">
             EVENTS & <span class="bg-gradient-to-r from-blue-300 via-yellow-300 to-red-300 bg-clip-text text-transparent">BATTLEGROUNDS</span>
         </h1>
         
@@ -23,7 +23,7 @@
     </div>
 
     <!-- General Scoring & Hype Banner -->
-    <div class="bg-indigo-950/90 border border-amber-500/30 rounded-3xl p-6 shadow-xl space-y-4 max-w-4xl mx-auto backdrop-blur-md">
+    <div class="bg-indigo-950/90 border border-amber-500/30 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4 max-w-4xl mx-auto backdrop-blur-md">
         <h2 class="text-xs font-black text-amber-400 uppercase tracking-widest text-center flex items-center justify-center gap-2">
             <span>⚖️</span> Scoring Protocol & Rules
         </h2>
@@ -66,7 +66,7 @@
 
         {% for name, emoji, desc in events_list %}
             {% set res_list = event_results_map.get(name, []) %}
-            <div class="bg-indigo-950/90 border border-indigo-800/60 hover:border-amber-400/60 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between transition backdrop-blur-md">
+            <div class="bg-indigo-950/90 border border-indigo-800/60 hover:border-amber-400/60 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4 flex flex-col justify-between transition backdrop-blur-md">
                 <div class="space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-mono font-bold text-amber-300 bg-purple-950/80 px-3 py-1 rounded-xl border border-indigo-800 shadow-inner">Trial #{{ loop.index }}</span>
@@ -76,14 +76,14 @@
                     <p class="text-xs text-indigo-200 leading-relaxed">{{ desc }}</p>
                 </div>
 
-                <!-- Toggle Button -->
+                <!-- Toggle Button (Enlarged for Touch Targets) -->
                 <div class="pt-2">
                     {% if res_list %}
-                        <button onclick="toggleStandings('standings-{{ loop.index }}')" class="w-full py-2.5 bg-indigo-900/80 hover:bg-amber-400 hover:text-slate-950 text-indigo-100 font-black text-[10px] uppercase tracking-widest rounded-xl transition shadow border border-indigo-700/60">
+                        <button onclick="toggleStandings('standings-{{ loop.index }}')" class="w-full py-3 bg-indigo-900/80 hover:bg-amber-400 hover:text-slate-950 text-indigo-100 font-black text-xs uppercase tracking-widest rounded-xl transition shadow border border-indigo-700/60">
                             Click here to view standings
                         </button>
                     {% else %}
-                        <button disabled class="w-full py-2.5 bg-indigo-950/50 text-indigo-400/50 font-bold text-[10px] uppercase tracking-widest rounded-xl cursor-not-allowed border border-indigo-900/60">
+                        <button disabled class="w-full py-3 bg-indigo-950/50 text-indigo-400/50 font-bold text-xs uppercase tracking-widest rounded-xl cursor-not-allowed border border-indigo-900/60">
                             Results Pending
                         </button>
                     {% endif %}
@@ -94,7 +94,7 @@
                     <span class="text-[10px] font-black uppercase tracking-wider text-amber-400 block">Final Results:</span>
                     <div class="space-y-1.5 max-h-40 overflow-y-auto pr-1">
                         {% for r in res_list %}
-                            <div class="bg-purple-950/80 border border-indigo-800/60 px-3 py-2 rounded-xl flex items-center justify-between text-xs shadow-inner">
+                            <div class="bg-purple-950/80 border border-indigo-800/60 px-3 py-2.5 rounded-xl flex items-center justify-between text-xs shadow-inner">
                                 <span class="font-bold text-slate-100 flex items-center gap-2">
                                     <span>{{ r.teams.flag_emoji }}</span>
                                     <span>{{ r.teams.nation_name }}</span>
