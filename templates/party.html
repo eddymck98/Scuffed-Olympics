@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-2xl mx-auto space-y-8 pb-20 pt-4 text-center">
+<div class="max-w-2xl mx-auto space-y-6 pb-20 pt-4 text-center">
     
     <!-- Header -->
     <div class="space-y-2">
@@ -9,6 +9,22 @@
         </div>
         <h1 class="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">The Judgement Wheel</h1>
         <p class="text-xs sm:text-sm text-indigo-300">Spin the slots, face your dare, or take the drink penalty!</p>
+    </div>
+
+    <!-- Active Players Toggle Filter -->
+    <div class="bg-indigo-950/50 border border-indigo-800/60 rounded-2xl p-4 shadow-inner space-y-2">
+        <div class="flex items-center justify-between">
+            <span class="text-[10px] font-mono uppercase tracking-widest text-indigo-400">Active Players (Uncheck to Bench)</span>
+            <button onclick="toggleAllPlayers(true)" class="text-[10px] text-amber-400 hover:underline font-bold">Select All</button>
+        </div>
+        <div id="playerFilter" class="flex flex-wrap justify-center gap-2 pt-1">
+            {% for t in teams %}
+            <label class="flex items-center gap-1.5 bg-slate-900/80 px-3 py-1.5 rounded-xl border border-indigo-900 cursor-pointer hover:border-amber-500/50 transition">
+                <input type="checkbox" {% if t.is_playing is not defined or t.is_playing %}checked{% endif %} value="{{ t.nation_name }}" class="player-checkbox w-3.5 h-3.5 accent-amber-500 rounded">
+                <span class="text-xs font-bold text-slate-200">{{ t.flag_emoji }} {{ t.nation_name }}</span>
+            </label>
+            {% endfor %}
+        </div>
     </div>
 
     <!-- Category Filter Tabs -->
@@ -73,6 +89,10 @@
             document.getElementById("slotTask").innerText = "Error loading tasks from database.";
         });
 
+    function toggleAllPlayers(status) {
+        document.querySelectorAll('.player-checkbox').forEach(cb => cb.checked = status);
+    }
+
     function setCategory(cat) {
         currentCategory = cat;
         document.querySelectorAll('.cat-btn').forEach(btn => {
@@ -89,12 +109,21 @@
     }
 
     function spinSlots() {
+        // Collect only the active checked players
+        const activeNames = Array.from(document.querySelectorAll('.player-checkbox:checked')).map(cb => cb.value);
+        const activeTeams = teams.filter(t => activeNames.includes(t.name));
+
+        if (activeTeams.length === 0) {
+            alert("Please select at least one active player from the list above!");
+            return;
+        }
+
         const filteredTasks = currentCategory === 'all' 
             ? tasks 
             : tasks.filter(t => t.category && t.category.toLowerCase() === currentCategory.toLowerCase());
 
-        if (teams.length === 0 || tasks.length === 0) {
-            alert("Missing teams or tasks database entries!");
+        if (tasks.length === 0) {
+            alert("No tasks database entries found!");
             return;
         }
 
@@ -111,31 +140,30 @@
         const rollSpeed = 60;
 
         const rollInterval = setInterval(() => {
-            const tempTeam1 = getRandomItem(teams);
+            const tempTeam1 = getRandomItem(activeTeams);
             document.getElementById("slotNation").innerHTML = `<span>${tempTeam1.flag}</span> ${tempTeam1.name}`;
             document.getElementById("slotTask").innerText = getRandomItem(filteredTasks).task;
 
             counter++;
             if (counter >= maxClicks) {
                 clearInterval(rollInterval);
-                finalizeSelection(filteredTasks);
+                finalizeSelection(filteredTasks, activeTeams);
                 btn.disabled = false;
             }
         }, rollSpeed);
     }
 
-    function finalizeSelection(filteredTasks) {
+    function finalizeSelection(filteredTasks, activeTeams) {
         const selectedTask = getRandomItem(filteredTasks);
         const minS = selectedTask.min_sips || 1;
         const maxS = selectedTask.max_sips || 4;
         const randomSips = Math.floor(Math.random() * (maxS - minS + 1)) + minS;
         const randomSeconds = (Math.floor(Math.random() * 3) + 1) * 15;
 
-        const team1 = getRandomItem(teams);
+        const team1 = getRandomItem(activeTeams);
         
         let taskText = selectedTask.task || "";
 
-        // Automatically append a drink penalty clause if the task text doesn't already mention taking sips/drinking
         if (!taskText.toLowerCase().includes('sip') && !taskText.toLowerCase().includes('drink') && !taskText.toLowerCase().includes('finish')) {
             taskText += ` Or take {sips} sips to skip!`;
         }
@@ -148,9 +176,9 @@
         let nationHtml = "";
 
         if (cat === 'duel') {
-            let team2 = getRandomItem(teams);
-            while (team2.name === team1.name && teams.length > 1) {
-                team2 = getRandomItem(teams);
+            let team2 = getRandomItem(activeTeams);
+            while (team2.name === team1.name && activeTeams.length > 1) {
+                team2 = getRandomItem(activeTeams);
             }
             document.getElementById("targetLabel").innerText = "Selected Matchup";
             nationHtml = `<span class="flex items-center gap-1.5"><span>${team1.flag}</span> ${team1.name}</span> <span class="text-amber-400 font-black text-lg px-2">VS</span> <span class="flex items-center gap-1.5"><span>${team2.flag}</span> ${team2.name}</span>`;
