@@ -134,6 +134,12 @@
         const team1 = getRandomItem(teams);
         
         let taskText = selectedTask.task || "";
+
+        // Automatically append a drink penalty clause if the task text doesn't already mention taking sips/drinking
+        if (!taskText.toLowerCase().includes('sip') && !taskText.toLowerCase().includes('drink') && !taskText.toLowerCase().includes('finish')) {
+            taskText += ` Or take {sips} sips to skip!`;
+        }
+
         let formattedTask = taskText
             .replace(/{sips}/g, `<span class="inline-flex items-center justify-center px-2.5 py-0.5 mx-1 bg-amber-500 text-slate-950 font-black rounded-md text-sm shadow">${randomSips}</span>`)
             .replace(/{seconds}/g, `<span class="inline-flex items-center justify-center px-2.5 py-0.5 mx-1 bg-amber-500 text-slate-950 font-black rounded-md text-sm shadow">${randomSeconds}</span>`);
@@ -141,7 +147,6 @@
         const cat = (selectedTask.category || "").toLowerCase();
         let nationHtml = "";
 
-        // STRICT CHECK: ONLY trigger VS mode if category is genuinely 'duel'
         if (cat === 'duel') {
             let team2 = getRandomItem(teams);
             while (team2.name === team1.name && teams.length > 1) {
@@ -150,7 +155,6 @@
             document.getElementById("targetLabel").innerText = "Selected Matchup";
             nationHtml = `<span class="flex items-center gap-1.5"><span>${team1.flag}</span> ${team1.name}</span> <span class="text-amber-400 font-black text-lg px-2">VS</span> <span class="flex items-center gap-1.5"><span>${team2.flag}</span> ${team2.name}</span>`;
             
-            // Clean up any stray placeholders if present
             formattedTask = formattedTask.replace(/\{\{nation1\}\}/g, team1.name).replace(/\{\{nation2\}\}/g, team2.name);
         } else {
             document.getElementById("targetLabel").innerText = "Selected Target";
