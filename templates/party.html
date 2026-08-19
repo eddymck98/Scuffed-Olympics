@@ -25,7 +25,7 @@
         
         <!-- Target / Nation Display Box -->
         <div class="bg-indigo-950/60 border border-indigo-800/80 rounded-2xl p-4 shadow-inner">
-            <span class="text-[10px] font-mono uppercase tracking-widest text-indigo-400 block mb-1">Selected Target</span>
+            <span id="targetLabel" class="text-[10px] font-mono uppercase tracking-widest text-indigo-400 block mb-1">Selected Target</span>
             <div id="slotNation" class="text-xl sm:text-2xl font-black text-white uppercase tracking-wider flex items-center justify-center gap-2">
                 <span>🎰</span> Hit Spin to Roll!
             </div>
@@ -58,7 +58,6 @@
     let tasks = [];
     let currentCategory = 'all';
 
-    // Fetch tasks safely from JSON API endpoint
     fetch('/api/party-tasks')
         .then(res => res.json())
         .then(data => {
@@ -130,13 +129,11 @@
         const minS = selectedTask.min_sips || 1;
         const maxS = selectedTask.max_sips || 4;
         const randomSips = Math.floor(Math.random() * (maxS - minS + 1)) + minS;
-        const randomSeconds = (Math.floor(Math.random() * 3) + 1) * 15; // 15, 30, or 45 secs
+        const randomSeconds = (Math.floor(Math.random() * 3) + 1) * 15;
 
         const team1 = getRandomItem(teams);
         
         let taskText = selectedTask.task || "";
-        
-        // Clean badge styling for sips and seconds numbers so they look premium and aligned
         let formattedTask = taskText
             .replace(/{sips}/g, `<span class="inline-flex items-center justify-center px-2.5 py-0.5 mx-1 bg-amber-500 text-slate-950 font-black rounded-md text-sm shadow">${randomSips}</span>`)
             .replace(/{seconds}/g, `<span class="inline-flex items-center justify-center px-2.5 py-0.5 mx-1 bg-amber-500 text-slate-950 font-black rounded-md text-sm shadow">${randomSeconds}</span>`);
@@ -144,15 +141,19 @@
         const cat = (selectedTask.category || "").toLowerCase();
         let nationHtml = "";
 
-        // Properly scoped 'let nationHtml' to fix the state-leak bug
-        if (cat === 'duel' || formattedTask.includes('{{nation2}}')) {
+        // STRICT CHECK: ONLY trigger VS mode if category is genuinely 'duel'
+        if (cat === 'duel') {
             let team2 = getRandomItem(teams);
             while (team2.name === team1.name && teams.length > 1) {
                 team2 = getRandomItem(teams);
             }
+            document.getElementById("targetLabel").innerText = "Selected Matchup";
             nationHtml = `<span class="flex items-center gap-1.5"><span>${team1.flag}</span> ${team1.name}</span> <span class="text-amber-400 font-black text-lg px-2">VS</span> <span class="flex items-center gap-1.5"><span>${team2.flag}</span> ${team2.name}</span>`;
+            
+            // Clean up any stray placeholders if present
             formattedTask = formattedTask.replace(/\{\{nation1\}\}/g, team1.name).replace(/\{\{nation2\}\}/g, team2.name);
         } else {
+            document.getElementById("targetLabel").innerText = "Selected Target";
             nationHtml = `<span>${team1.flag}</span> ${team1.name} <span class="text-xs text-indigo-300 font-normal ml-1">(${team1.participant})</span>`;
         }
 
