@@ -252,26 +252,7 @@
         </div>
     </div>
 
-    <!-- NEW: Random Nation Generator Card -->
-    <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-4 max-w-xl mx-auto backdrop-blur-md">
-        <div class="flex items-center justify-between border-b border-indigo-800/60 pb-2.5">
-            <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
-                <span>🎰</span> Random Nation Selector
-            </h3>
-            <span class="text-[10px] text-indigo-300 font-mono">Generator</span>
-        </div>
-
-        <div class="text-center py-4 space-y-3 bg-purple-950/60 rounded-2xl border border-indigo-800/60 shadow-inner">
-            <div id="randomNationOutput" class="text-lg font-black text-white uppercase tracking-wider flex items-center justify-center gap-2 min-h-[40px]">
-                <span class="text-2xl">🎲</span> Click below to pick a random nation!
-            </div>
-            <button type="button" onclick="spinRandomNation()" class="px-6 py-2.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 hover:brightness-110 text-white font-black text-xs uppercase tracking-widest rounded-xl transition shadow-lg">
-                Spin Nation Generator &rarr;
-            </button>
-        </div>
-    </div>
-
-    <!-- Security & Code Reset Card (Positioned right below the Generator) -->
+    <!-- Security & Code Reset Card -->
     <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-4 max-w-xl mx-auto backdrop-blur-md">
         <div class="flex items-center justify-between border-b border-indigo-800/60 pb-2.5">
             <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
@@ -299,37 +280,7 @@
 
 </div>
 
-<!-- JavaScript for Random Nation Generator & Rolling Marquee Ticker -->
-<script>
-    const nationsPool = [
-        {% for t in teams %}
-            { name: "{{ t.nation_name }}", emoji: "{{ t.flag_emoji }}" },
-        {% endfor %}
-    ];
-
-    function spinRandomNation() {
-        const output = document.getElementById("randomNationOutput");
-        if (nationsPool.length === 0) {
-            output.innerHTML = "No nations available!";
-            return;
-        }
-
-        let counter = 0;
-        const maxClicks = 15;
-        const interval = setInterval(() => {
-            const randomItem = nationsPool[Math.floor(Math.random() * nationsPool.length)];
-            output.innerHTML = `<span class="text-3xl">${randomItem.emoji}</span> <span class="text-amber-300">${randomItem.name}</span>`;
-            counter++;
-            
-            if (counter >= maxClicks) {
-                clearInterval(interval);
-                const finalItem = nationsPool[Math.floor(Math.random() * nationsPool.length)];
-                output.innerHTML = `<span class="text-3xl animate-bounce">${finalItem.emoji}</span> <span class="text-amber-400 font-extrabold text-xl">🎉 ${finalItem.name} 🎉</span>`;
-            }
-        }, 80);
-    }
-</script>
-
+<!-- Rolling Marquee Ticker Style -->
 <style>
 @keyframes marquee {
     0% { transform: translateX(0%); }
