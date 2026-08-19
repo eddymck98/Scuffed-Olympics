@@ -1,46 +1,48 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-2xl mx-auto space-y-6 pb-16 pt-6 text-center">
+<div class="max-w-2xl mx-auto space-y-8 pb-20 pt-4 text-center">
     
     <!-- Header -->
     <div class="space-y-2">
-        <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-4 py-1 rounded-full text-amber-400 text-xs font-black uppercase tracking-widest shadow-inner">
-            <span>🍻</span> Scuffed Party Slots <span>🍻</span>
+        <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-4 py-1.5 rounded-full text-amber-400 text-xs font-black uppercase tracking-widest shadow-inner">
+            <span>🍻</span> Scuffed Party Mode <span>🍻</span>
         </div>
-        <h1 class="text-3xl font-black uppercase tracking-tight text-white">The Judgement Wheel</h1>
-        <p class="text-xs text-indigo-300">Spin the slots, face your dare, or take the drink penalty!</p>
+        <h1 class="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">The Judgement Wheel</h1>
+        <p class="text-xs sm:text-sm text-indigo-300">Spin the slots, face your dare, or take the drink penalty!</p>
     </div>
 
     <!-- Category Filter Tabs -->
     <div class="flex flex-wrap items-center justify-center gap-2">
-        <button onclick="setCategory('all')" id="cat-all" class="cat-btn bg-amber-500 text-slate-950 px-4 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">All</button>
-        <button onclick="setCategory('standard')" id="cat-standard" class="cat-btn bg-indigo-950/80 border border-indigo-800 text-slate-300 hover:text-white px-4 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">Standard</button>
-        <button onclick="setCategory('timed')" id="cat-timed" class="cat-btn bg-indigo-950/80 border border-indigo-800 text-slate-300 hover:text-white px-4 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">Timed</button>
-        <button onclick="setCategory('duel')" id="cat-duel" class="cat-btn bg-indigo-950/80 border border-indigo-800 text-slate-300 hover:text-white px-4 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">Duel</button>
-        <button onclick="setCategory('spicy')" id="cat-spicy" class="cat-btn bg-indigo-950/80 border border-indigo-800 text-slate-300 hover:text-white px-4 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">Spicy</button>
+        <button onclick="setCategory('all')" id="cat-all" class="cat-btn bg-amber-500 text-slate-950 px-4 py-2 rounded-xl font-black text-xs uppercase tracking-wider transition shadow-lg">All</button>
+        <button onclick="setCategory('standard')" id="cat-standard" class="cat-btn bg-indigo-950/80 border border-indigo-800 text-slate-300 hover:text-white px-4 py-2 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">Standard</button>
+        <button onclick="setCategory('timed')" id="cat-timed" class="cat-btn bg-indigo-950/80 border border-indigo-800 text-slate-300 hover:text-white px-4 py-2 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">Timed</button>
+        <button onclick="setCategory('duel')" id="cat-duel" class="cat-btn bg-indigo-950/80 border border-indigo-800 text-slate-300 hover:text-white px-4 py-2 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">Duel</button>
+        <button onclick="setCategory('spicy')" id="cat-spicy" class="cat-btn bg-indigo-950/80 border border-indigo-800 text-slate-300 hover:text-white px-4 py-2 rounded-xl font-black text-xs uppercase tracking-wider transition shadow">Spicy</button>
     </div>
 
-    <!-- Slots Active Prompt Card -->
-    <div class="bg-gradient-to-br from-indigo-950/95 via-purple-950/90 to-indigo-950/95 border-2 border-amber-500/40 rounded-3xl p-8 shadow-2xl space-y-6 relative overflow-hidden min-h-[280px] flex flex-col items-center justify-center">
+    <!-- Main Game Card Container -->
+    <div class="bg-gradient-to-br from-indigo-950/90 via-purple-950/90 to-slate-950/90 border border-amber-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden backdrop-blur-md">
         
-        <!-- Nation / Competitor Slot Box -->
-        <div class="w-full bg-indigo-950/80 border border-indigo-800/80 rounded-2xl p-4 shadow-inner">
-            <span class="text-[10px] font-mono uppercase tracking-widest text-indigo-400 block mb-1">Selected Target(s)</span>
-            <div id="slotNation" class="text-xl sm:text-2xl font-black text-white uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-100">
-                <span>🎰</span> Loading tasks...
+        <!-- Target / Nation Display Box -->
+        <div class="bg-indigo-950/60 border border-indigo-800/80 rounded-2xl p-4 shadow-inner">
+            <span class="text-[10px] font-mono uppercase tracking-widest text-indigo-400 block mb-1">Selected Target</span>
+            <div id="slotNation" class="text-xl sm:text-2xl font-black text-white uppercase tracking-wider flex items-center justify-center gap-2">
+                <span>🎰</span> Hit Spin to Roll!
             </div>
         </div>
 
-        <!-- Task / Dare Slot Box -->
-        <div id="slotTask" class="w-full bg-purple-950/80 border border-indigo-800/80 rounded-2xl p-5 text-sm sm:text-base font-bold text-slate-100 shadow-inner min-h-[90px] flex items-center justify-center leading-relaxed">
-            Please wait while the wheel loads...
+        <!-- Task Prompt Box -->
+        <div class="bg-slate-950/70 border border-indigo-800/60 rounded-2xl p-6 shadow-inner min-h-[120px] flex items-center justify-center">
+            <div id="slotTask" class="text-base sm:text-lg font-bold text-slate-100 leading-relaxed max-w-lg">
+                Your chaotic prompt or dare will appear here...
+            </div>
         </div>
     </div>
 
-    <!-- Spin Control Button -->
-    <div class="flex justify-center">
-        <button id="spinBtn" onclick="spinSlots()" disabled class="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 opacity-50 cursor-not-allowed text-slate-950 font-black text-sm uppercase tracking-widest py-4 px-10 rounded-2xl transition shadow-xl shadow-amber-500/20">
-            🎰 Loading...
+    <!-- Spin Button Action -->
+    <div>
+        <button id="spinBtn" onclick="spinSlots()" disabled class="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 opacity-50 cursor-not-allowed text-slate-950 font-black text-sm sm:text-base uppercase tracking-widest py-4 px-12 rounded-2xl transition shadow-xl shadow-amber-500/20">
+            🎰 Loading Tasks...
         </button>
     </div>
 
@@ -56,12 +58,13 @@
     let tasks = [];
     let currentCategory = 'all';
 
+    // Fetch tasks safely from JSON API endpoint
     fetch('/api/party-tasks')
         .then(res => res.json())
         .then(data => {
             tasks = data;
-            document.getElementById("slotNation").innerHTML = `<span>🎰</span> Hit Spin to Roll!`;
-            document.getElementById("slotTask").innerText = `Your chaotic prompt will appear here...`;
+            document.getElementById("slotNation").innerHTML = `<span>🎰</span> Ready to Spin!`;
+            document.getElementById("slotTask").innerText = `Press the button below to draw your first prompt.`;
             const spinBtn = document.getElementById("spinBtn");
             spinBtn.disabled = false;
             spinBtn.classList.remove('opacity-50', 'cursor-not-allowed');
@@ -79,7 +82,7 @@
         });
         const activeBtn = document.getElementById(`cat-${cat}`);
         activeBtn.classList.remove('bg-indigo-950/80', 'border-indigo-800', 'text-slate-300');
-        activeBtn.classList.add('bg-amber-500', 'text-slate-950', 'shadow');
+        activeBtn.classList.add('bg-amber-500', 'text-slate-950', 'shadow-lg');
     }
 
     function getRandomItem(arr) {
@@ -106,7 +109,7 @@
 
         let counter = 0;
         const maxClicks = 15;
-        const rollSpeed = 70;
+        const rollSpeed = 60;
 
         const rollInterval = setInterval(() => {
             const tempTeam1 = getRandomItem(teams);
@@ -127,28 +130,30 @@
         const minS = selectedTask.min_sips || 1;
         const maxS = selectedTask.max_sips || 4;
         const randomSips = Math.floor(Math.random() * (maxS - minS + 1)) + minS;
-        const randomSeconds = Math.floor(Math.random() * 4) * 15 + 15;
+        const randomSeconds = (Math.floor(Math.random() * 3) + 1) * 15; // 15, 30, or 45 secs
 
         const team1 = getRandomItem(teams);
         
         let taskText = selectedTask.task || "";
+        
+        // Clean badge styling for sips and seconds numbers so they look premium and aligned
         let formattedTask = taskText
-            .replace(/{sips}/g, `<span class="inline-block mx-1 px-2 py-0.5 bg-amber-500/20 border border-amber-500/40 rounded-lg text-amber-400 font-mono font-black">${randomSips}</span>`)
-            .replace(/{seconds}/g, `<span class="inline-block mx-1 px-2 py-0.5 bg-amber-500/20 border border-amber-500/40 rounded-lg text-amber-400 font-mono font-black">${randomSeconds}</span>`);
+            .replace(/{sips}/g, `<span class="inline-flex items-center justify-center px-2.5 py-0.5 mx-1 bg-amber-500 text-slate-950 font-black rounded-md text-sm shadow">${randomSips}</span>`)
+            .replace(/{seconds}/g, `<span class="inline-flex items-center justify-center px-2.5 py-0.5 mx-1 bg-amber-500 text-slate-950 font-black rounded-md text-sm shadow">${randomSeconds}</span>`);
 
         const cat = (selectedTask.category || "").toLowerCase();
+        let nationHtml = "";
 
-        // ONLY trigger VS mode if the category is strictly 'duel' or the text explicitly has placeholders for two nations
+        // Properly scoped 'let nationHtml' to fix the state-leak bug
         if (cat === 'duel' || formattedTask.includes('{{nation2}}')) {
             let team2 = getRandomItem(teams);
             while (team2.name === team1.name && teams.length > 1) {
                 team2 = getRandomItem(teams);
             }
-            nationHtml = `<span>${team1.flag}</span> ${team1.name} <span class="text-amber-400 font-black px-2">VS</span> <span>${team2.flag}</span> ${team2.name}`;
+            nationHtml = `<span class="flex items-center gap-1.5"><span>${team1.flag}</span> ${team1.name}</span> <span class="text-amber-400 font-black text-lg px-2">VS</span> <span class="flex items-center gap-1.5"><span>${team2.flag}</span> ${team2.name}</span>`;
             formattedTask = formattedTask.replace(/\{\{nation1\}\}/g, team1.name).replace(/\{\{nation2\}\}/g, team2.name);
         } else {
-            // Standard single-player target layout
-            nationHtml = `<span>${team1.flag}</span> ${team1.name} <span class="text-xs text-indigo-300 font-normal">(${team1.participant})</span>`;
+            nationHtml = `<span>${team1.flag}</span> ${team1.name} <span class="text-xs text-indigo-300 font-normal ml-1">(${team1.participant})</span>`;
         }
 
         document.getElementById("slotNation").innerHTML = nationHtml;
