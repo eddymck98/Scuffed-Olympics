@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-2xl mx-auto space-y-6 pb-16 pt-6 text-center">
+    
+    <!-- Header -->
+    <div class="space-y-2">
+        <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-4 py-1 rounded-full text-amber-400 text-xs font-black uppercase tracking-widest shadow-inner">
+            <span>🍻</span> Scuffed Party Slots <span>🍻</span>
+        </div>
+        <h1 class="text-3xl font-black uppercase tracking-tight text-white">The Judgement Wheel</h1>
+        <p class="text-xs text-indigo-300">Spin the slots, face your dare, or take the drink penalty!</p>
+    </div>
+
+    <!-- Slots Active Prompt Card -->
+    <div class="bg-gradient-to-br from-indigo-950/95 via-purple-950/90 to-indigo-950/95 border-2 border-amber-500/40 rounded-3xl p-8 shadow-2xl space-y-6 relative overflow-hidden min-h-[320px] flex flex-col items-center justify-center">
+        
+        <!-- Nation / Competitor Slot Box -->
+        <div class="w-full bg-indigo-950/80 border border-indigo-800/80 rounded-2xl p-4 shadow-inner">
+            <span class="text-[10px] font-mono uppercase tracking-widest text-indigo-400 block mb-1">Selected Target(s)</span>
+            <div id="slotNation" class="text-xl sm:text-2xl font-black text-white uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-100">
+                <span>🎰</span> Hit Spin to Roll!
+            </div>
+        </div>
+
+        <!-- Task / Dare Slot Box -->
+        <div id="slotTask" class="w-full bg-purple-950/80 border border-indigo-800/80 rounded-2xl p-5 text-sm sm:text-base font-bold text-slate-100 shadow-inner min-h-[90px] flex items-center justify-center">
+            Your chaotic prompt will appear here...
+        </div>
+
+        <!-- Timed Challenge Display (if applicable) -->
+        <div id="timerContainer" class="hidden font-mono text-amber-400 text-xs font-black bg-amber-500/10 border border-amber-500/30 px-4 py-2 rounded-xl animate-pulse">
+            ⏱️ Time Remaining: <span id="countdown">30</span>s
+        </div>
+    </div>
+
+    <!-- Spin Control Button -->
+    <div class="flex justify-center">
+        <button id="spinBtn" onclick="spinSlots()" class="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:brightness-110 text-slate-950 font-black text-sm uppercase tracking-widest py-4 px-10 rounded-2xl transition shadow-xl shadow-amber-500/20 active:scale-95">
+            🎰 Spin the Slots! &rarr;
+        </button>
+    </div>
+
+</div>
+
+<script>
+    // Data injected from FastAPI / Supabase
+    const teams = [
+        {% for t in teams %}
+        { name: "{{ t.nation_name }}", participant: "{{ t.participant_name }}", flag: "{{ t.flag_emoji }}" },
+        {% endfor %}
+    ];
+
+    const tasks = [
+        {% for task in tasks %}
+        { 
+            text: "{{ task.task | safe }}", 
+            category: "{{ task.category }}", 
+            min_sips: {{ task.min_sips | default(1) }}, 
+            max_sips: {{ task.max_sips | default(4) }} 
+        },
+        {% endfor %}
+    ];
+
+    let timerInterval = null;
+
+    function getRandomItem(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function spinSlots() {
+        if (teams.length === 0 || tasks.length === 0) {
+            alert("Missing teams or tasks database entries!");
+            return;
+        }
+
+        const btn = document.getElementById("spinBtn");
+        btn.disabled = true;
+
+        clearInterval(timerInterval);
+        document.getElementById("timerContainer").classList.add("hidden");
+
+        let counter = 0;
+        const maxClicks = 15; // Slot roll ticks
+        const rollSpeed = 70;
+
+        // Slot rolling visual effect loop
+        const rollInterval = setInterval(() => {
+            // Flash random nations/tasks for slot machine feel
+            const tempTeam1 = getRandomItem(teams);
+            const tempTeam2 = getRandomItem(teams);
+            document.getElementById("slotNation").innerHTML = `<span>${tempTeam1.flag}</span> ${tempTeam1.name}`;
+            document.getElementById("slotTask").innerText = getRandomItem(tasks).text;
+
+            counter++;
+            if (counter >= maxClicks) {
+                clearInterval(rollInterval);
+                finalizeSelection();
+                btn.disabled = false;
+            }
+        }, rollSpeed);
+    }
+
+    function finalizeSelection() {
+        const selectedTask = getRandomItem(tasks);
+        const randomSips = Math.floor(Math.random() * (selectedTask.max_sips - selectedTask.min_sips + 1)) + selectedTask.min_sips;
+        const randomSeconds = Math.floor(Math.random() * 4) * 15 + 15; // 15, 30, 45, or 60 secs
+
+        const team1 = getRandomItem(teams);
+        let nationHtml = `<span>${team1.flag}</span> ${team1.name} <span class="text-xs text-indigo-300 font-normal">(${team1.participant})</span>`;
+
+        // Check if task involves two nations (e.g., contains {{nation2}} or duel category)
+        let formattedTask = selectedTask.text
+            .replace(/{sips}/g, `<strong class="text-amber-400 font-mono">${randomSips}</strong>`)
+            .replace(/{seconds}/g, `<strong class="text-amber-400 font-mono">${randomSeconds}</strong>`);
+
+        if (selectedTask.category === 'duel' || formattedTask.includes('{{nation2}}')) {
+            let team2 = getRandomItem(teams);
+            while (team2.name === team1.name && teams.length > 1) {
+                team2 = getRandomItem(teams);
+            }
+            nationHtml = `<span>${team1.flag}</span> ${team1.name} <span class="text-amber-400">vs</span> <span>${team2.flag}</span> ${team2.name}`;
+            formattedTask = formattedTask.replace(/\{\{nation1\}\}/g, team1.name).replace(/\{\{nation2\}\}/g, team2.name);
+        }
+
+        document.getElementById("slotNation").innerHTML = nationHtml;
+        document.getElementById("slotTask").innerHTML = formattedTask;
+
+        // Handle timed challenge countdown if applicable
+        if (selectedTask.category === 'timed') {
+            let timeLeft = randomSeconds;
+            const timerEl = document.getElementById("countdown");
+            timerEl.innerText = timeLeft;
+            document.getElementById("timerContainer").classList.remove("hidden");
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById("timerContainer").classList.add("hidden");
+                }
+            }, 1000);
+        }
+    }
+</script>
+{% endblock %}
