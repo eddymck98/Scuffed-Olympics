@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-7xl mx-auto py-4 px-4 space-y-6 relative overflow-hidden pt-2">
+<div class="max-w-7xl mx-auto py-4 px-3 sm:px-6 space-y-6 relative overflow-hidden pt-2">
     
     <!-- Olympic Ring Color Gradient Accent Bar -->
     <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
 
     <!-- Hero Header -->
-    <div class="relative py-6 px-6 text-center space-y-3 overflow-hidden bg-gradient-to-b from-indigo-950/90 to-purple-950/60 rounded-[2.5rem] border border-indigo-800/60 shadow-xl backdrop-blur-md">
+    <div class="relative py-6 px-4 sm:px-6 text-center space-y-3 overflow-hidden bg-gradient-to-b from-indigo-950/90 to-purple-950/60 rounded-[2.5rem] border border-indigo-800/60 shadow-xl backdrop-blur-md">
         <div class="relative z-10 flex flex-col items-center space-y-3">
-            <span class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-400 via-yellow-400 to-red-400 text-slate-950 text-[10px] font-black px-5 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
+            <span class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-400 via-yellow-400 to-red-400 text-slate-950 text-[10px] font-black px-4 sm:px-5 py-1.5 rounded-full uppercase tracking-widest shadow-lg text-center">
                 🏛️ Participating Delegations & Player Cards 🏛️
             </span>
             <h1 class="text-2xl sm:text-4xl font-black text-white tracking-tight uppercase">THE NATIONS</h1>
@@ -42,7 +42,7 @@
                 {% set flag_url = 'https://flagcdn.com/w640/gb.png' %}
             {% endif %}
             
-            <div class="relative overflow-hidden bg-indigo-950/70 border-2 {% if t.nation_name == team.nation_name %}border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.2)]{% else %}border-indigo-800/60 hover:border-blue-400/50{% endif %} rounded-2xl p-4 shadow-xl transition-all group backdrop-blur-md">
+            <div class="relative overflow-hidden bg-indigo-950/70 border-2 {% if t.nation_name == team.nation_name %}border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.2)]{% else %}border-indigo-800/60 hover:border-blue-400/50{% endif %} rounded-2xl p-4 sm:p-5 shadow-xl transition-all group backdrop-blur-md">
                 
                 <!-- Transparent Waving Flag Watermark Background (opacity-25) -->
                 <div class="absolute inset-0 opacity-25 bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" 
@@ -52,12 +52,12 @@
                 <div class="relative z-10 space-y-3">
                     <!-- Top Bar: Flag & Status Badge -->
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2.5">
+                        <div class="flex items-center gap-3">
                             <span class="text-3xl p-1.5 bg-indigo-950/90 rounded-xl border border-indigo-800 shadow-inner group-hover:scale-105 transition-transform inline-block">
                                 {{ t.flag_emoji }}
                             </span>
                             <div>
-                                <h3 class="font-black text-base text-white group-hover:text-yellow-300 transition-colors uppercase tracking-wide leading-tight drop-shadow">
+                                <h3 class="font-black text-sm sm:text-base text-white group-hover:text-yellow-300 transition-colors uppercase tracking-wide leading-tight drop-shadow">
                                     {{ t.nation_name }}
                                 </h3>
                                 <p class="text-[11px] font-mono text-indigo-200">
@@ -68,15 +68,15 @@
 
                         <div>
                             {% if t.is_admin %}
-                                <span class="bg-yellow-500/20 text-yellow-300 text-[9px] font-black px-2.5 py-0.5 rounded-full border border-yellow-500/40 tracking-widest shadow">
+                                <span class="bg-yellow-500/20 text-yellow-300 text-[9px] font-black px-2.5 py-1 rounded-full border border-yellow-500/40 tracking-widest shadow">
                                     👑 COMMISH
                                 </span>
                             {% elif t.nation_name == team.nation_name %}
-                                <span class="bg-blue-500/20 text-blue-300 text-[9px] font-black px-2.5 py-0.5 rounded-full border border-blue-500/40 tracking-widest shadow">
+                                <span class="bg-blue-500/20 text-blue-300 text-[9px] font-black px-2.5 py-1 rounded-full border border-blue-500/40 tracking-widest shadow">
                                     ⭐ YOU
                                 </span>
                             {% else %}
-                                <span class="bg-green-500/20 text-green-300 text-[9px] font-black px-2.5 py-0.5 rounded-full border border-green-500/40 tracking-widest shadow">
+                                <span class="bg-green-500/20 text-green-300 text-[9px] font-black px-2.5 py-1 rounded-full border border-green-500/40 tracking-widest shadow">
                                     ACTIVE
                                 </span>
                             {% endif %}
@@ -85,11 +85,11 @@
 
                     <!-- Player Card Stat Badges -->
                     <div class="grid grid-cols-2 gap-2 text-xs font-mono pt-1 border-t border-indigo-800/60">
-                        <div class="bg-purple-950/70 border border-indigo-800/60 p-2 rounded-xl text-center shadow-inner">
+                        <div class="bg-purple-950/70 border border-indigo-800/60 p-2.5 rounded-xl text-center shadow-inner">
                             <span class="block text-[8px] text-indigo-200 uppercase font-sans font-bold">Olympics Attended</span>
                             <span class="font-black text-yellow-300 text-xs mt-0.5 block truncate">{{ t.olympics_attended | default("1 (2026)") }}</span>
                         </div>
-                        <div class="bg-purple-950/70 border border-indigo-800/60 p-2 rounded-xl text-center shadow-inner">
+                        <div class="bg-purple-950/70 border border-indigo-800/60 p-2.5 rounded-xl text-center shadow-inner">
                             <span class="block text-[8px] text-indigo-200 uppercase font-sans font-bold">Status</span>
                             <span class="font-black text-green-300 text-xs mt-0.5 block">Ready for Chaos</span>
                         </div>
@@ -107,7 +107,7 @@
     </div>
 
     <!-- Random Nation Generator Card (Relocated Here) -->
-    <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-4 max-w-xl mx-auto backdrop-blur-md mt-8">
+    <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4 max-w-xl mx-auto backdrop-blur-md mt-8">
         <div class="flex items-center justify-between border-b border-indigo-800/60 pb-2.5">
             <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
                 <span>🎰</span> Random Nation Selector
@@ -115,11 +115,11 @@
             <span class="text-[10px] text-indigo-300 font-mono">Generator</span>
         </div>
 
-        <div class="text-center py-4 space-y-3 bg-purple-950/60 rounded-2xl border border-indigo-800/60 shadow-inner">
-            <div id="randomNationOutput" class="text-lg font-black text-white uppercase tracking-wider flex items-center justify-center gap-2 min-h-[40px]">
+        <div class="text-center py-4 space-y-3 bg-purple-950/60 rounded-2xl border border-indigo-800/60 shadow-inner px-3">
+            <div id="randomNationOutput" class="text-base sm:text-lg font-black text-white uppercase tracking-wider flex items-center justify-center gap-2 min-h-[40px]">
                 <span class="text-2xl">🎲</span> Click below to pick a random nation!
             </div>
-            <button type="button" onclick="spinRandomNation()" class="px-6 py-2.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 hover:brightness-110 text-white font-black text-xs uppercase tracking-widest rounded-xl transition shadow-lg">
+            <button type="button" onclick="spinRandomNation()" class="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 hover:brightness-110 text-white font-black text-xs uppercase tracking-widest rounded-xl transition shadow-lg">
                 Spin Nation Generator &rarr;
             </button>
         </div>
@@ -152,7 +152,7 @@
             if (counter >= maxClicks) {
                 clearInterval(interval);
                 const finalItem = nationsPool[Math.floor(Math.random() * nationsPool.length)];
-                output.innerHTML = `<span class="text-3xl animate-bounce">${finalItem.emoji}</span> <span class="text-amber-400 font-extrabold text-xl">🎉 ${finalItem.name} 🎉</span>`;
+                output.innerHTML = `<span class="text-3xl animate-bounce">${finalItem.emoji}</span> <span class="text-amber-400 font-extrabold text-lg sm:text-xl">🎉 ${finalItem.name} 🎉</span>`;
             }
         }, 80);
     }
