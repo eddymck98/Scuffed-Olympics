@@ -252,6 +252,42 @@
         </div>
     </div>
 
+    <!-- Theme Customizer Box -->
+    <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-4 max-w-xl mx-auto backdrop-blur-md">
+        <div class="flex items-center justify-between border-b border-indigo-800/60 pb-2.5">
+            <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
+                <span>🎨</span> Theme Customizer
+            </h3>
+            <span class="text-[10px] text-indigo-300 font-mono">Personalize</span>
+        </div>
+
+        <form action="/profile/update-colors" method="POST" class="space-y-3">
+            <div class="grid grid-cols-2 gap-3">
+                <!-- Background Color Picker -->
+                <div class="bg-purple-950/60 border border-indigo-800/60 p-3 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider">Background</label>
+                        <span class="text-[9px] text-indigo-400">Main page tint</span>
+                    </div>
+                    <input type="color" name="bg_color" value="{{ team.bg_color | default('#030712') }}" class="w-8 h-8 bg-transparent rounded-lg cursor-pointer border border-indigo-700">
+                </div>
+
+                <!-- Navbar Color Picker -->
+                <div class="bg-purple-950/60 border border-indigo-800/60 p-3 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider">Navbar</label>
+                        <span class="text-[9px] text-indigo-400">Top menu tint</span>
+                    </div>
+                    <input type="color" name="nav_color" value="{{ team.nav_color | default('#090d16') }}" class="w-8 h-8 bg-transparent rounded-lg cursor-pointer border border-indigo-700">
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 hover:brightness-110 text-white font-black text-xs uppercase tracking-widest py-3 rounded-xl transition shadow-lg">
+                Save Theme Vibe &rarr;
+            </button>
+        </form>
+    </div>
+
     <!-- Security & Code Reset Card -->
     <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-4 max-w-xl mx-auto backdrop-blur-md">
         <div class="flex items-center justify-between border-b border-indigo-800/60 pb-2.5">
