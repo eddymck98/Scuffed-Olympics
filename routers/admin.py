@@ -33,6 +33,7 @@ async def admin_dashboard(request: Request, tab: str = "events", subtab: str = "
     template = templates.get_template("admin.html")
     html_content = template.render({
         "request": request,
+        "team": {"nav_color": "rgba(15, 23, 42, 0.9)"},  # <-- Fixes the UndefinedError in base.html
         "active_tab": tab,
         "active_subtab": subtab,
         "selected_event": event,
