@@ -27,20 +27,20 @@
         <div class="w-full bg-indigo-950/80 border border-indigo-800/80 rounded-2xl p-4 shadow-inner">
             <span class="text-[10px] font-mono uppercase tracking-widest text-indigo-400 block mb-1">Selected Target(s)</span>
             <div id="slotNation" class="text-xl sm:text-2xl font-black text-white uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-100">
-                <span>🎰</span> Hit Spin to Roll!
+                <span>🎰</span> Loading tasks...
             </div>
         </div>
 
         <!-- Task / Dare Slot Box -->
         <div id="slotTask" class="w-full bg-purple-950/80 border border-indigo-800/80 rounded-2xl p-5 text-sm sm:text-base font-bold text-slate-100 shadow-inner min-h-[90px] flex items-center justify-center leading-relaxed">
-            Your chaotic prompt will appear here...
+            Please wait while the wheel loads...
         </div>
     </div>
 
     <!-- Spin Control Button -->
     <div class="flex justify-center">
-        <button id="spinBtn" onclick="spinSlots()" class="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:brightness-110 text-slate-950 font-black text-sm uppercase tracking-widest py-4 px-10 rounded-2xl transition shadow-xl shadow-amber-500/20 active:scale-95">
-            🎰 Spin the Slots! &rarr;
+        <button id="spinBtn" onclick="spinSlots()" disabled class="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 opacity-50 cursor-not-allowed text-slate-950 font-black text-sm uppercase tracking-widest py-4 px-10 rounded-2xl transition shadow-xl shadow-amber-500/20">
+            🎰 Loading...
         </button>
     </div>
 
@@ -53,10 +53,24 @@
         {% endfor %}
     ];
 
-    // Safely loaded from Python JSON string to eliminate Jinja recursion errors on complex strings
-    const tasks = {{ tasks_json | safe }};
-
+    let tasks = [];
     let currentCategory = 'all';
+
+    // Fetch tasks asynchronously from API to prevent Jinja template parsing conflicts
+    fetch('/api/party-tasks')
+        .then(res => res.json())
+        .then(data => {
+            tasks = data;
+            document.getElementById("slotNation").innerHTML = `<span>🎰</span> Hit Spin to Roll!`;
+            document.getElementById("slotTask").innerText = `Your chaotic prompt will appear here...`;
+            const spinBtn = document.getElementById("spinBtn");
+            spinBtn.disabled = false;
+            spinBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            spinBtn.innerText = `🎰 Spin the Slots! →`;
+        })
+        .catch(err => {
+            document.getElementById("slotTask").innerText = "Error loading tasks from database.";
+        });
 
     function setCategory(cat) {
         currentCategory = cat;
