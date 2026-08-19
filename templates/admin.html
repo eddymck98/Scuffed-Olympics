@@ -1,39 +1,39 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-6xl mx-auto py-4 px-4 space-y-6 relative overflow-hidden pt-2">
+<div class="max-w-6xl mx-auto py-4 px-3 sm:px-6 space-y-6 relative overflow-hidden pt-2">
     
     <!-- Olympic Ring Color Gradient Accent Bar -->
     <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
 
     <!-- Admin Header -->
-    <div class="bg-indigo-950/90 border border-amber-500/40 rounded-3xl p-6 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-md">
-        <div class="flex items-center space-x-4">
-            <span class="text-4xl">👑</span>
+    <div class="bg-indigo-950/90 border border-amber-500/40 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-md">
+        <div class="flex items-center space-x-3.5">
+            <span class="text-3xl sm:text-4xl">👑</span>
             <div>
-                <span class="text-xs font-black text-amber-400 uppercase tracking-widest">Commissioner Control Center</span>
-                <h1 class="text-xl sm:text-2xl font-black text-white drop-shadow">ADMINISTRATION PORTAL</h1>
+                <span class="text-[10px] sm:text-xs font-black text-amber-400 uppercase tracking-widest">Commissioner Control Center</span>
+                <h1 class="text-lg sm:text-2xl font-black text-white drop-shadow">ADMINISTRATION PORTAL</h1>
             </div>
         </div>
-        <a href="/" class="text-xs font-bold bg-indigo-950 border border-indigo-800 text-indigo-200 px-4 py-2.5 rounded-xl hover:border-amber-400 transition text-center w-full sm:w-auto shadow-inner">
+        <a href="/" class="text-xs font-bold bg-indigo-950 border border-indigo-800 text-indigo-200 px-4 py-3 rounded-xl hover:border-amber-400 transition text-center w-full sm:w-auto shadow-inner">
             &larr; Back to Dashboard
         </a>
     </div>
 
-    <!-- Admin Sub-Navigation Tabs (Mobile Scrollable) -->
-    <div class="flex items-center gap-2 border-b border-indigo-800/60 pb-4 overflow-x-auto whitespace-nowrap scrollbar-none">
-        <a href="/admin?tab=events&subtab=standard" class="px-5 py-2.5 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'events' %} bg-amber-400 text-slate-950 shadow-lg {% else %} bg-indigo-950/80 text-indigo-200 hover:text-white border border-indigo-800/60 {% endif %}">
+    <!-- Admin Sub-Navigation Tabs (Mobile Scrollable with Touch Padding) -->
+    <div class="flex items-center gap-2 border-b border-indigo-800/60 pb-3 overflow-x-auto whitespace-nowrap scrollbar-none">
+        <a href="/admin?tab=events&subtab=standard" class="px-4 sm:px-5 py-3 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'events' %} bg-amber-400 text-slate-950 shadow-lg {% else %} bg-indigo-950/80 text-indigo-200 hover:text-white border border-indigo-800/60 {% endif %}">
             🏆 Event Manager
         </a>
-        <a href="/admin?tab=verification" class="px-5 py-2.5 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'verification' %} bg-amber-400 text-slate-950 shadow-lg {% else %} bg-indigo-950/80 text-indigo-200 hover:text-white border border-indigo-800/60 {% endif %}">
+        <a href="/admin?tab=verification" class="px-4 sm:px-5 py-3 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'verification' %} bg-amber-400 text-slate-950 shadow-lg {% else %} bg-indigo-950/80 text-indigo-200 hover:text-white border border-indigo-800/60 {% endif %}">
             📸 Treasure Verification {% if pending_submissions %}<span class="ml-1 bg-rose-500 text-white px-1.5 py-0.5 rounded-full text-[10px]">{{ pending_submissions|length }}</span>{% endif %}
         </a>
-        <a href="/admin?tab=var" class="px-5 py-2.5 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'var' %} bg-rose-600 text-white shadow-lg {% else %} bg-indigo-950/80 text-indigo-200 hover:text-rose-300 border border-indigo-800/60 {% endif %}">
+        <a href="/admin?tab=var" class="px-4 sm:px-5 py-3 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'var' %} bg-rose-600 text-white shadow-lg {% else %} bg-indigo-950/80 text-indigo-200 hover:text-rose-300 border border-indigo-800/60 {% endif %}">
             🚨 VAR Judgement Hall {% if var_submissions %}<span class="ml-1 bg-white text-rose-600 px-1.5 py-0.5 rounded-full text-[10px]">{{ var_submissions|length }}</span>{% endif %}
         </a>
-        <a href="/admin?tab=settings" class="px-5 py-2.5 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'settings' %} bg-amber-400 text-slate-950 shadow-lg {% else %} bg-indigo-950/80 text-indigo-200 hover:text-white border border-indigo-800/60 {% endif %}">
+        <a href="/admin?tab=settings" class="px-4 sm:px-5 py-3 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'settings' %} bg-amber-400 text-slate-950 shadow-lg {% else %} bg-indigo-950/80 text-indigo-200 hover:text-white border border-indigo-800/60 {% endif %}">
             ⚙️ Weekend Toggles
         </a>
-        <a href="/admin?tab=logs" class="px-5 py-2.5 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'logs' %} bg-amber-400 text-slate-950 shadow-lg {% else %} bg-indigo-950/80 text-indigo-200 hover:text-white border border-indigo-800/60 {% endif %}">
+        <a href="/admin?tab=logs" class="px-4 sm:px-5 py-3 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'logs' %} bg-amber-400 text-slate-950 shadow-lg {% else %} bg-indigo-950/80 text-indigo-200 hover:text-white border border-indigo-800/60 {% endif %}">
             📜 Activity Logs
         </a>
     </div>
@@ -55,18 +55,17 @@
             </a>
         </div>
 
-        <!-- Standard Events Subtab (Mobile Friendly Responsive Card Grid Layout) -->
-        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-6 backdrop-blur-md {% if active_subtab != 'standard' %}hidden{% endif %}">
+        <!-- Standard Events Subtab -->
+        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-4 sm:p-6 shadow-xl space-y-6 backdrop-blur-md {% if active_subtab != 'standard' %}hidden{% endif %}">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">Standard Event Scorecard</h2>
-                <select onchange="window.location.href='/admin?tab=events&subtab=standard&event=' + this.value" class="bg-purple-950/90 border border-amber-400/50 rounded-2xl px-4 py-2.5 text-xs font-bold text-amber-300 outline-none w-full sm:w-auto shadow-inner">
+                <select onchange="window.location.href='/admin?tab=events&subtab=standard&event=' + this.value" class="bg-purple-950/90 border border-amber-400/50 rounded-2xl px-4 py-3 text-xs font-bold text-amber-300 outline-none w-full sm:w-auto shadow-inner">
                     {% for ev in standard_events %}<option value="{{ ev }}" {% if selected_event == ev %}selected{% endif %}>{{ ev }}</option>{% endfor %}
                 </select>
             </div>
             <form action="/admin/event-results/save-standard" method="POST" class="space-y-4">
                 <input type="hidden" name="event_name" value="{{ selected_event }}">
                 
-                <!-- Responsive Card Grid instead of rigid table forcing horizontal scroll -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {% for t in teams %}
                     {% set saved = event_scores.get(t.id) %}
@@ -83,7 +82,7 @@
 
                         <div>
                             <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider mb-1">Select Placement</label>
-                            <select name="placement_{{ t.id }}" class="w-full bg-indigo-950 border border-indigo-700/80 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-amber-400 shadow-inner">
+                            <select name="placement_{{ t.id }}" class="w-full bg-indigo-950 border border-indigo-700/80 rounded-xl px-3 py-3 text-xs text-white outline-none focus:border-amber-400 shadow-inner">
                                 <option value="unscored" {% if not saved %}selected{% endif %}>-- Select Placement --</option>
                                 <option value="1st" {% if saved and saved.medal_type == 'gold' %}selected{% endif %}>1st Place (8 pts)</option>
                                 <option value="2nd" {% if saved and saved.medal_type == 'silver' %}selected{% endif %}>2nd Place (7 pts)</option>
@@ -101,12 +100,12 @@
                     {% endfor %}
                 </div>
 
-                <button type="submit" class="w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase py-3.5 rounded-2xl transition shadow-lg">Save & Publish {{ selected_event }} Results</button>
+                <button type="submit" class="w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase py-4 rounded-2xl transition shadow-lg">Save & Publish {{ selected_event }} Results</button>
             </form>
         </div>
 
         <!-- Duck Hunt Subtab -->
-        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-6 backdrop-blur-md {% if active_subtab != 'duck' %}hidden{% endif %}">
+        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-4 sm:p-6 shadow-xl space-y-6 backdrop-blur-md {% if active_subtab != 'duck' %}hidden{% endif %}">
             <div class="bg-amber-500/10 border border-amber-500/30 p-4 rounded-2xl text-xs text-amber-300 shadow-inner">🦆 <strong>Duck Hunt Scoring:</strong> Enter the exact number of resin ducks found around the house.</div>
             <form action="/admin/event-results/save-duck-hunt" method="POST" class="space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -116,16 +115,16 @@
                             <span class="text-xl">{{ t.flag_emoji }}</span>
                             <span class="uppercase tracking-wide">{{ t.nation_name }}</span>
                         </span>
-                        <input type="number" name="ducks_{{ t.id }}" placeholder="e.g. 5" min="0" class="w-28 bg-indigo-950 border border-indigo-700/80 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-amber-400 text-center shadow-inner font-mono">
+                        <input type="number" name="ducks_{{ t.id }}" placeholder="e.g. 5" min="0" class="w-28 bg-indigo-950 border border-indigo-700/80 rounded-xl px-3 py-3 text-xs text-white outline-none focus:border-amber-400 text-center shadow-inner font-mono">
                     </div>
                     {% endfor %}
                 </div>
-                <button type="submit" class="w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase py-3.5 rounded-2xl transition shadow-lg">Save Duck Hunt Scores</button>
+                <button type="submit" class="w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase py-4 rounded-2xl transition shadow-lg">Save Duck Hunt Scores</button>
             </form>
         </div>
 
         <!-- City Selfies Subtab -->
-        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-6 backdrop-blur-md {% if active_subtab != 'treasure' %}hidden{% endif %}">
+        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-4 sm:p-6 shadow-xl space-y-6 backdrop-blur-md {% if active_subtab != 'treasure' %}hidden{% endif %}">
             <div class="bg-amber-500/10 border border-amber-500/30 p-4 rounded-2xl text-xs text-amber-300 shadow-inner">📸 <strong>City Selfies Scoring:</strong> Podiums award custom pod points.</div>
             <form action="/admin/event-results/save-treasure" method="POST" class="space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -135,7 +134,7 @@
                             <span class="text-xl">{{ t.flag_emoji }}</span>
                             <span class="uppercase tracking-wide">{{ t.nation_name }}</span>
                         </span>
-                        <select name="pod_{{ t.id }}" class="w-full bg-indigo-950 border border-indigo-700/80 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-amber-400 shadow-inner">
+                        <select name="pod_{{ t.id }}" class="w-full bg-indigo-950 border border-indigo-700/80 rounded-xl px-3 py-3 text-xs text-white outline-none focus:border-amber-400 shadow-inner">
                             <option value="unscored">-- Select Pod Placement --</option>
                             <option value="1st">1st Team (10 pts + Gold)</option>
                             <option value="2nd">2nd Team (7 pts + Silver)</option>
@@ -146,27 +145,27 @@
                     </div>
                     {% endfor %}
                 </div>
-                <button type="submit" class="w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase py-3.5 rounded-2xl transition shadow-lg">Save City Selfies Results</button>
+                <button type="submit" class="w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase py-4 rounded-2xl transition shadow-lg">Save City Selfies Results</button>
             </form>
         </div>
     </div>
 
     <!-- TAB 2: TREASURE VERIFICATION -->
     <div class="space-y-6 {% if active_tab != 'verification' %}hidden{% endif %}">
-        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-6 backdrop-blur-md">
+        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-4 sm:p-6 shadow-xl space-y-6 backdrop-blur-md">
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-indigo-800/60 pb-4 gap-2">
                 <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">Pending Treasure Hunt Submissions</h2>
-                <span class="text-xs font-mono px-3 py-1 rounded-lg bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 shadow-inner">{{ pending_submissions | length }} Pending Review</span>
+                <span class="text-xs font-mono px-3 py-1.5 rounded-lg bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 shadow-inner">{{ pending_submissions | length }} Pending Review</span>
             </div>
 
             {% if not pending_submissions %}
-                <div class="bg-purple-950/50 border border-indigo-800/60 rounded-3xl p-12 text-center text-indigo-300 italic text-xs shadow-inner">
+                <div class="bg-purple-950/50 border border-indigo-800/60 rounded-3xl p-10 text-center text-indigo-300 italic text-xs shadow-inner">
                     No pending treasure hunt submissions to review right now!
                 </div>
             {% else %}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {% for sub in pending_submissions %}
-                        <div class="bg-purple-950/80 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-4 shadow-inner">
+                        <div class="bg-purple-950/80 border border-indigo-800/60 rounded-3xl p-4 sm:p-6 shadow-xl space-y-4 shadow-inner">
                             
                             <!-- Team & Item Info -->
                             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-indigo-800/60 pb-3 gap-2">
@@ -177,7 +176,7 @@
                                         <p class="text-[10px] text-indigo-200 font-mono">Submitted: {{ sub.submitted_at }}</p>
                                     </div>
                                 </div>
-                                <span class="text-xs font-mono font-bold text-amber-300 bg-amber-500/20 px-2.5 py-1 rounded-lg border border-amber-500/30">
+                                <span class="text-xs font-mono font-bold text-amber-300 bg-amber-500/20 px-2.5 py-1.5 rounded-lg border border-amber-500/30">
                                     {{ sub.treasure_hunt_items.title }} (+{{ sub.treasure_hunt_items.points }} pts)
                                 </span>
                             </div>
@@ -196,15 +195,15 @@
                                 <!-- Rejection Reason Text Box -->
                                 <div>
                                     <label class="block text-[10px] font-black text-indigo-200 uppercase tracking-wider mb-1">Rejection Reason (Required if rejecting)</label>
-                                    <input type="text" name="rejection_reason" placeholder="e.g., Blurry photo, wrong location, etc." class="w-full bg-indigo-950 border border-indigo-700/80 rounded-xl p-2.5 text-xs text-white outline-none focus:border-red-400 shadow-inner">
+                                    <input type="text" name="rejection_reason" placeholder="e.g., Blurry photo, wrong location, etc." class="w-full bg-indigo-950 border border-indigo-700/80 rounded-xl p-3 text-xs text-white outline-none focus:border-red-400 shadow-inner">
                                 </div>
 
                                 <!-- Action Buttons -->
                                 <div class="grid grid-cols-2 gap-3 pt-1">
-                                    <button type="submit" name="action" value="reject" class="w-full bg-rose-950/60 border border-rose-500/40 text-rose-300 font-black text-xs uppercase tracking-widest py-3 rounded-xl hover:bg-rose-900/60 transition shadow-inner">
+                                    <button type="submit" name="action" value="reject" class="w-full bg-rose-950/60 border border-rose-500/40 text-rose-300 font-black text-xs uppercase tracking-widest py-3.5 rounded-xl hover:bg-rose-900/60 transition shadow-inner">
                                         Reject ❌
                                     </button>
-                                    <button type="submit" name="action" value="approve" class="w-full bg-emerald-500 text-slate-950 font-black text-xs uppercase tracking-widest py-3 rounded-xl hover:bg-emerald-400 transition shadow-lg">
+                                    <button type="submit" name="action" value="approve" class="w-full bg-emerald-500 text-slate-950 font-black text-xs uppercase tracking-widest py-3.5 rounded-xl hover:bg-emerald-400 transition shadow-lg">
                                         Approve ✅
                                     </button>
                                 </div>
@@ -219,37 +218,55 @@
 
     <!-- TAB 3: VAR JUDGEMENT HALL -->
     <div class="space-y-6 {% if active_tab != 'var' %}hidden{% endif %}">
-        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-6 backdrop-blur-md">
+        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-4 sm:p-6 shadow-xl space-y-6 backdrop-blur-md">
             <h2 class="text-sm font-black text-red-400 uppercase tracking-widest flex items-center gap-2">🚨 Judgement Hall</h2>
             {% if var_submissions %}
                 <div class="space-y-4">
                     {% for sub in var_submissions %}
-                        <div class="bg-purple-950/80 border border-indigo-800/60 p-5 rounded-2xl space-y-4 shadow-inner">
-                            <div><span class="text-amber-300 font-bold text-xs">{{ sub.teams.flag_emoji }} {{ sub.teams.nation_name }}</span><p class="text-indigo-100 text-xs mt-2 italic">"{{ sub.incident_description }}"</p></div>
-                            <form action="/admin/var/issue" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end bg-indigo-950 p-4 rounded-xl border border-indigo-800/80 shadow-inner">
-                                <input type="hidden" name="submission_id" value="{{ sub.id }}"><input type="hidden" name="reason" value="{{ sub.incident_description }}">
-                                <div><label class="text-[10px] uppercase font-bold text-indigo-300">Ruling</label><select name="decision" class="w-full bg-purple-950 border border-indigo-700 rounded-lg p-2 text-xs text-white"><option value="upheld">Upheld (Penalty)</option><option value="dismissed">Dismissed</option></select></div>
-                                <div><label class="text-[10px] uppercase font-bold text-indigo-300">Pts Penalty</label><input type="number" name="points" value="0" class="w-full bg-purple-950 border border-indigo-700 rounded-lg p-2 text-xs text-white"></div>
-                                <div><label class="text-[10px] uppercase font-bold text-indigo-300">Shots Owed</label><input type="number" name="shots" value="0" class="w-full bg-purple-950 border border-indigo-700 rounded-lg p-2 text-xs text-white"></div>
-                                <button type="submit" class="bg-red-500 text-white font-black text-[10px] uppercase py-2.5 rounded-lg hover:bg-red-400 w-full shadow">Issue Ruling</button>
+                        <div class="bg-purple-950/80 border border-indigo-800/60 p-4 sm:p-5 rounded-2xl space-y-4 shadow-inner">
+                            <div>
+                                <span class="text-amber-300 font-bold text-xs">{{ sub.teams.flag_emoji }} {{ sub.teams.nation_name }}</span>
+                                <p class="text-indigo-100 text-xs mt-2 italic">"{{ sub.incident_description }}"</p>
+                            </div>
+                            <form action="/admin/var/issue" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end bg-indigo-950 p-4 rounded-xl border border-indigo-800/80 shadow-inner">
+                                <input type="hidden" name="submission_id" value="{{ sub.id }}">
+                                <input type="hidden" name="reason" value="{{ sub.incident_description }}">
+                                <div>
+                                    <label class="text-[10px] uppercase font-bold text-indigo-300 block mb-1">Ruling</label>
+                                    <select name="decision" class="w-full bg-purple-950 border border-indigo-700 rounded-xl p-3 text-xs text-white">
+                                        <option value="upheld">Upheld (Penalty)</option>
+                                        <option value="dismissed">Dismissed</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-[10px] uppercase font-bold text-indigo-300 block mb-1">Pts Penalty</label>
+                                    <input type="number" name="points" value="0" class="w-full bg-purple-950 border border-indigo-700 rounded-xl p-3 text-xs text-white">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] uppercase font-bold text-indigo-300 block mb-1">Shots Owed</label>
+                                    <input type="number" name="shots" value="0" class="w-full bg-purple-950 border border-indigo-700 rounded-xl p-3 text-xs text-white">
+                                </div>
+                                <button type="submit" class="bg-red-500 text-white font-black text-xs uppercase py-3 rounded-xl hover:bg-red-400 w-full shadow">Issue Ruling</button>
                             </form>
                         </div>
                     {% endfor %}
                 </div>
-            {% else %}<p class="text-xs text-indigo-300 italic text-center py-8">The Judgement Hall is quiet. No incidents pending.</p>{% endif %}
+            {% else %}
+                <p class="text-xs text-indigo-300 italic text-center py-8">The Judgement Hall is quiet. No incidents pending.</p>
+            {% endif %}
         </div>
     </div>
 
     <!-- TAB 4: WEEKEND TOGGLES & SETTINGS -->
     <div class="space-y-6 {% if active_tab != 'settings' %}hidden{% endif %}">
-        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-6 backdrop-blur-md">
+        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-4 sm:p-6 shadow-xl space-y-6 backdrop-blur-md">
             <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">⚙️ Weekend Feature Toggles</h2>
             <p class="text-xs text-indigo-200">Control which hidden pages and countdown timers are visible to competitors.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
                 <!-- Treasure Hunt Toggle -->
-                <div class="bg-purple-950/80 border border-indigo-800/60 p-5 rounded-2xl flex items-center justify-between shadow-inner">
+                <div class="bg-purple-950/80 border border-indigo-800/60 p-4 sm:p-5 rounded-2xl flex items-center justify-between shadow-inner">
                     <div>
                         <h3 class="font-bold text-white text-sm">🏴‍☠️ Treasure Hunt Hub</h3>
                         <p class="text-[10px] text-indigo-200 mt-0.5">Currently: <strong class="{% if app_settings.treasure_hunt_active %}text-emerald-400{% else %}text-rose-400{% endif %}">{% if app_settings.treasure_hunt_active %}VISIBLE{% else %}HIDDEN{% endif %}</strong></p>
@@ -258,14 +275,14 @@
                         <input type="hidden" name="key" value="treasure_hunt_active">
                         <input type="hidden" name="value" value="{{ 'false' if app_settings.treasure_hunt_active else 'true' }}">
                         
-                        <button type="submit" class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none {% if app_settings.treasure_hunt_active %} bg-amber-400 {% else %} bg-indigo-900 {% endif %} shadow-inner">
-                            <span class="inline-block h-4 w-4 transform rounded-full bg-slate-950 transition-transform {% if app_settings.treasure_hunt_active %} translate-x-6 {% else %} translate-x-1 {% endif %}"></span>
+                        <button type="submit" class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none {% if app_settings.treasure_hunt_active %} bg-amber-400 {% else %} bg-indigo-900 {% endif %} shadow-inner">
+                            <span class="inline-block h-5 w-5 transform rounded-full bg-slate-950 transition-transform {% if app_settings.treasure_hunt_active %} translate-x-6 {% else %} translate-x-1 {% endif %}"></span>
                         </button>
                     </form>
                 </div>
 
                 <!-- Virtual Escape Room Toggle -->
-                <div class="bg-purple-950/80 border border-indigo-800/60 p-5 rounded-2xl flex items-center justify-between shadow-inner">
+                <div class="bg-purple-950/80 border border-indigo-800/60 p-4 sm:p-5 rounded-2xl flex items-center justify-between shadow-inner">
                     <div>
                         <h3 class="font-bold text-white text-sm">🧩 Virtual Escape Room</h3>
                         <p class="text-[10px] text-indigo-200 mt-0.5">Currently: <strong class="{% if app_settings.puzzle_room_active %}text-emerald-400{% else %}text-rose-400{% endif %}">{% if app_settings.puzzle_room_active %}VISIBLE{% else %}HIDDEN{% endif %}</strong></p>
@@ -274,14 +291,14 @@
                         <input type="hidden" name="key" value="puzzle_room_active">
                         <input type="hidden" name="value" value="{{ 'false' if app_settings.puzzle_room_active else 'true' }}">
                         
-                        <button type="submit" class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none {% if app_settings.puzzle_room_active %} bg-amber-400 {% else %} bg-indigo-900 {% endif %} shadow-inner">
-                            <span class="inline-block h-4 w-4 transform rounded-full bg-slate-950 transition-transform {% if app_settings.puzzle_room_active %} translate-x-6 {% else %} translate-x-1 {% endif %}"></span>
+                        <button type="submit" class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none {% if app_settings.puzzle_room_active %} bg-amber-400 {% else %} bg-indigo-900 {% endif %} shadow-inner">
+                            <span class="inline-block h-5 w-5 transform rounded-full bg-slate-950 transition-transform {% if app_settings.puzzle_room_active %} translate-x-6 {% else %} translate-x-1 {% endif %}"></span>
                         </button>
                     </form>
                 </div>
 
                 <!-- Opening Ceremony Countdown Toggle -->
-                <div class="bg-purple-950/80 border border-indigo-800/60 p-5 rounded-2xl flex items-center justify-between shadow-inner">
+                <div class="bg-purple-950/80 border border-indigo-800/60 p-4 sm:p-5 rounded-2xl flex items-center justify-between shadow-inner">
                     <div>
                         <h3 class="font-bold text-white text-sm">⏳ Opening Ceremony Countdown</h3>
                         <p class="text-[10px] text-indigo-200 mt-0.5">Currently: <strong class="{% if app_settings.ceremony_countdown_active %}text-emerald-400{% else %}text-rose-400{% endif %}">{% if app_settings.ceremony_countdown_active %}VISIBLE{% else %}HIDDEN{% endif %}</strong></p>
@@ -290,8 +307,8 @@
                         <input type="hidden" name="key" value="ceremony_countdown_active">
                         <input type="hidden" name="value" value="{{ 'false' if app_settings.ceremony_countdown_active else 'true' }}">
                         
-                        <button type="submit" class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none {% if app_settings.ceremony_countdown_active %} bg-amber-400 {% else %} bg-indigo-900 {% endif %} shadow-inner">
-                            <span class="inline-block h-4 w-4 transform rounded-full bg-slate-950 transition-transform {% if app_settings.ceremony_countdown_active %} translate-x-6 {% else %} translate-x-1 {% endif %}"></span>
+                        <button type="submit" class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none {% if app_settings.ceremony_countdown_active %} bg-amber-400 {% else %} bg-indigo-900 {% endif %} shadow-inner">
+                            <span class="inline-block h-5 w-5 transform rounded-full bg-slate-950 transition-transform {% if app_settings.ceremony_countdown_active %} translate-x-6 {% else %} translate-x-1 {% endif %}"></span>
                         </button>
                     </form>
                 </div>
@@ -302,18 +319,26 @@
 
     <!-- TAB 5: RECENT LOGS -->
     <div class="space-y-6 {% if active_tab != 'logs' %}hidden{% endif %}">
-        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-6 shadow-xl space-y-4 backdrop-blur-md">
+        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-4 sm:p-6 shadow-xl space-y-4 backdrop-blur-md">
             <h2 class="text-sm font-black text-white uppercase tracking-widest">Recent Event Logs & Results</h2>
             {% if recent_results %}
-                <div class="space-y-2">
+                <div class="space-y-2.5">
                     {% for res in recent_results %}
-                        <div class="bg-purple-950/80 border border-indigo-800/60 p-3.5 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs shadow-inner">
-                            <div><span class="font-bold text-white">{{ res.teams.flag_emoji }} {{ res.teams.nation_name }}</span><span class="text-indigo-200 block text-[10px]">{{ res.event_name }} &bull; <strong class="text-amber-300">+{{ res.points }} pts</strong></span></div>
-                            <form action="/admin/event-results/delete" method="POST"><input type="hidden" name="result_id" value="{{ res.id }}"><button type="submit" class="text-[10px] text-rose-300 hover:underline font-bold">Delete Result</button></form>
+                        <div class="bg-purple-950/80 border border-indigo-800/60 p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs shadow-inner">
+                            <div>
+                                <span class="font-bold text-white">{{ res.teams.flag_emoji }} {{ res.teams.nation_name }}</span>
+                                <span class="text-indigo-200 block text-[10px] mt-0.5">{{ res.event_name }} &bull; <strong class="text-amber-300">+{{ res.points }} pts</strong></span>
+                            </div>
+                            <form action="/admin/event-results/delete" method="POST" class="w-full sm:w-auto text-right">
+                                <input type="hidden" name="result_id" value="{{ res.id }}">
+                                <button type="submit" class="text-xs text-rose-300 hover:underline font-bold px-3 py-1.5 bg-rose-950/40 rounded-lg border border-rose-500/20">Delete Result</button>
+                            </form>
                         </div>
                     {% endfor %}
                 </div>
-            {% else %}<p class="text-xs text-indigo-300 italic text-center py-8">No event results recorded yet.</p>{% endif %}
+            {% else %}
+                <p class="text-xs text-indigo-300 italic text-center py-8">No event results recorded yet.</p>
+            {% endif %}
         </div>
     </div>
 </div>
