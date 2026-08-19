@@ -53,6 +53,7 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
 
         standings[t["id"]] = {
             "nation_name": t["nation_name"],
+            "participant_name": t["participant_name"],
             "flag_emoji": t["flag_emoji"],
             "flag_url": flag_url,
             "gold": 0,
@@ -80,6 +81,24 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
         key=lambda x: (x["total_points"], x["gold"], x["silver"], x["bronze"]), 
         reverse=True
     )
+
+    # --- Analyst Desk Commentary Generator ---
+    commentary = []
+    if len(sorted_standings) >= 1:
+        leader = sorted_standings[0]
+        commentary.append(f"🏆 **{leader['nation_name']}** ({leader['participant_name']}) is currently sitting comfortably at the summit, though experts note their smugness levels are reaching clinical heights.")
+    
+    if len(sorted_standings) >= 2:
+        runner_up = sorted_standings[1]
+        commentary.append(f"🥈 **{runner_up['nation_name']}** ({runner_up['participant_name']}) is breathing down the leader's neck, fueled entirely by panic, caffeine, and desperation.")
+
+    if len(sorted_standings) >= 3:
+        mid_pack = sorted_standings[len(sorted_standings) // 2]
+        commentary.append(f"⚡ **{mid_pack['nation_name']}** is lingering dangerously in the middle of the pack, posing absolute zero threat to anyone but themselves.")
+
+    if sorted_standings:
+        floundering = sorted_standings[-1]
+        commentary.append(f"🚨 **{floundering['nation_name']}** is anchoring the bottom of the table. Analysts report they spend more time arguing with the referee than actually competing.")
 
     # Fetch medal results for the rolling news ticker
     activity_res = supabase.table("event_results") \
@@ -123,7 +142,8 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
         "activities": news_items,
         "shots_history": shots_history,
         "treasure_visible": treasure_visible,
-        "escape_visible": escape_visible
+        "escape_visible": escape_visible,
+        "analyst_commentary": commentary  # <-- Injected into template context
     })
     return HTMLResponse(content=html_content)
 
@@ -132,7 +152,6 @@ async def update_colors(
     nav_color: str = Form(...),
     team: dict = Depends(require_team)
 ):
-    # Update only the team's custom navbar color in Supabase
     supabase.table("teams").update({
         "nav_color": nav_color
     }).eq("id", team["id"]).execute()
@@ -141,7 +160,6 @@ async def update_colors(
 
 @router.post("/var/submit")
 async def submit_var(target_team_id: str = Form(...), incident: str = Form(...), team: dict = Depends(require_team)):
-    # Get target team details to make the incident description clear
     target_res = supabase.table("teams").select("nation_name, participant_name").eq("id", target_team_id).execute()
     target_info = target_res.data[0] if target_res.data else {"nation_name": "Unknown", "participant_name": "Athlete"}
     
@@ -156,7 +174,6 @@ async def submit_var(target_team_id: str = Form(...), incident: str = Form(...),
 
 @router.get("/events", response_class=HTMLResponse)
 async def events_page(request: Request, team: dict = Depends(require_team)):
-    # Fetch feature toggles so the navbar links display correctly on the events page too
     settings_res = supabase.table("app_settings").select("key, is_active").execute()
     settings = {s["key"]: s["is_active"] for s in settings_res.data} if settings_res.data else {}
     
@@ -185,11 +202,9 @@ async def events_page(request: Request, team: dict = Depends(require_team)):
 
 @router.get("/nations", response_class=HTMLResponse)
 async def nations_page(request: Request, team: dict = Depends(require_team)):
-    # Explicitly select participant_name and olympics_attended alongside team details
     teams_res = supabase.table("teams").select("id, nation_name, participant_name, flag_emoji, is_admin, olympics_attended").execute()
     teams = teams_res.data if teams_res.data else []
 
-    # Also include feature toggles here just to keep navbar fully consistent
     settings_res = supabase.table("app_settings").select("key, is_active").execute()
     settings = {s["key"]: s["is_active"] for s in settings_res.data} if settings_res.data else {}
     
