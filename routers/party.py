@@ -7,7 +7,7 @@ router = APIRouter(tags=["Party Mode"])
 
 @router.get("/party", response_class=HTMLResponse)
 async def party_page(request: Request, team: dict = Depends(require_team)):
-    teams_res = supabase.table("teams").select("id, nation_name, participant_name, flag_emoji").execute()
+    teams_res = supabase.table("teams").select("id, nation_name, participant_name, flag_emoji, is_playing").execute()
     teams = teams_res.data if teams_res.data else []
 
     settings_res = supabase.table("app_settings").select("key, is_active").execute()
