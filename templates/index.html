@@ -79,39 +79,27 @@
         </div>
     </div>
 
-    <!-- ANALYST DESK LIVE BROADCAST BOX (Upgraded Replacement News Feed) -->
-    <div class="bg-gradient-to-br from-indigo-950/95 via-purple-950/90 to-slate-950/95 border-2 border-amber-500/40 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-4 relative overflow-hidden">
-        
-        <div class="flex items-center justify-between border-b border-indigo-800/60 pb-3">
-            <div class="flex items-center gap-3">
-                <span class="relative flex h-3 w-3">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
-                </span>
-                <span class="text-xs font-black uppercase tracking-widest text-amber-400">ANALYST DESK // LIVE BROADCAST</span>
-            </div>
-            <span class="text-[10px] font-mono text-indigo-400">SSN Studio Feed</span>
+    <!-- MAIN NEWS TICKER BANNER -->
+    <div class="bg-indigo-950/90 border-y border-yellow-500/30 py-2 px-4 overflow-hidden relative shadow-inner flex items-center rounded-xl">
+        <div class="bg-yellow-400 text-slate-950 font-black text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded z-10 shrink-0 mr-3 shadow flex items-center gap-1">
+            <span>📢</span> WIRE
         </div>
-
-        <!-- Dynamic Commentary Cards -->
-        <div class="space-y-3">
-            {% if analyst_commentary %}
-                {% for comment in analyst_commentary %}
-                <div class="bg-slate-950/60 border border-indigo-900/80 rounded-2xl p-4 shadow-inner flex items-start gap-3.5">
-                    <div class="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-400 text-sm sm:text-base shrink-0">
-                        🎙️
-                    </div>
-                    <p class="text-xs sm:text-sm text-slate-100 font-medium leading-relaxed pt-0.5">
-                        {{ comment | safe }}
-                    </p>
-                </div>
-                {% endfor %}
-            {% else %}
-                <div class="bg-slate-950/60 border border-indigo-900/80 rounded-2xl p-4 shadow-inner flex items-center gap-3.5">
-                    <div class="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-400 text-sm sm:text-base shrink-0">🎙️</div>
-                    <p class="text-xs sm:text-sm text-slate-100 font-medium">Standby for expert commentary as events unfold...</p>
-                </div>
-            {% endif %}
+        <div class="overflow-hidden whitespace-nowrap relative w-full flex">
+            <div class="inline-flex animate-[marquee_25s_linear_infinite] items-center space-x-12 text-xs font-bold text-indigo-100">
+                {% if activities %}
+                    {% for act in activities %}
+                        <span class="inline-flex items-center gap-2">
+                            {% if act.type == 'medal' %}
+                                <span class="text-yellow-300">🏆 MEDAL:</span> {{ act.text }}
+                            {% else %}
+                                <span class="text-red-300">🚨 FORFEIT:</span> {{ act.text }}
+                            {% endif %}
+                        </span>
+                    {% endfor %}
+                {% else %}
+                    <span>⚡ Welcome to the Scuffed Olympics 2026! Party hard, play fair.</span>
+                {% endif %}
+            </div>
         </div>
     </div>
 
@@ -311,4 +299,18 @@
     </div>
 
 </div>
+
+<!-- Rolling Marquee Ticker Style -->
+<style>
+@keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+}
+.animate-\[marquee_25s_linear_infinite\] {
+    animation: marquee 25s linear infinite;
+}
+.animate-\[marquee_25s_linear_infinite\]:hover {
+    animation-play-state: paused;
+}
+</style>
 {% endblock %}
