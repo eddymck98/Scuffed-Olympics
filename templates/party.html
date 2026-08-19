@@ -56,7 +56,6 @@
     let tasks = [];
     let currentCategory = 'all';
 
-    // Fetch tasks asynchronously from API to prevent Jinja template parsing conflicts
     fetch('/api/party-tasks')
         .then(res => res.json())
         .then(data => {
@@ -131,14 +130,15 @@
         const randomSeconds = Math.floor(Math.random() * 4) * 15 + 15;
 
         const team1 = getRandomItem(teams);
-        let nationHtml = `<span>${team1.flag}</span> ${team1.name} <span class="text-xs text-indigo-300 font-normal">(${team1.participant})</span>`;
-
+        
         let taskText = selectedTask.task || "";
         let formattedTask = taskText
             .replace(/{sips}/g, `<span class="inline-block mx-1 px-2 py-0.5 bg-amber-500/20 border border-amber-500/40 rounded-lg text-amber-400 font-mono font-black">${randomSips}</span>`)
             .replace(/{seconds}/g, `<span class="inline-block mx-1 px-2 py-0.5 bg-amber-500/20 border border-amber-500/40 rounded-lg text-amber-400 font-mono font-black">${randomSeconds}</span>`);
 
         const cat = (selectedTask.category || "").toLowerCase();
+
+        // ONLY trigger VS mode if the category is strictly 'duel' or the text explicitly has placeholders for two nations
         if (cat === 'duel' || formattedTask.includes('{{nation2}}')) {
             let team2 = getRandomItem(teams);
             while (team2.name === team1.name && teams.length > 1) {
@@ -146,6 +146,9 @@
             }
             nationHtml = `<span>${team1.flag}</span> ${team1.name} <span class="text-amber-400 font-black px-2">VS</span> <span>${team2.flag}</span> ${team2.name}`;
             formattedTask = formattedTask.replace(/\{\{nation1\}\}/g, team1.name).replace(/\{\{nation2\}\}/g, team2.name);
+        } else {
+            // Standard single-player target layout
+            nationHtml = `<span>${team1.flag}</span> ${team1.name} <span class="text-xs text-indigo-300 font-normal">(${team1.participant})</span>`;
         }
 
         document.getElementById("slotNation").innerHTML = nationHtml;
