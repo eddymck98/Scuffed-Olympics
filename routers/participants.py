@@ -127,6 +127,20 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
     })
     return HTMLResponse(content=html_content)
 
+@router.post("/profile/update-colors")
+async def update_colors(
+    bg_color: str = Form(...),
+    nav_color: str = Form(...),
+    team: dict = Depends(require_team)
+):
+    # Update the team's custom background and navbar colors in Supabase
+    supabase.table("teams").update({
+        "bg_color": bg_color,
+        "nav_color": nav_color
+    }).eq("id", team["id"]).execute()
+    
+    return RedirectResponse(url="/?message=Theme+Updated", status_code=303)
+
 @router.post("/var/submit")
 async def submit_var(target_team_id: str = Form(...), incident: str = Form(...), team: dict = Depends(require_team)):
     # Get target team details to make the incident description clear
