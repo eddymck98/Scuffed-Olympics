@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
 
 from database import supabase, templates
 from routers.auth import get_current_team
@@ -31,11 +30,14 @@ def walkout_page(request: Request):
                 sorted_teams.append(t)
         teams = sorted_teams
 
-    return templates.TemplateResponse("walkout.html", {
-        "request": request,
-        "team": get_current_team(request),
-        "teams": teams
-    })
+    return templates.TemplateResponse(
+        request,
+        "walkout.html",
+        {
+            "team": get_current_team(request),
+            "teams": teams
+        }
+    )
 
 @router.post("/walkout/submit")
 async def submit_walkout(request: Request):
