@@ -22,7 +22,8 @@ async def party_page(request: Request, team: dict = Depends(require_team)):
         "team": team,
         "teams": teams,
         "treasure_visible": treasure_visible,
-        "escape_visible": escape_visible
+        "escape_visible": escape_visible,
+        "walkout_visible": walkout_visible
     })
     return HTMLResponse(content=html_content)
 
