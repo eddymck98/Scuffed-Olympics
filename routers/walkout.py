@@ -43,7 +43,8 @@ def walkout_page(request: Request):
             "team": get_current_team(request),
             "teams": teams,
             "treasure_visible": treasure_visible,
-            "escape_visible": escape_visible
+            "escape_visible": escape_visible,
+            "walkout_visible": walkout_visible
         }
     )
 
