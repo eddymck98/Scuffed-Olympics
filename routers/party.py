@@ -15,6 +15,7 @@ async def party_page(request: Request, team: dict = Depends(require_team)):
     
     treasure_visible = settings.get("treasure_hunt_active", False)
     escape_visible = settings.get("puzzle_room_active", False)
+    walkout_visible = app_settings.get("walkout_active", False)
 
     template = templates.get_template("party.html")
     html_content = template.render({
