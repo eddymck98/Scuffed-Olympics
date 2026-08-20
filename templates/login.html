@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+    {% extends "base.html" %}
 {% block content %}
 <div class="max-w-2xl mx-auto py-4 px-3 sm:px-6 relative overflow-hidden pt-2">
     
@@ -66,6 +66,10 @@
                             {% set flag_url = 'https://flagcdn.com/w640/ie.png' %}
                         {% elif n == 'united states' or n == 'usa' %}
                             {% set flag_url = 'https://flagcdn.com/w640/us.png' %}
+                        {% elif n == 'mexico' %}
+                            {% set flag_url = 'https://flagcdn.com/w640/mx.png' %}
+                        {% elif n == 'france' %}
+                            {% set flag_url = 'https://flagcdn.com/w640/fr.png' %}
                         {% elif n == 'japan' %}
                             {% set flag_url = 'https://flagcdn.com/w640/jp.png' %}
                         {% elif n == 'germany' %}
