@@ -17,6 +17,7 @@ def walkout_page(request: Request):
     app_settings = {s["key"]: s["is_active"] for s in settings_res.data} if settings_res.data else {}
     treasure_visible = app_settings.get("treasure_hunt_active", False)
     escape_visible = app_settings.get("puzzle_room_active", False)
+    walkout_visible = app_settings.get("walkout_active", False)
     
     # Fetch all competing nations/teams
     teams_res = supabase.table("teams").select("*").order("nation_name").execute()
