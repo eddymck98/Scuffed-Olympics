@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from routers import auth, participants, party, treasure, puzzle, admin
+from routers import auth, participants, party, treasure, puzzle, admin, walkout
 
 app = FastAPI(title="Scuffed Olympics")
 
