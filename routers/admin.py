@@ -24,16 +24,39 @@ async def admin_dashboard(request: Request, tab: str = "events", subtab: str = "
     # Pull visibility flags and countdown state
     treasure_visible = app_settings.get("treasure_hunt_active", False)
     escape_visible = app_settings.get("puzzle_room_active", False)
+    walkout_visible = app_settings.get("walkout_active", False)
     ceremony_countdown_active = app_settings.get("ceremony_countdown_active", False)
      
     teams = teams_res.data if teams_res.data else []
     event_scores = {r["team_id"]: r for r in (all_results.data or []) if r["event_name"] == event}
     recent_list = supabase.table("event_results").select("id, event_name, points, medal_type, teams(nation_name, flag_emoji)").order("recorded_at", desc=True).limit(15).execute().data or []
 
+    # Calculate Walkout Consensus Points
+    ballots_res = supabase.table("walkout_rankings").select("ranked_team_ids").execute()
+    ballots = ballots_res.data if ballots_res.data else []
+    
+    consensus_scores = {t['id']: {"name": t['nation_name'], "emoji": t['flag_emoji'], "total_points": 0, "first_place_votes": 0} for t in teams}
+    
+    for ballot in ballots:
+        ranked_list = ballot.get('ranked_team_ids', [])
+        for index, t_id in enumerate(ranked_list):
+            if t_id in consensus_scores:
+                # 1st place gets 10 pts, decreasing by 1 down to a minimum of 1
+                points = max(1, 11 - (index + 1))
+                consensus_scores[t_id]["total_points"] += points
+                if index == 0:
+                    consensus_scores[t_id]["first_place_votes"] += 1
+                    
+    sorted_consensus = sorted(consensus_scores.values(), key=lambda x: x["total_points"], reverse=True)
+    walkout_consensus = {
+        "ballots_cast": len(ballots),
+        "consensus": sorted_consensus
+    }
+
     template = templates.get_template("admin.html")
     html_content = template.render({
         "request": request,
-        "team": {"nav_color": "rgba(15, 23, 42, 0.9)"},  # <-- Fixes the UndefinedError in base.html
+        "team": {"nav_color": "rgba(15, 23, 42, 0.9)"}, 
         "active_tab": tab,
         "active_subtab": subtab,
         "selected_event": event,
@@ -45,7 +68,9 @@ async def admin_dashboard(request: Request, tab: str = "events", subtab: str = "
         "app_settings": app_settings,
         "treasure_visible": treasure_visible,
         "escape_visible": escape_visible,
+        "walkout_visible": walkout_visible,
         "ceremony_countdown_active": ceremony_countdown_active,
+        "walkout_consensus": walkout_consensus,
         "ceremony_date": "Oct 2, 2026 18:00:00",
         "standard_events": ["Crack the Code", "Golf Putting", "Padel Pong", "Sticky Bounce", "Ring Toss", "Bean Bag Toss", "The Entrance", "Cut the Deck", "Beer Pong", "The Ultimate Relay Race"]
     })
