@@ -35,7 +35,8 @@ async def escape_room_page(request: Request, team: dict = Depends(require_team))
             "team": team,
             "current_stage": current_stage,
             "escape_visible": escape_visible,
-            "treasure_visible": treasure_visible
+            "treasure_visible": treasure_visible,
+            "walkout_visible": walkout_visible
         }
     )
 
