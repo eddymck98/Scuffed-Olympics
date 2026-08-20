@@ -23,7 +23,7 @@ async def escape_room_page(request: Request, team: dict = Depends(require_team))
     
     escape_visible = settings.get("puzzle_room_active", False)
     treasure_visible = settings.get("treasure_hunt_active", False)
-    walkout_visible = app_settings.get("walkout_active", False)
+    walkout_visible = settings.get("walkout_active", False) # Fixed: using `settings` instead of `app_settings`
 
     prog_res = supabase.table("puzzle_progress").select("current_stage").eq("team_id", team["id"]).execute()
     current_stage = prog_res.data[0]["current_stage"] if prog_res.data else 1
