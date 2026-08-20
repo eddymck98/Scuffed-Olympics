@@ -49,6 +49,10 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
             flag_url = 'https://flagcdn.com/w640/ca.png'
         elif code == 'br' or 'brazil' in name:
             flag_url = 'https://flagcdn.com/w640/br.png'
+        elif code == 'mx' or 'mexico' in name:
+            flag_url = 'https://flagcdn.com/w640/mx.png'
+        elif code == 'fr' or 'france' in name:
+            flag_url = 'https://flagcdn.com/w640/fr.png'
         else:
             flag_url = 'https://flagcdn.com/w640/gb.png'
 
@@ -124,7 +128,8 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
         "activities": news_items,
         "shots_history": shots_history,
         "treasure_visible": treasure_visible,
-        "escape_visible": escape_visible
+        "escape_visible": escape_visible,
+        "walkout_visible": walkout_visible
     })
     return HTMLResponse(content=html_content)
 
@@ -163,6 +168,7 @@ async def events_page(request: Request, team: dict = Depends(require_team)):
     
     treasure_visible = settings.get("treasure_hunt_active", False)
     escape_visible = settings.get("puzzle_room_active", False)
+    walkout_visible = settings.get("walkout_active", False)
 
     results_res = supabase.table("event_results").select("event_name, points, medal_type, teams(nation_name, flag_emoji)").order("points", desc=True).execute()
     results = results_res.data if results_res.data else []
@@ -180,7 +186,8 @@ async def events_page(request: Request, team: dict = Depends(require_team)):
         "team": team,
         "event_results_map": event_results_map,
         "treasure_visible": treasure_visible,
-        "escape_visible": escape_visible
+        "escape_visible": escape_visible,
+        "walkout_visible": walkout_visible
     })
     return HTMLResponse(content=html_content)
 
@@ -196,6 +203,7 @@ async def nations_page(request: Request, team: dict = Depends(require_team)):
     
     treasure_visible = settings.get("treasure_hunt_active", False)
     escape_visible = settings.get("puzzle_room_active", False)
+    walkout_visible = settings.get("walkout_active", False)
 
     template = templates.get_template("nations.html")
     html_content = template.render({
