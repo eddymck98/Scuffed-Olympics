@@ -44,21 +44,21 @@
                 </a>
 
                 <!-- Desktop Navigation Links -->
-                <nav class="hidden lg:flex space-x-2 text-xs font-bold uppercase tracking-wider items-center">
-                    <a href="/" class="px-3 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition">Dashboard</a>
-                    <a href="/events" class="px-3 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition">Events</a>
-                    <a href="/nations" class="px-3 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition">Nations</a>
-                    <a href="/party" class="px-3 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/30">🍻 Party</a>
+                <nav class="hidden lg:flex space-x-1.5 text-xs font-bold uppercase tracking-wider items-center">
+                    <a href="/" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-amber-300 bg-slate-900/40 hover:bg-amber-500/10 transition border border-slate-800 hover:border-amber-500/30">Dashboard</a>
+                    <a href="/events" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-amber-300 bg-slate-900/40 hover:bg-amber-500/10 transition border border-slate-800 hover:border-amber-500/30">Events</a>
+                    <a href="/nations" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-amber-300 bg-slate-900/40 hover:bg-amber-500/10 transition border border-slate-800 hover:border-amber-500/30">Nations</a>
+                    <a href="/party" class="px-3.5 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/30 shadow-inner">🍻 Party</a>
                     
                     {% if walkout_visible %}
-                        <a href="/walkout" class="px-3 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/30">✨ Walkout</a>
+                        <a href="/walkout" class="px-3.5 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/30 shadow-inner">✨ Walkout</a>
                     {% endif %}
                     
                     {% if treasure_visible %}
-                        <a href="/treasure-hunt" class="px-3 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/30">🏴‍☠️ Hunt</a>
+                        <a href="/treasure-hunt" class="px-3.5 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/30 shadow-inner">🏴‍☠️ Hunt</a>
                     {% endif %}
                     {% if escape_visible %}
-                        <a href="/escape-room" class="px-3 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/30">🧩 Escape</a>
+                        <a href="/escape-room" class="px-3.5 py-2 rounded-xl text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition border border-amber-500/30 shadow-inner">🧩 Escape</a>
                     {% endif %}
                     
                     {% if request.cookies.get("is_admin") == "true" %}
@@ -93,9 +93,9 @@
                 <span>⚡ {{ request.cookies.get("nation_name") or 'Competitor' }}</span>
                 <a href="/logout" class="text-rose-400 underline p-1">Logout</a>
             </div>
-            <a href="/" class="block px-4 py-3 rounded-xl text-slate-300 hover:bg-indigo-950 transition">Dashboard</a>
-            <a href="/events" class="block px-4 py-3 rounded-xl text-slate-300 hover:bg-indigo-950 transition">Events & Rules</a>
-            <a href="/nations" class="block px-4 py-3 rounded-xl text-slate-300 hover:bg-indigo-950 transition">Nations</a>
+            <a href="/" class="block px-4 py-3 rounded-xl text-slate-300 bg-slate-900/40 border border-slate-800 hover:bg-indigo-950 transition">Dashboard</a>
+            <a href="/events" class="block px-4 py-3 rounded-xl text-slate-300 bg-slate-900/40 border border-slate-800 hover:bg-indigo-950 transition">Events & Rules</a>
+            <a href="/nations" class="block px-4 py-3 rounded-xl text-slate-300 bg-slate-900/40 border border-slate-800 hover:bg-indigo-950 transition">Nations</a>
             <a href="/party" class="block px-4 py-3 rounded-xl text-amber-300 bg-amber-500/10 border border-amber-500/30 transition">🍻 Party Mode</a>
             
             {% if walkout_visible %}
