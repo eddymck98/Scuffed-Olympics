@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import RedirectResponse, HTMLResponse
 from database import supabase, templates
-from routers.auth import require_admin
+from routers.auth import require_admin, get_current_team
 
 router = APIRouter(tags=["Admin"])
 
@@ -56,7 +56,7 @@ async def admin_dashboard(request: Request, tab: str = "events", subtab: str = "
     template = templates.get_template("admin.html")
     html_content = template.render({
         "request": request,
-        "team": {"nav_color": "rgba(15, 23, 42, 0.9)"}, 
+        "team": get_current_team(request),  # <-- Fixed: Uses logged-in nation's styling/nav color
         "active_tab": tab,
         "active_subtab": subtab,
         "selected_event": event,
