@@ -1,1 +1,119 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-2xl mx-auto space-y-6 pb-20 px-3 sm:px-6 relative pt-2">
+    
+    <!-- Olympic Ring Color Gradient Accent Bar -->
+    <div class="h-2 w-full rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 via-slate-100 via-green-500 to-red-500 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
 
+    <!-- Header Banner -->
+    <div class="relative py-6 px-4 sm:px-6 bg-gradient-to-r from-indigo-950/90 via-purple-950/80 to-indigo-950/90 rounded-3xl border border-amber-500/30 shadow-xl text-center space-y-3 backdrop-blur-md">
+        <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1 rounded-full text-amber-400 text-[10px] font-black uppercase tracking-widest shadow-inner">
+            <span>✨</span> The Entrance / Walkout Rankings <span>✨</span>
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-black uppercase tracking-tight text-white">
+            Live <span class="bg-gradient-to-r from-blue-300 via-yellow-300 to-red-300 bg-clip-text text-transparent">Walkout Ballot</span>
+        </h1>
+        <p class="text-xs sm:text-sm text-indigo-200 max-w-xl mx-auto font-medium">
+            Use the arrows to order nations from your absolute favorite (1st) to your least favorite. Save live as walkouts happen!
+        </p>
+    </div>
+
+    {% if request.query_params.get('success') %}
+        <div class="bg-emerald-950/80 border border-emerald-500 text-emerald-300 text-xs font-black p-3.5 rounded-2xl text-center uppercase tracking-wide shadow-xl flex items-center justify-center gap-2">
+            <span>✨</span> Ballot Saved Successfully! Consensus scores are shifting... 🍻
+        </div>
+    {% endif %}
+
+    <form action="/walkout/submit" method="POST" id="walkoutForm" class="space-y-4">
+        <input type="hidden" name="ranked_ids" id="rankedIdsInput">
+
+        <div id="sortableList" class="space-y-3">
+            {% for t in teams %}
+                <!-- Pure Nation Name Mapping for Waving Flag Watermark Backgrounds -->
+                {% set n = t.nation_name|lower|trim %}
+                {% if n == 'wales' %}
+                    {% set flag_url = 'https://flagcdn.com/w640/gb-wls.png' %}
+                {% elif n == 'austria' %}
+                    {% set flag_url = 'https://flagcdn.com/w640/at.png' %}
+                {% elif n == 'china' %}
+                    {% set flag_url = 'https://flagcdn.com/w640/cn.png' %}
+                {% elif n == 'ireland' %}
+                    {% set flag_url = 'https://flagcdn.com/w640/ie.png' %}
+                {% elif n == 'united states' or n == 'usa' %}
+                    {% set flag_url = 'https://flagcdn.com/w640/us.png' %}
+                {% elif n == 'japan' %}
+                    {% set flag_url = 'https://flagcdn.com/w640/jp.png' %}
+                {% elif n == 'germany' %}
+                    {% set flag_url = 'https://flagcdn.com/w640/de.png' %}
+                {% elif n == 'canada' %}
+                    {% set flag_url = 'https://flagcdn.com/w640/ca.png' %}
+                {% elif n == 'brazil' %}
+                    {% set flag_url = 'https://flagcdn.com/w640/br.png' %}
+                {% elif n == 'mexico' %}
+                    {% set flag_url = 'https://flagcdn.com/w640/mx.png' %}
+                {% elif n == 'france' %}
+                    {% set flag_url = 'https://flagcdn.com/w640/fr.png' %}
+                {% else %}
+                    {% set flag_url = 'https://flagcdn.com/w640/gb.png' %}
+                {% endif %}
+
+                <div data-id="{{ t.id }}" class="sortable-item relative overflow-hidden bg-indigo-950/70 border-2 border-indigo-800/60 hover:border-amber-400 p-4 rounded-2xl flex items-center justify-between shadow-xl transition-all group backdrop-blur-md">
+                    
+                    <!-- Transparent Waving Flag Watermark Background -->
+                    <div class="absolute inset-0 opacity-25 bg-cover bg-center pointer-events-none transition-transform group-hover:scale-105 duration-500" 
+                         style="background-image: url('{{ flag_url }}');">
+                    </div>
+
+                    <div class="relative z-10 flex items-center gap-3">
+                        <span class="rank-num font-mono font-black text-amber-400 text-xs sm:text-sm bg-indigo-950/90 px-3 py-1.5 rounded-xl border border-indigo-800 shadow-inner">
+                            #{{ loop.index }}
+                        </span>
+                        <span class="text-2xl p-1 bg-indigo-950/90 rounded-lg border border-indigo-800 shadow-inner">{{ t.flag_emoji }}</span>
+                        <div>
+                            <span class="font-black text-white text-sm sm:text-base uppercase tracking-wide block drop-shadow">{{ t.nation_name }}</span>
+                            <span class="text-[10px] text-indigo-200 font-mono">Athlete: {{ t.participant_name | default("Competitor") }}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile-friendly touch reordering arrows -->
+                    <div class="relative z-10 flex items-center gap-1">
+                        <button type="button" onclick="moveItem(this, -1)" class="p-3 bg-indigo-900/80 hover:bg-amber-400 hover:text-slate-950 rounded-xl text-indigo-100 transition text-xs font-bold shadow-inner">▲</button>
+                        <button type="button" onclick="moveItem(this, 1)" class="p-3 bg-indigo-900/80 hover:bg-amber-400 hover:text-slate-950 rounded-xl text-indigo-100 transition text-xs font-bold shadow-inner">▼</button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" onclick="prepareSubmission()" class="w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-slate-950 font-black text-xs uppercase tracking-widest py-4 rounded-2xl hover:brightness-110 transition shadow-lg shadow-amber-500/20">
+            Submit / Update My Rankings &rarr;
+        </button>
+    </form>
+
+</div>
+
+<script>
+    function moveItem(btn, direction) {
+        const item = btn.closest('.sortable-item');
+        const list = document.getElementById('sortableList');
+        if (direction === -1 && item.previousElementSibling) {
+            list.insertBefore(item, item.previousElementSibling);
+        } else if (direction === 1 && item.nextElementSibling) {
+            list.insertBefore(item.nextElementSibling, item);
+        }
+        updateRankNumbers();
+    }
+
+    function updateRankNumbers() {
+        const items = document.querySelectorAll('.sortable-item');
+        items.forEach((item, index) => {
+            item.querySelector('.rank-num').innerText = `#${index + 1}`;
+        });
+    }
+
+    function prepareSubmission() {
+        const items = document.querySelectorAll('.sortable-item');
+        const ids = Array.from(items).map(item => item.getAttribute('data-id'));
+        document.getElementById('rankedIdsInput').value = ids.join(',');
+    }
+</script>
+{% endblock %}
