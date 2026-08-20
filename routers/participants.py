@@ -16,6 +16,7 @@ async def home_dashboard(request: Request, team: dict = Depends(require_team)):
     
     treasure_visible = settings.get("treasure_hunt_active", False)
     escape_visible = settings.get("puzzle_room_active", False)
+    walkout_visible = app_settings.get("walkout_active", False)
 
     results_res = supabase.table("event_results").select("team_id, medal_type, points").execute()
     results = results_res.data if results_res.data else []
