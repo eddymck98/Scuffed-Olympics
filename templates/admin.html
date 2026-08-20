@@ -24,6 +24,9 @@
         <a href="/admin?tab=events&subtab=standard" class="px-4 sm:px-5 py-3 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'events' %} bg-amber-400 text-slate-950 shadow-lg {% else %} bg-indigo-950/80 text-indigo-200 hover:text-white border border-indigo-800/60 {% endif %}">
             🏆 Event Manager
         </a>
+        <a href="/admin?tab=walkout" class="px-4 sm:px-5 py-3 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'walkout' %} bg-amber-400 text-slate-950 shadow-lg {% else %} bg-indigo-950/80 text-indigo-200 hover:text-white border border-indigo-800/60 {% endif %}">
+            ✨ Walkout Consensus
+        </a>
         <a href="/admin?tab=verification" class="px-4 sm:px-5 py-3 rounded-2xl text-xs font-black transition shrink-0 {% if active_tab == 'verification' %} bg-amber-400 text-slate-950 shadow-lg {% else %} bg-indigo-950/80 text-indigo-200 hover:text-white border border-indigo-800/60 {% endif %}">
             📸 Treasure Verification {% if pending_submissions %}<span class="ml-1 bg-rose-500 text-white px-1.5 py-0.5 rounded-full text-[10px]">{{ pending_submissions|length }}</span>{% endif %}
         </a>
@@ -150,6 +153,52 @@
         </div>
     </div>
 
+    <!-- TAB 1.5: WALKOUT CONSENSUS MANAGER -->
+    <div class="space-y-6 {% if active_tab != 'walkout' %}hidden{% endif %}">
+        <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-5 sm:p-6 shadow-xl space-y-6 backdrop-blur-md">
+            <div class="flex items-center justify-between border-b border-indigo-800/60 pb-4">
+                <div>
+                    <h2 class="text-sm font-black text-amber-400 uppercase tracking-widest">✨ Walkout Consensus Tally</h2>
+                    <p class="text-xs text-indigo-200 mt-1">Live calculated points from all submitted competitor ballots (1st = 10 pts, decreasing by 1 down to 1).</p>
+                </div>
+                <span class="text-xs font-mono px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-inner">
+                    {{ walkout_consensus.ballots_cast | default(0) }} Ballots Cast
+                </span>
+            </div>
+
+            {% if not walkout_consensus or not walkout_consensus.consensus %}
+                <div class="bg-purple-950/50 border border-indigo-800/60 rounded-2xl p-10 text-center text-indigo-300 italic text-xs shadow-inner">
+                    No walkout ballots submitted yet!
+                </div>
+            {% else %}
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="border-b border-indigo-800/60 text-indigo-300 uppercase font-mono text-[10px]">
+                                <th class="py-3 px-4">Rank</th>
+                                <th class="py-3 px-4">Nation</th>
+                                <th class="py-3 px-4 text-center">1st Place Votes</th>
+                                <th class="py-3 px-4 text-right">Total Consensus Points</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-indigo-800/40 font-mono">
+                            {% for item in walkout_consensus.consensus %}
+                                <tr class="hover:bg-purple-950/40 transition">
+                                    <td class="py-3.5 px-4 font-black text-amber-400">#{{ loop.index }}</td>
+                                    <td class="py-3.5 px-4 font-bold text-white uppercase flex items-center gap-2">
+                                        <span class="text-lg">{{ item.emoji }}</span> {{ item.name }}
+                                    </td>
+                                    <td class="py-3.5 px-4 text-center text-indigo-200">{{ item.first_place_votes }}</td>
+                                    <td class="py-3.5 px-4 text-right font-black text-amber-300 text-sm">{{ item.total_points }} pts</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
     <!-- TAB 2: TREASURE VERIFICATION -->
     <div class="space-y-6 {% if active_tab != 'verification' %}hidden{% endif %}">
         <div class="bg-indigo-950/90 border border-indigo-800/60 rounded-3xl p-4 sm:p-6 shadow-xl space-y-6 backdrop-blur-md">
@@ -265,6 +314,21 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
+                <!-- Walkout Rankings Toggle -->
+                <div class="bg-purple-950/80 border border-indigo-800/60 p-4 sm:p-5 rounded-2xl flex items-center justify-between shadow-inner">
+                    <div>
+                        <h3 class="font-bold text-white text-sm">✨ Walkout Rankings Page</h3>
+                        <p class="text-[10px] text-indigo-200 mt-0.5">Currently: <strong class="{% if app_settings.walkout_active %}text-emerald-400{% else %}text-rose-400{% endif %}">{% if app_settings.walkout_active %}VISIBLE{% else %}HIDDEN{% endif %}</strong></p>
+                    </div>
+                    <form action="/admin/toggle-setting" method="POST" class="flex items-center">
+                        <input type="hidden" name="key" value="walkout_active">
+                        <input type="hidden" name="value" value="{{ 'false' if app_settings.walkout_active else 'true' }}">
+                        <button type="submit" class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none {% if app_settings.walkout_active %} bg-amber-400 {% else %} bg-indigo-900 {% endif %} shadow-inner">
+                            <span class="inline-block h-5 w-5 transform rounded-full bg-slate-950 transition-transform {% if app_settings.walkout_active %} translate-x-6 {% else %} translate-x-1 {% endif %}"></span>
+                        </button>
+                    </form>
+                </div>
+
                 <!-- Treasure Hunt Toggle -->
                 <div class="bg-purple-950/80 border border-indigo-800/60 p-4 sm:p-5 rounded-2xl flex items-center justify-between shadow-inner">
                     <div>
@@ -274,7 +338,6 @@
                     <form action="/admin/toggle-setting" method="POST" class="flex items-center">
                         <input type="hidden" name="key" value="treasure_hunt_active">
                         <input type="hidden" name="value" value="{{ 'false' if app_settings.treasure_hunt_active else 'true' }}">
-                        
                         <button type="submit" class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none {% if app_settings.treasure_hunt_active %} bg-amber-400 {% else %} bg-indigo-900 {% endif %} shadow-inner">
                             <span class="inline-block h-5 w-5 transform rounded-full bg-slate-950 transition-transform {% if app_settings.treasure_hunt_active %} translate-x-6 {% else %} translate-x-1 {% endif %}"></span>
                         </button>
@@ -290,7 +353,6 @@
                     <form action="/admin/toggle-setting" method="POST" class="flex items-center">
                         <input type="hidden" name="key" value="puzzle_room_active">
                         <input type="hidden" name="value" value="{{ 'false' if app_settings.puzzle_room_active else 'true' }}">
-                        
                         <button type="submit" class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none {% if app_settings.puzzle_room_active %} bg-amber-400 {% else %} bg-indigo-900 {% endif %} shadow-inner">
                             <span class="inline-block h-5 w-5 transform rounded-full bg-slate-950 transition-transform {% if app_settings.puzzle_room_active %} translate-x-6 {% else %} translate-x-1 {% endif %}"></span>
                         </button>
@@ -306,7 +368,6 @@
                     <form action="/admin/toggle-setting" method="POST" class="flex items-center">
                         <input type="hidden" name="key" value="ceremony_countdown_active">
                         <input type="hidden" name="value" value="{{ 'false' if app_settings.ceremony_countdown_active else 'true' }}">
-                        
                         <button type="submit" class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none {% if app_settings.ceremony_countdown_active %} bg-amber-400 {% else %} bg-indigo-900 {% endif %} shadow-inner">
                             <span class="inline-block h-5 w-5 transform rounded-full bg-slate-950 transition-transform {% if app_settings.ceremony_countdown_active %} translate-x-6 {% else %} translate-x-1 {% endif %}"></span>
                         </button>
