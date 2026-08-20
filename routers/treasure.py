@@ -14,6 +14,7 @@ async def treasure_hunt_page(request: Request, team: dict = Depends(require_team
     
     treasure_visible = settings.get("treasure_hunt_active", False)
     escape_visible = settings.get("puzzle_room_active", False)
+    walkout_visible = app_settings.get("walkout_active", False)
     
     toggle_res = supabase.table("app_settings").select("is_active").eq("key", "treasure_hunt_active").execute()
     is_active = toggle_res.data[0]["is_active"] if toggle_res.data else False
