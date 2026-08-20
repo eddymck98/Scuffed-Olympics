@@ -37,7 +37,8 @@ async def treasure_hunt_page(request: Request, team: dict = Depends(require_team
             "items": items,
             "progress_map": progress_map,
             "treasure_visible": treasure_visible,
-            "escape_visible": escape_visible
+            "escape_visible": escape_visible,
+            "walkout_visible": walkout_visible
         }
     )
 
